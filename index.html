@@ -1054,13 +1054,39 @@ h1 .dim{color:var(--text3)}
     </div>
 
     <!-- Center: Scene name + Preview controls -->
-    <div class="ide-center" style="gap:8px">
+    <div class="ide-center" style="gap:6px">
       <span style="font-size:.75rem;color:var(--text2);font-weight:500" id="sbScene">Game Scene</span>
       <div style="width:1px;height:16px;background:var(--border)"></div>
-      <button class="brun" id="btnRun2d" onclick="runGame('2d')" style="gap:5px;padding:4px 16px;font-size:.78rem">
-        <span>▶</span> Preview
-      </button>
-      <button class="bstop" id="btnStop" onclick="stopGame()" style="padding:4px 16px;font-size:.78rem">■ Stop</button>
+
+      <!-- 2D Preview button -->
+      <div style="display:flex;align-items:stretch;position:relative">
+        <button class="brun" id="btnRun2d" onclick="runGame('2d')" style="gap:5px;padding:4px 14px;font-size:.78rem;border-radius:4px 0 0 4px;border-right:1px solid rgba(255,255,255,.15)">
+          ▶ Preview
+        </button>
+        <button class="brun" onclick="tDD('ddPreview')" style="padding:4px 7px;font-size:.65rem;border-radius:0 4px 4px 0;min-width:0" title="More preview options">▾</button>
+        <div class="ddm" id="ddPreview" style="min-width:180px;left:0;top:100%">
+          <div class="ddi" onclick="closeDD();runGame('2d')" style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--green)">▶</span>
+            <div>
+              <div style="font-size:.8rem;font-weight:500;color:var(--text)">2D Preview</div>
+              <div style="font-size:.68rem;color:var(--text3)">Play game in 2D mode</div>
+            </div>
+          </div>
+          <div class="ddi" onclick="closeDD();runGame('3d')" style="display:flex;align-items:center;gap:8px">
+            <span style="color:var(--purple)">▶</span>
+            <div>
+              <div style="font-size:.8rem;font-weight:500;color:var(--text)">3D Preview</div>
+              <div style="font-size:.68rem;color:var(--text3)">Play game in 3D mode</div>
+            </div>
+          </div>
+          <div class="dds"></div>
+          <div class="ddi" onclick="closeDD();runGame('2d')">
+            <span style="font-size:.75rem">⚙</span> Preview settings
+          </div>
+        </div>
+      </div>
+
+      <button class="bstop" id="btnStop" onclick="stopGame()" style="padding:4px 14px;font-size:.78rem">■ Stop</button>
     </div>
 
     <!-- Right: Mode tabs + user -->
