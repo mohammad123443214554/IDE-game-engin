@@ -426,6 +426,23 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .run-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
 
+/* ===== GAME PREVIEW MODAL ===== */
+.preview-modal{background:#000;border:1px solid var(--border);border-radius:12px;overflow:hidden;width:min(900px,95vw);height:min(580px,90vh);display:flex;flex-direction:column;position:relative;animation:fadeUp .2s ease;box-shadow:0 40px 80px rgba(0,0,0,.8)}
+.preview-topbar{display:flex;align-items:center;gap:10px;background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 14px;flex-shrink:0;height:38px}
+.preview-dots{display:flex;gap:5px;align-items:center}
+.pdot2{width:11px;height:11px;border-radius:50%;display:inline-block}
+.pdot2.r{background:#ff5f57}.pdot2.y{background:#febc2e}.pdot2.g{background:#28c840}
+.preview-title{flex:1;text-align:center;font-size:.78rem;font-weight:600;color:var(--text2);font-family:var(--fc)}
+.preview-controls{display:flex;align-items:center;gap:8px}
+.preview-fps{font-size:.68rem;color:var(--green);font-family:var(--fc);background:rgba(109,207,111,.1);padding:2px 8px;border-radius:4px;border:1px solid rgba(109,207,111,.2)}
+.preview-fullbtn,.preview-closebtn{width:26px;height:26px;border-radius:5px;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.preview-fullbtn{background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
+.preview-fullbtn:hover{border-color:var(--accent);color:var(--accent)}
+.preview-closebtn{background:rgba(224,108,117,.15);border:1px solid rgba(224,108,117,.25);color:var(--red)}
+.preview-closebtn:hover{background:var(--red);color:#fff}
+.game-hud{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:space-between;padding:0 16px;pointer-events:none;z-index:10}
+.game-hud>div{background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.1);color:#fff;padding:4px 12px;border-radius:6px;font-size:.75rem;font-family:var(--fc)}
+.game-controls-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.45);padding:4px 14px;border-radius:100px;font-size:.67rem;font-family:var(--fc);pointer-events:none;white-space:nowrap}
 /* Toast */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:12px 18px;font-size:.83rem;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
@@ -786,7 +803,8 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
       <button class="imdb" id="bas" onclick="chkPro('Asset Library')">Asset Lib</button>
     </div>
     <div class="ide-right">
-      <button class="brun" id="btnRun" onclick="runGame()">▶ Run</button>
+      <button class="brun" id="btnRun2d" onclick="runGame('2d')" title="Run 2D Preview">▶ 2D</button>
+      <button class="brun" id="btnRun3d" style="background:var(--purple)" onclick="runGame('3d')" title="Run 3D Preview">▶ 3D</button>
       <button class="bstop" id="btnStop" onclick="stopGame()">■ Stop</button>
       <div class="ide-plan plan-free" id="idePlanChip">FREE</div>
       <button class="bupg" id="ideUpgBtn" onclick="handlePaidPlan('Pro Monthly',199,'monthly')">⚡ Upgrade</button>
@@ -912,6 +930,43 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
     <div class="sb-r">
       <div class="si" id="sbPlan">Free Plan</div>
       <div class="si">v1.0.0</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= GAME PREVIEW ============================= -->
+<div class="overlay" id="previewOverlay" onclick="if(event.target===this)stopGame()">
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-topbar">
+      <div class="preview-dots">
+        <span class="pdot2 r"></span><span class="pdot2 y"></span><span class="pdot2 g"></span>
+      </div>
+      <div class="preview-title" id="previewTitle">🎮 2D Preview — Main Scene</div>
+      <div class="preview-controls">
+        <span class="preview-fps" id="previewFps">60 FPS</span>
+        <button class="preview-fullbtn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+        <button class="preview-closebtn" onclick="stopGame()">✕</button>
+      </div>
+    </div>
+    <!-- 2D Game Canvas -->
+    <div id="game2d" style="display:none;position:relative;width:100%;height:100%">
+      <canvas id="gameCanvas2d" style="display:block;width:100%;height:100%;background:#1a1a2e"></canvas>
+      <div class="game-hud">
+        <div class="hud-score">Score: <span id="score2d">0</span></div>
+        <div class="hud-lives">❤️❤️❤️</div>
+        <div class="hud-time">Time: <span id="time2d">0</span>s</div>
+      </div>
+      <div class="game-controls-hint">← → Move &nbsp;|&nbsp; Space Jump &nbsp;|&nbsp; Esc Stop</div>
+    </div>
+    <!-- 3D Game Canvas -->
+    <div id="game3d" style="display:none;position:relative;width:100%;height:100%">
+      <canvas id="gameCanvas3d" style="display:block;width:100%;height:100%;background:#0a0a1a"></canvas>
+      <div class="game-hud">
+        <div class="hud-score">Score: <span id="score3d">0</span></div>
+        <div class="hud-cam">Camera: Free</div>
+        <div class="hud-time">Time: <span id="time3d">0</span>s</div>
+      </div>
+      <div class="game-controls-hint">← → ↑ ↓ Move &nbsp;|&nbsp; Mouse Look &nbsp;|&nbsp; Esc Stop</div>
     </div>
   </div>
 </div>
@@ -1473,24 +1528,556 @@ function chkPro(feat){
 }
 
 // ================================================================
-//  RUN GAME
+//  GAME PREVIEW — 2D & 3D
 // ================================================================
-function runGame(){
-  state.running=true;
-  document.getElementById('btnRun').style.display='none';
-  document.getElementById('btnStop').style.display='flex';
-  document.getElementById('runInd').style.display='flex';
-  log('info','  Parsing GDScript...');
-  log('info','  Loading scene: '+(state.scNodes[0]?.name||'Main Scene'));
-  setTimeout(()=>{log('ok','✓ Game running! (Preview mode)');toast('▶ Game is running!');},500);
+let gameLoop = null, gameTimer = null, fpsInterval = null;
+let game2dState = null, game3dState = null;
+
+function runGame(type = '2d') {
+  state.running = true;
+  document.getElementById('btnRun2d').style.display = 'none';
+  document.getElementById('btnRun3d').style.display = 'none';
+  document.getElementById('btnStop').style.display = 'flex';
+  document.getElementById('runInd').style.display = 'flex';
+
+  log('info', '  Compiling scene...');
+  log('info', '  Starting ' + type.toUpperCase() + ' preview...');
+
+  document.getElementById('previewOverlay').classList.add('open');
+  document.getElementById('previewTitle').textContent = (type === '2d' ? '🎮 2D' : '🎲 3D') + ' Preview — ' + (state.scNodes[0]?.name || 'Main Scene');
+  document.getElementById('game2d').style.display = type === '2d' ? 'block' : 'none';
+  document.getElementById('game3d').style.display = type === '3d' ? 'block' : 'none';
+
+  setTimeout(() => {
+    if (type === '2d') start2DGame();
+    else start3DGame();
+    log('ok', '✓ ' + type.toUpperCase() + ' game running! Press Esc to stop.');
+    toast('▶ ' + type.toUpperCase() + ' Preview started!');
+  }, 300);
 }
-function stopGame(){
-  state.running=false;
-  document.getElementById('btnRun').style.display='';
-  document.getElementById('btnStop').style.display='none';
-  document.getElementById('runInd').style.display='none';
-  log('info','  Game stopped.');toast('■ Game stopped.','in');
+
+function stopGame() {
+  state.running = false;
+  if (gameLoop) { cancelAnimationFrame(gameLoop); gameLoop = null; }
+  if (gameTimer) { clearInterval(gameTimer); gameTimer = null; }
+  if (fpsInterval) { clearInterval(fpsInterval); fpsInterval = null; }
+  document.getElementById('previewOverlay').classList.remove('open');
+  document.getElementById('btnRun2d').style.display = '';
+  document.getElementById('btnRun3d').style.display = '';
+  document.getElementById('btnStop').style.display = 'none';
+  document.getElementById('runInd').style.display = 'none';
+  log('info', '  Game stopped.'); toast('■ Stopped.', 'in');
 }
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && state.running) stopGame(); });
+
+function toggleFullscreen() {
+  const m = document.getElementById('previewModal');
+  if (!document.fullscreenElement) m.requestFullscreen?.();
+  else document.exitFullscreen?.();
+}
+
+// ===== FPS Counter =====
+function startFPS() {
+  let frames = 0, last = performance.now();
+  fpsInterval = setInterval(() => {
+    const now = performance.now();
+    const fps = Math.round(frames / ((now - last) / 1000));
+    document.getElementById('previewFps').textContent = fps + ' FPS';
+    frames = 0; last = now;
+  }, 1000);
+  return () => frames++;
+}
+
+// ================================================================
+//  2D PLATFORMER GAME ENGINE
+// ================================================================
+function start2DGame() {
+  const canvas = document.getElementById('gameCanvas2d');
+  const ctx = canvas.getContext('2d');
+  const countFps = startFPS();
+  let score = 0, gameTime = 0, lives = 3;
+
+  // Resize canvas
+  function resize() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const W = () => canvas.width, H = () => canvas.height;
+  const GRAVITY = 0.5, JUMP = -13, SPEED = 4;
+
+  // Player
+  const player = { x: 80, y: 300, w: 36, h: 36, vx: 0, vy: 0, onGround: false, color: '#478cbf', emoji: '👾' };
+
+  // Platforms
+  const platforms = [
+    { x: 0,    y: () => H() - 40, w: () => W(), h: 40 },
+    { x: 120,  y: () => H() - 140, w: 160, h: 16 },
+    { x: 340,  y: () => H() - 200, w: 140, h: 16 },
+    { x: 560,  y: () => H() - 160, w: 160, h: 16 },
+    { x: 50,   y: () => H() - 280, w: 120, h: 16 },
+    { x: 480,  y: () => H() - 320, w: 100, h: 16 },
+  ];
+
+  // Coins
+  const coins = [];
+  function spawnCoins() {
+    coins.length = 0;
+    const cx = [160, 200, 370, 400, 590, 610, 90, 110, 510, 530];
+    const cy = [-120, -120, -180, -180, -140, -140, -260, -260, -300, -300];
+    cx.forEach((x, i) => coins.push({ x, y: H() + cy[i], r: 8, collected: false, bob: Math.random() * Math.PI * 2 }));
+  }
+
+  // Enemies
+  const enemies = [
+    { x: 350, y: 0, w: 32, h: 32, vx: 1.5, dir: 1, color: '#e06c75', emoji: '👹', minX: 320, maxX: 480 },
+    { x: 580, y: 0, w: 32, h: 32, vx: 1.2, dir: 1, color: '#e06c75', emoji: '👺', minX: 540, maxX: 700 },
+  ];
+
+  // Keys
+  const keys = {};
+  function onKey(e) { keys[e.code] = e.type === 'keydown'; }
+  document.addEventListener('keydown', onKey);
+  document.addEventListener('keyup', onKey);
+
+  spawnCoins();
+
+  // Timer
+  gameTimer = setInterval(() => {
+    gameTime++;
+    document.getElementById('time2d').textContent = gameTime;
+  }, 1000);
+
+  // Particles
+  const particles = [];
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 8; i++) {
+      particles.push({ x, y, vx: (Math.random()-0.5)*6, vy: (Math.random()-2)*5, life: 1, color });
+    }
+  }
+
+  // Stars background
+  const stars = Array.from({length: 60}, () => ({ x: Math.random()*800, y: Math.random()*600, r: Math.random()*1.5+0.5, twinkle: Math.random()*Math.PI*2 }));
+  let frameCount = 0;
+
+  function drawBg() {
+    // Sky gradient
+    const grad = ctx.createLinearGradient(0, 0, 0, H());
+    grad.addColorStop(0, '#0a0a1e');
+    grad.addColorStop(1, '#1a1a3e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W(), H());
+    // Stars
+    stars.forEach(s => {
+      s.twinkle += 0.05;
+      ctx.beginPath();
+      ctx.arc(s.x % W(), s.y % H(), s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${0.4 + Math.sin(s.twinkle)*0.3})`;
+      ctx.fill();
+    });
+  }
+
+  function drawPlatforms() {
+    platforms.forEach(p => {
+      const px = p.x, py = typeof p.y === 'function' ? p.y() : p.y;
+      const pw = typeof p.w === 'function' ? p.w() : p.w;
+      // Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.3)';
+      ctx.fillRect(px+4, py+4, pw, p.h);
+      // Platform
+      const grad = ctx.createLinearGradient(px, py, px, py+p.h);
+      grad.addColorStop(0, '#6dcf6f');
+      grad.addColorStop(1, '#3a8a3a');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.roundRect(px, py, pw, p.h, 4);
+      ctx.fill();
+      // Top highlight
+      ctx.fillStyle = 'rgba(255,255,255,0.2)';
+      ctx.fillRect(px+2, py+2, pw-4, 3);
+    });
+  }
+
+  function drawCoins() {
+    coins.forEach(c => {
+      if (c.collected) return;
+      c.bob += 0.08;
+      const y = c.y + Math.sin(c.bob) * 4;
+      // Glow
+      ctx.shadowColor = '#ffd700';
+      ctx.shadowBlur = 12;
+      // Coin body
+      const grad = ctx.createRadialGradient(c.x, y, 1, c.x, y, c.r);
+      grad.addColorStop(0, '#ffe066');
+      grad.addColorStop(1, '#f0a000');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(c.x, y, c.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      // Star inside
+      ctx.fillStyle = '#fff8';
+      ctx.beginPath();
+      ctx.arc(c.x-2, y-2, 2, 0, Math.PI*2);
+      ctx.fill();
+    });
+  }
+
+  function drawEnemies() {
+    enemies.forEach(en => {
+      const py = typeof platforms[1].y === 'function' ? platforms[1].y() - en.h : en.y;
+      en.y = py;
+      // Move
+      en.x += en.vx * en.dir;
+      if (en.x > en.maxX || en.x < en.minX) en.dir *= -1;
+      // Body
+      ctx.fillStyle = en.color;
+      ctx.beginPath();
+      ctx.roundRect(en.x, en.y, en.w, en.h, 6);
+      ctx.fill();
+      // Emoji
+      ctx.font = '20px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(en.emoji, en.x + en.w/2, en.y + en.h/2 + 7);
+    });
+  }
+
+  function drawPlayer() {
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(player.x + player.w/2, player.y + player.h + 2, player.w/2, 5, 0, 0, Math.PI*2);
+    ctx.fill();
+    // Body
+    const grad = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h);
+    grad.addColorStop(0, '#5ba3d9');
+    grad.addColorStop(1, '#2a5a8a');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(player.x, player.y, player.w, player.h, 6);
+    ctx.fill();
+    // Emoji
+    ctx.font = '22px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(player.emoji, player.x + player.w/2, player.y + player.h/2 + 8);
+  }
+
+  function drawParticles() {
+    particles.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.04;
+      ctx.globalAlpha = Math.max(0, p.life);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4 * p.life, 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    for (let i = particles.length-1; i >= 0; i--) if (particles[i].life <= 0) particles.splice(i, 1);
+  }
+
+  function collideRect(a, bx, by, bw, bh) {
+    return a.x < bx+bw && a.x+a.w > bx && a.y < by+bh && a.y+a.h > by;
+  }
+
+  function update() {
+    frameCount++;
+    // Input
+    if (keys['ArrowLeft'] || keys['KeyA'])  { player.vx = -SPEED; player.emoji = '👾'; }
+    else if (keys['ArrowRight'] || keys['KeyD']) { player.vx = SPEED; player.emoji = '👾'; }
+    else player.vx *= 0.8;
+    if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && player.onGround) {
+      player.vy = JUMP; player.onGround = false;
+    }
+
+    // Physics
+    player.vy += GRAVITY;
+    player.x += player.vx;
+    player.y += player.vy;
+    player.onGround = false;
+
+    // Platform collision
+    platforms.forEach(p => {
+      const py = typeof p.y === 'function' ? p.y() : p.y;
+      const pw = typeof p.w === 'function' ? p.w() : p.w;
+      if (collideRect(player, p.x, py, pw, p.h)) {
+        if (player.vy > 0 && player.y + player.h - player.vy <= py + 4) {
+          player.y = py - player.h; player.vy = 0; player.onGround = true;
+        } else if (player.vy < 0) {
+          player.y = py + p.h; player.vy = 0;
+        } else {
+          player.x -= player.vx;
+        }
+      }
+    });
+
+    // Boundaries
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.w > W()) player.x = W() - player.w;
+    if (player.y > H() + 100) { player.x = 80; player.y = 200; player.vy = 0; }
+
+    // Coin collection
+    coins.forEach(c => {
+      if (c.collected) return;
+      if (Math.hypot(player.x+player.w/2 - c.x, player.y+player.h/2 - c.y) < c.r + 18) {
+        c.collected = true; score += 10;
+        document.getElementById('score2d').textContent = score;
+        spawnParticles(c.x, c.y, '#ffd700');
+      }
+    });
+    if (coins.every(c=>c.collected)) { spawnCoins(); score += 50; document.getElementById('score2d').textContent = score; }
+
+    // Enemy collision
+    enemies.forEach(en => {
+      if (collideRect(player, en.x, en.y, en.w, en.h)) {
+        player.x = 80; player.y = 200; player.vy = 0;
+        spawnParticles(player.x, player.y, '#e06c75');
+      }
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W(), H());
+    drawBg(); drawPlatforms(); drawCoins(); drawEnemies(); drawPlayer(); drawParticles();
+    countFps();
+  }
+
+  function loop() {
+    if (!state.running) return;
+    update(); draw();
+    gameLoop = requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ================================================================
+//  3D GAME ENGINE (WebGL-style with Canvas 2D faux-3D)
+// ================================================================
+function start3DGame() {
+  const canvas = document.getElementById('gameCanvas3d');
+  const ctx = canvas.getContext('2d');
+  const countFps = startFPS();
+  let score = 0, gameTime = 0;
+
+  function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+  const W = () => canvas.width, H = () => canvas.height;
+
+  // 3D Camera
+  const cam = { x: 0, y: 1.6, z: -4, rx: 0, ry: 0, speed: 0.08 };
+  const keys = {};
+  let mx = 0, my = 0, locked = false;
+
+  canvas.addEventListener('click', () => canvas.requestPointerLock?.());
+  document.addEventListener('pointerlockchange', () => { locked = document.pointerLockElement === canvas; });
+  document.addEventListener('mousemove', e => { if (locked) { cam.ry += e.movementX * 0.002; cam.rx += e.movementY * 0.002; cam.rx = Math.max(-1, Math.min(1, cam.rx)); } });
+  document.addEventListener('keydown', e => keys[e.code] = true);
+  document.addEventListener('keyup', e => keys[e.code] = false);
+
+  // 3D World objects
+  const cubes = [
+    {x:2,y:0,z:4,size:1,color:'#478cbf',label:'Player'},{x:-2,y:0,z:6,size:1,color:'#e06c75',label:'Enemy'},
+    {x:0,y:-1,z:4,size:8,color:'#6dcf6f',label:'Floor',flat:true},{x:4,y:0,z:8,size:1,color:'#e5c07b',label:'Coin'},
+    {x:-4,y:0,z:8,size:1,color:'#c678dd',label:'Power'},{x:0,y:0,z:12,size:2,color:'#56b6c2',label:'Portal'},
+    {x:6,y:0,z:10,size:1.5,color:'#e8934a',label:'Chest'},
+  ];
+  const particles3d = [];
+  let frame3d = 0;
+
+  // Project 3D point to 2D screen
+  function project(px, py, pz) {
+    const cos = Math.cos, sin = Math.sin;
+    // Translate relative to camera
+    let dx = px - cam.x, dy = py - cam.y, dz = pz - cam.z;
+    // Rotate Y
+    const cosY = cos(-cam.ry), sinY = sin(-cam.ry);
+    const rx = dx*cosY - dz*sinY, rz = dx*sinY + dz*cosY;
+    // Rotate X
+    const cosX = cos(-cam.rx), sinX = sin(-cam.rx);
+    const ry = dy*cosX - rz*sinX, rz2 = dy*sinX + rz*cosX;
+    if (rz2 <= 0.1) return null;
+    const fov = 500;
+    const sx = W()/2 + rx*fov/rz2;
+    const sy = H()/2 + ry*fov/rz2;
+    const scale = fov / rz2;
+    return { sx, sy, scale, depth: rz2 };
+  }
+
+  function drawSkybox() {
+    // Sky
+    const grad = ctx.createLinearGradient(0, 0, 0, H());
+    grad.addColorStop(0, '#050520');
+    grad.addColorStop(0.5, '#0a0a35');
+    grad.addColorStop(1, '#1a1a4e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W(), H());
+    // Stars
+    for (let i = 0; i < 80; i++) {
+      const sx = ((i*137 + cam.ry*200 + 1000) % W());
+      const sy = ((i*73) % (H()*0.6));
+      ctx.fillStyle = `rgba(255,255,255,${0.3 + (i%3)*0.2})`;
+      ctx.beginPath(); ctx.arc(sx, sy, 1, 0, Math.PI*2); ctx.fill();
+    }
+    // Horizon fog
+    const fog = ctx.createLinearGradient(0, H()*0.5, 0, H()*0.65);
+    fog.addColorStop(0, 'rgba(20,20,60,0)');
+    fog.addColorStop(1, 'rgba(20,20,60,0.8)');
+    ctx.fillStyle = fog;
+    ctx.fillRect(0, H()*0.5, W(), H()*0.15);
+    // Ground
+    const ggrad = ctx.createLinearGradient(0, H()*0.62, 0, H());
+    ggrad.addColorStop(0, '#1a2a1a');
+    ggrad.addColorStop(1, '#0a150a');
+    ctx.fillStyle = ggrad;
+    ctx.fillRect(0, H()*0.62, W(), H()*0.38);
+    // Grid on ground
+    ctx.strokeStyle = 'rgba(109,207,111,0.15)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < 20; i++) {
+      const z = (i + frame3d*0.02) % 20 + cam.z;
+      const p1 = project(-20, -1, z), p2 = project(20, -1, z);
+      if (p1&&p2) { ctx.beginPath(); ctx.moveTo(p1.sx,p1.sy); ctx.lineTo(p2.sx,p2.sy); ctx.stroke(); }
+    }
+    for (let i = -5; i <= 5; i++) {
+      const p1 = project(i*2, -1, cam.z), p2 = project(i*2, -1, cam.z+30);
+      if (p1&&p2) { ctx.beginPath(); ctx.moveTo(p1.sx,p1.sy); ctx.lineTo(p2.sx,p2.sy); ctx.stroke(); }
+    }
+  }
+
+  function drawCube(c) {
+    if (c.flat) return; // Floor drawn in grid
+    const s = c.size/2;
+    const verts = [
+      [c.x-s,c.y+s,c.z-s],[c.x+s,c.y+s,c.z-s],[c.x+s,c.y+s,c.z+s],[c.x-s,c.y+s,c.z+s], // top
+      [c.x-s,c.y-s,c.z-s],[c.x+s,c.y-s,c.z-s],[c.x+s,c.y-s,c.z+s],[c.x-s,c.y-s,c.z+s], // bottom
+    ];
+    const faces = [
+      [0,1,2,3,0.9],[4,5,6,7,0.5],[0,1,5,4,0.7],[2,3,7,6,0.7],[1,2,6,5,0.8],[0,3,7,4,0.6]
+    ];
+    const projs = verts.map(v => project(v[0],v[1],v[2]));
+    if (projs.some(p=>!p)) return;
+    // Sort faces by depth
+    faces.sort((a,b) => {
+      const da = a.slice(0,4).reduce((s,i)=>s+projs[i].depth,0)/4;
+      const db = b.slice(0,4).reduce((s,i)=>s+projs[i].depth,0)/4;
+      return db - da;
+    });
+    faces.forEach(f => {
+      const pts = f.slice(0,4).map(i=>projs[i]);
+      if (pts.some(p=>p.depth<0.2)) return;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].sx, pts[0].sy);
+      pts.slice(1).forEach(p => ctx.lineTo(p.sx, p.sy));
+      ctx.closePath();
+      const alpha = f[4];
+      // Parse color
+      const r = parseInt(c.color.slice(1,3),16), g = parseInt(c.color.slice(3,5),16), b2 = parseInt(c.color.slice(5,7),16);
+      ctx.fillStyle = `rgba(${Math.round(r*alpha)},${Math.round(g*alpha)},${Math.round(b2*alpha)},0.92)`;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+    });
+    // Label on top face
+    const topCtr = project(c.x, c.y+s+0.1, c.z);
+    if (topCtr && topCtr.depth > 0.3 && topCtr.depth < 20) {
+      ctx.font = Math.round(topCtr.scale*14) + 'px IBM Plex Sans, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.textAlign = 'center';
+      ctx.fillText(c.label, topCtr.sx, topCtr.sy);
+    }
+    // Animate coin/power spin
+    if (c.label==='Coin'||c.label==='Power') c.x += Math.sin(frame3d*0.05)*0.02;
+  }
+
+  function draw3DParticles() {
+    for (let i = particles3d.length-1; i >= 0; i--) {
+      const p = particles3d[i];
+      p.x += p.vx; p.y += p.vy; p.z += p.vz; p.life -= 0.03;
+      if (p.life <= 0) { particles3d.splice(i,1); continue; }
+      const pt = project(p.x, p.y, p.z);
+      if (!pt) continue;
+      ctx.beginPath();
+      ctx.arc(pt.sx, pt.sy, pt.scale*0.3, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,200,50,${p.life})`;
+      ctx.fill();
+    }
+  }
+
+  function drawCrosshair() {
+    const cx = W()/2, cy = H()/2, sz = 10, gap = 4;
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx-sz, cy); ctx.lineTo(cx-gap, cy);
+    ctx.moveTo(cx+gap, cy); ctx.lineTo(cx+sz, cy);
+    ctx.moveTo(cx, cy-sz); ctx.lineTo(cx, cy-gap);
+    ctx.moveTo(cx, cy+gap); ctx.lineTo(cx, cy+sz);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, cy, 2, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.fill();
+  }
+
+  function drawHint3D() {
+    if (!locked) {
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      ctx.beginPath();
+      ctx.roundRect(W()/2-130, H()/2+30, 260, 36, 8);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      ctx.font = '13px IBM Plex Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🖱 Click canvas to capture mouse', W()/2, H()/2+53);
+    }
+  }
+
+  function update3d() {
+    frame3d++;
+    const spd = cam.speed;
+    const cos = Math.cos(cam.ry), sin = Math.sin(cam.ry);
+    if (keys['ArrowUp']||keys['KeyW'])    { cam.z += cos*spd; cam.x += sin*spd; }
+    if (keys['ArrowDown']||keys['KeyS'])  { cam.z -= cos*spd; cam.x -= sin*spd; }
+    if (keys['ArrowLeft']||keys['KeyA'])  { cam.x -= cos*spd; cam.z += sin*spd; }
+    if (keys['ArrowRight']||keys['KeyD']) { cam.x += cos*spd; cam.z -= sin*spd; }
+    // Float camera
+    cam.y = 1.6 + Math.sin(frame3d*0.03)*0.05;
+    // Check coin pickup
+    cubes.forEach(c => {
+      if (c.label==='Coin'||c.label==='Power') {
+        const d = Math.hypot(cam.x-c.x, cam.z-c.z);
+        if (d < 1.5) { score += 10; document.getElementById('score3d').textContent = score; c.x = (Math.random()-0.5)*16; c.z = cam.z + 8 + Math.random()*8; for(let i=0;i<12;i++) particles3d.push({x:c.x,y:c.y,z:c.z,vx:(Math.random()-.5)*.2,vy:Math.random()*.2,vz:(Math.random()-.5)*.2,life:1}); }
+      }
+    });
+    // Move cubes forward so world is endless
+    cubes.forEach(c => { if (c.z < cam.z - 5 && !c.flat) c.z += 30 + Math.random()*10; });
+  }
+
+  gameTimer = setInterval(() => { gameTime++; document.getElementById('time3d').textContent = gameTime; }, 1000);
+
+  function loop3d() {
+    if (!state.running) return;
+    ctx.clearRect(0, 0, W(), H());
+    update3d();
+    drawSkybox();
+    // Sort cubes by distance
+    const sorted = [...cubes].sort((a,b) => {
+      const da = Math.hypot(cam.x-a.x, cam.z-a.z), db = Math.hypot(cam.x-b.x, cam.z-b.z);
+      return db - da;
+    });
+    sorted.forEach(c => drawCube(c));
+    draw3DParticles();
+    drawCrosshair();
+    drawHint3D();
+    countFps();
+    gameLoop = requestAnimationFrame(loop3d);
+  }
+  loop3d();
+}
+
 
 // ================================================================
 //  DROPDOWNS
