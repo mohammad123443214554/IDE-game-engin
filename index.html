@@ -1532,13 +1532,21 @@ function renderTree(){
     const d=document.createElement('div');
     d.className='tn'+(state.selNode===n.id?' sel':'');
     d.style.setProperty('--d',n.d);
-    d.innerHTML=`<span class="ni">${n.icon}</span> ${n.name} <span class="na">▸</span>`;
+    d.innerHTML=`<span class="ni">${n.icon}</span> <span class="tn-name">${n.name}</span> <span class="na">▸</span>`;
     d.onclick=()=>selTN(n.id);
-    // Make canvas objects draggable from tree
-    if(n.id!=='root' && state.objects[n.id]){
-      d.draggable=false; // use custom drag
-      d.addEventListener('mousedown', e=>startTreeDrag(e, n));
-      d.addEventListener('touchstart', e=>startTreeDragTouch(e, n), {passive:false});
+
+    // Right-click on tree node → same context menu
+    if(n.id!=='root'){
+      d.oncontextmenu=e=>{
+        e.preventDefault(); e.stopPropagation();
+        selTN(n.id);
+        showCtxMenu(e, n.id);
+      };
+      // Drag from tree to canvas
+      if(state.objects[n.id]){
+        d.addEventListener('mousedown', e=>startTreeDrag(e, n));
+        d.addEventListener('touchstart', e=>startTreeDragTouch(e, n), {passive:false});
+      }
     }
     c.appendChild(d);
   });
@@ -1862,15 +1870,27 @@ function ctxDuplicate(){
 
 function ctxDelete(){
   const id = document.getElementById('ctxMenu').dataset.nodeId;
+  const node = state.scNodes.find(n=>n.id===id);
+  if(!node) return;
   closeCtxMenu();
+
+  // Show confirmation
+  if(!confirm(`"${node.name}" delete karna chahte ho?`)) return;
+
+  // Remove from canvas
   const el = document.getElementById('g'+id);
   if(el) el.remove();
   delete state.objects[id];
+
+  // Remove from scene tree
   state.scNodes = state.scNodes.filter(n=>n.id!==id);
+  state.selNode = null;
+
   renderTree();
   document.getElementById('rpCon').innerHTML='<div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect properties.</div>';
   document.getElementById('insName').textContent='— None —';
-  toast('🗑 Deleted','er');
+  log('info', '  Node deleted: '+node.name);
+  toast('🗑 '+node.name+' deleted','er');
 }
 
 function ctxEdit(){
@@ -2737,8 +2757,14 @@ function setupKeyboard(){
       if(e.key==='r')setTool('scale');
       if(e.key==='F5'){e.preventDefault();runGame();}
       if((e.key==='Delete'||e.key==='Backspace')&&state.selNode&&state.objects[state.selNode]){
-        document.getElementById('ctxMenu').dataset.nodeId=state.selNode;
-        ctxDelete();
+        // Only delete if focus is on canvas area (not on input/tree)
+        const active = document.activeElement;
+        const onInput = active && (active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.closest('.ide-lp'));
+        if(!onInput){
+          e.preventDefault();
+          document.getElementById('ctxMenu').dataset.nodeId=state.selNode;
+          ctxDelete();
+        }
       }
     }
   });
