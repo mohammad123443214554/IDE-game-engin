@@ -1615,7 +1615,7 @@ function startFPS() {
 }
 
 // ================================================================
-//  2D PLATFORMER GAME ENGINE
+//  2D SCENE PREVIEW — Uses actual scene nodes
 // ================================================================
 function start2DGame() {
   const canvas = document.getElementById('gameCanvas2d');
@@ -1623,44 +1623,47 @@ function start2DGame() {
   const countFps = startFPS();
   let score = 0, gameTime = 0, lives = 3;
 
-  // Resize canvas
-  function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
-  }
+  function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
   resize();
   window.addEventListener('resize', resize);
-
   const W = () => canvas.width, H = () => canvas.height;
   const GRAVITY = 0.5, JUMP = -13, SPEED = 4;
 
-  // Player
-  const player = { x: 80, y: 300, w: 36, h: 36, vx: 0, vy: 0, onGround: false, color: '#478cbf', emoji: '👾' };
+  // ── Build world from actual scene nodes ──────────────────────
+  // Canvas origin is center, convert to top-left coords
+  const cx0 = () => W() / 2, cy0 = () => H() / 2;
 
-  // Platforms
-  const platforms = [
-    { x: 0,    y: () => H() - 40, w: () => W(), h: 40 },
-    { x: 120,  y: () => H() - 140, w: 160, h: 16 },
-    { x: 340,  y: () => H() - 200, w: 140, h: 16 },
-    { x: 560,  y: () => H() - 160, w: 160, h: 16 },
-    { x: 50,   y: () => H() - 280, w: 120, h: 16 },
-    { x: 480,  y: () => H() - 320, w: 100, h: 16 },
-  ];
+  let player = null;
+  const platforms = [];
+  const enemies = [];
+  const genericNodes = [];
 
-  // Coins
-  const coins = [];
-  function spawnCoins() {
-    coins.length = 0;
-    const cx = [160, 200, 370, 400, 590, 610, 90, 110, 510, 530];
-    const cy = [-120, -120, -180, -180, -140, -140, -260, -260, -300, -300];
-    cx.forEach((x, i) => coins.push({ x, y: H() + cy[i], r: 8, collected: false, bob: Math.random() * Math.PI * 2 }));
+  // Always add ground floor
+  platforms.push({ x: 0, y: () => H() - 30, w: () => W(), h: 30, color: '#3a7a3a', isGround: true });
+
+  // Read from state.objects
+  Object.entries(state.objects).forEach(([id, obj]) => {
+    const node = state.scNodes.find(n => n.id === id);
+    if (!node) return;
+    const nm = node.name.toLowerCase();
+    const sx = cx0() + obj.x;  // scene x → screen x
+    const sy = cy0() + obj.y;  // scene y → screen y
+
+    if (nm.includes('player')) {
+      player = { x: sx - 18, y: sy - 18, w: 36, h: 36, vx: 0, vy: 0, onGround: false, emoji: node.icon || '👾', color: '#478cbf', name: node.name };
+    } else if (nm.includes('platform')) {
+      platforms.push({ x: sx - 65, y: () => sy, w: 130, h: 18, color: '#4a9a4a' });
+    } else if (nm.includes('enemy')) {
+      enemies.push({ x: sx - 16, y: sy - 16, w: 32, h: 32, vx: 1.4, dir: 1, color: '#e06c75', emoji: node.icon || '👹', minX: sx - 80, maxX: sx + 80, name: node.name });
+    } else {
+      genericNodes.push({ x: sx - 16, y: sy - 16, w: 32, h: 32, color: '#7a7aaa', emoji: node.icon || '📦', name: node.name });
+    }
+  });
+
+  // If no player found in scene, create default
+  if (!player) {
+    player = { x: 60, y: H() - 100, w: 36, h: 36, vx: 0, vy: 0, onGround: false, emoji: '👾', color: '#478cbf', name: 'Player' };
   }
-
-  // Enemies
-  const enemies = [
-    { x: 350, y: 0, w: 32, h: 32, vx: 1.5, dir: 1, color: '#e06c75', emoji: '👹', minX: 320, maxX: 480 },
-    { x: 580, y: 0, w: 32, h: 32, vx: 1.2, dir: 1, color: '#e06c75', emoji: '👺', minX: 540, maxX: 700 },
-  ];
 
   // Keys
   const keys = {};
@@ -1668,108 +1671,93 @@ function start2DGame() {
   document.addEventListener('keydown', onKey);
   document.addEventListener('keyup', onKey);
 
-  spawnCoins();
-
   // Timer
-  gameTimer = setInterval(() => {
-    gameTime++;
-    document.getElementById('time2d').textContent = gameTime;
-  }, 1000);
+  gameTimer = setInterval(() => { gameTime++; document.getElementById('time2d').textContent = gameTime; }, 1000);
 
   // Particles
   const particles = [];
   function spawnParticles(x, y, color) {
-    for (let i = 0; i < 8; i++) {
-      particles.push({ x, y, vx: (Math.random()-0.5)*6, vy: (Math.random()-2)*5, life: 1, color });
-    }
+    for (let i = 0; i < 10; i++) particles.push({ x, y, vx: (Math.random()-0.5)*5, vy: (Math.random()-0.5)*5-2, life: 1, color });
   }
 
-  // Stars background
-  const stars = Array.from({length: 60}, () => ({ x: Math.random()*800, y: Math.random()*600, r: Math.random()*1.5+0.5, twinkle: Math.random()*Math.PI*2 }));
-  let frameCount = 0;
-
+  // ── Draw background ──
   function drawBg() {
     // Sky gradient
     const grad = ctx.createLinearGradient(0, 0, 0, H());
-    grad.addColorStop(0, '#0a0a1e');
-    grad.addColorStop(1, '#1a1a3e');
+    grad.addColorStop(0, '#0a0e1a');
+    grad.addColorStop(1, '#1a2440');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W(), H());
-    // Stars
-    stars.forEach(s => {
-      s.twinkle += 0.05;
-      ctx.beginPath();
-      ctx.arc(s.x % W(), s.y % H(), s.r, 0, Math.PI*2);
-      ctx.fillStyle = `rgba(255,255,255,${0.4 + Math.sin(s.twinkle)*0.3})`;
-      ctx.fill();
-    });
+    // Grid lines (IDE feel)
+    ctx.strokeStyle = 'rgba(71,140,191,0.08)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < W(); x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H()); ctx.stroke(); }
+    for (let y = 0; y < H(); y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W(), y); ctx.stroke(); }
+    // Scene origin cross
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(cx0(), 0); ctx.lineTo(cx0(), H()); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, cy0()); ctx.lineTo(W(), cy0()); ctx.stroke();
+    // Origin label
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = '10px monospace';
+    ctx.fillText('(0,0)', cx0()+4, cy0()-4);
   }
 
+  // ── Draw platforms ──
   function drawPlatforms() {
     platforms.forEach(p => {
-      const px = p.x, py = typeof p.y === 'function' ? p.y() : p.y;
+      const py = typeof p.y === 'function' ? p.y() : p.y;
       const pw = typeof p.w === 'function' ? p.w() : p.w;
-      // Shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.3)';
-      ctx.fillRect(px+4, py+4, pw, p.h);
-      // Platform
-      const grad = ctx.createLinearGradient(px, py, px, py+p.h);
-      grad.addColorStop(0, '#6dcf6f');
-      grad.addColorStop(1, '#3a8a3a');
-      ctx.fillStyle = grad;
+      ctx.fillStyle = p.color || '#4a9a4a';
       ctx.beginPath();
-      ctx.roundRect(px, py, pw, p.h, 4);
+      ctx.roundRect(p.x, py, pw, p.h, p.isGround ? 0 : 6);
       ctx.fill();
-      // Top highlight
-      ctx.fillStyle = 'rgba(255,255,255,0.2)';
-      ctx.fillRect(px+2, py+2, pw-4, 3);
+      if (!p.isGround) {
+        ctx.fillStyle = 'rgba(255,255,255,0.15)';
+        ctx.fillRect(p.x + 4, py + 2, pw - 8, 3);
+      }
     });
   }
 
-  function drawCoins() {
-    coins.forEach(c => {
-      if (c.collected) return;
-      c.bob += 0.08;
-      const y = c.y + Math.sin(c.bob) * 4;
-      // Glow
-      ctx.shadowColor = '#ffd700';
-      ctx.shadowBlur = 12;
-      // Coin body
-      const grad = ctx.createRadialGradient(c.x, y, 1, c.x, y, c.r);
-      grad.addColorStop(0, '#ffe066');
-      grad.addColorStop(1, '#f0a000');
-      ctx.fillStyle = grad;
+  // ── Draw generic nodes ──
+  function drawGenericNodes() {
+    genericNodes.forEach(n => {
+      ctx.fillStyle = n.color;
       ctx.beginPath();
-      ctx.arc(c.x, y, c.r, 0, Math.PI*2);
+      ctx.roundRect(n.x, n.y, n.w, n.h, 5);
       ctx.fill();
-      ctx.shadowBlur = 0;
-      // Star inside
-      ctx.fillStyle = '#fff8';
-      ctx.beginPath();
-      ctx.arc(c.x-2, y-2, 2, 0, Math.PI*2);
-      ctx.fill();
+      ctx.font = '18px serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(n.emoji, n.x + n.w/2, n.y + n.h/2 + 6);
+      // Name label
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = '10px sans-serif';
+      ctx.fillText(n.name, n.x + n.w/2, n.y - 5);
     });
   }
 
+  // ── Draw enemies ──
   function drawEnemies() {
     enemies.forEach(en => {
-      const py = typeof platforms[1].y === 'function' ? platforms[1].y() - en.h : en.y;
+      const py = typeof platforms[1]?.y === 'function' ? platforms[1].y() - en.h : en.y;
       en.y = py;
-      // Move
       en.x += en.vx * en.dir;
       if (en.x > en.maxX || en.x < en.minX) en.dir *= -1;
-      // Body
       ctx.fillStyle = en.color;
       ctx.beginPath();
       ctx.roundRect(en.x, en.y, en.w, en.h, 6);
       ctx.fill();
-      // Emoji
-      ctx.font = '20px serif';
+      ctx.font = '18px serif';
       ctx.textAlign = 'center';
       ctx.fillText(en.emoji, en.x + en.w/2, en.y + en.h/2 + 7);
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.font = '9px sans-serif';
+      ctx.fillText(en.name, en.x + en.w/2, en.y - 4);
     });
   }
 
+  // ── Draw player ──
   function drawPlayer() {
     // Shadow
     ctx.fillStyle = 'rgba(0,0,0,0.3)';
@@ -1788,8 +1776,13 @@ function start2DGame() {
     ctx.font = '22px serif';
     ctx.textAlign = 'center';
     ctx.fillText(player.emoji, player.x + player.w/2, player.y + player.h/2 + 8);
+    // Name label
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillText(player.name || 'Player', player.x + player.w/2, player.y - 5);
   }
 
+  // ── Draw particles ──
   function drawParticles() {
     particles.forEach((p, i) => {
       p.x += p.vx; p.y += p.vy; p.vy += 0.2; p.life -= 0.04;
@@ -1803,69 +1796,83 @@ function start2DGame() {
     for (let i = particles.length-1; i >= 0; i--) if (particles[i].life <= 0) particles.splice(i, 1);
   }
 
+  // ── HUD ──
+  function drawHUD() {
+    // Score
+    document.getElementById('score2d').textContent = score;
+    // Scene info
+    ctx.fillStyle = 'rgba(71,140,191,0.7)';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText(`Nodes: ${state.scNodes.length - 1}  |  Pos: (${Math.round(player.x - cx0())}, ${Math.round(player.y - cy0())})`, 10, H() - 40);
+  }
+
   function collideRect(a, bx, by, bw, bh) {
     return a.x < bx+bw && a.x+a.w > bx && a.y < by+bh && a.y+a.h > by;
   }
 
+  // ── Update ──
   function update() {
-    frameCount++;
     // Input
-    if (keys['ArrowLeft'] || keys['KeyA'])  { player.vx = -SPEED; player.emoji = '👾'; }
-    else if (keys['ArrowRight'] || keys['KeyD']) { player.vx = SPEED; player.emoji = '👾'; }
+    if (keys['ArrowLeft']||keys['KeyA'])  player.vx = -SPEED;
+    else if (keys['ArrowRight']||keys['KeyD']) player.vx = SPEED;
     else player.vx *= 0.8;
-    if ((keys['Space'] || keys['ArrowUp'] || keys['KeyW']) && player.onGround) {
+    if ((keys['Space']||keys['ArrowUp']||keys['KeyW']) && player.onGround) {
       player.vy = JUMP; player.onGround = false;
     }
-
     // Physics
     player.vy += GRAVITY;
     player.x += player.vx;
     player.y += player.vy;
     player.onGround = false;
-
+    // Boundaries
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.w > W()) player.x = W() - player.w;
     // Platform collision
     platforms.forEach(p => {
       const py = typeof p.y === 'function' ? p.y() : p.y;
       const pw = typeof p.w === 'function' ? p.w() : p.w;
       if (collideRect(player, p.x, py, pw, p.h)) {
-        if (player.vy > 0 && player.y + player.h - player.vy <= py + 4) {
-          player.y = py - player.h; player.vy = 0; player.onGround = true;
-        } else if (player.vy < 0) {
-          player.y = py + p.h; player.vy = 0;
-        } else {
-          player.x -= player.vx;
+        if (player.vy > 0 && player.y + player.h - player.vy <= py + 2) {
+          player.y = py - player.h;
+          player.vy = 0;
+          player.onGround = true;
         }
       }
     });
-
-    // Boundaries
-    if (player.x < 0) player.x = 0;
-    if (player.x + player.w > W()) player.x = W() - player.w;
-    if (player.y > H() + 100) { player.x = 80; player.y = 200; player.vy = 0; }
-
-    // Coin collection
-    coins.forEach(c => {
-      if (c.collected) return;
-      if (Math.hypot(player.x+player.w/2 - c.x, player.y+player.h/2 - c.y) < c.r + 18) {
-        c.collected = true; score += 10;
-        document.getElementById('score2d').textContent = score;
-        spawnParticles(c.x, c.y, '#ffd700');
-      }
-    });
-    if (coins.every(c=>c.collected)) { spawnCoins(); score += 50; document.getElementById('score2d').textContent = score; }
-
     // Enemy collision
     enemies.forEach(en => {
       if (collideRect(player, en.x, en.y, en.w, en.h)) {
-        player.x = 80; player.y = 200; player.vy = 0;
+        lives = Math.max(0, lives - 1);
+        document.getElementById('lives2d').innerHTML = '❤️'.repeat(lives) || '💀';
+        player.x = 60; player.y = H() - 100; player.vy = 0;
         spawnParticles(player.x, player.y, '#e06c75');
+        score = Math.max(0, score - 5);
+        if (lives === 0) {
+          log('warn', '  Game Over! Score: ' + score);
+          stopGame();
+        }
       }
     });
+    // Fall off screen → respawn
+    if (player.y > H() + 50) {
+      player.x = 60; player.y = H() - 100; player.vy = 0;
+      lives = Math.max(0, lives - 1);
+      document.getElementById('lives2d').innerHTML = '❤️'.repeat(lives) || '💀';
+    }
+    score++;
+    if (score % 100 === 0) document.getElementById('score2d').textContent = Math.floor(score/10);
   }
 
   function draw() {
     ctx.clearRect(0, 0, W(), H());
-    drawBg(); drawPlatforms(); drawCoins(); drawEnemies(); drawPlayer(); drawParticles();
+    drawBg();
+    drawPlatforms();
+    drawGenericNodes();
+    drawEnemies();
+    drawPlayer();
+    drawParticles();
+    drawHUD();
     countFps();
   }
 
