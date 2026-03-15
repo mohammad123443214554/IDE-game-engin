@@ -1069,8 +1069,8 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
   <div class="ctx-sep"></div>
   <div class="ctx-item" onclick="ctxEdit()">✏️ Edit Object</div>
   <div class="ctx-sep"></div>
-  <div class="ctx-item danger" onclick="ctxDelete()">🙈 Canvas se Hatao</div>
-  <div class="ctx-item danger" onclick="deleteNodePermanently(document.getElementById('ctxMenu').dataset.nodeId);closeCtxMenu()">🗑️ Permanently Delete</div>
+  <div class="ctx-item danger" onclick="ctxDelete()">🙈 Hide from Canvas</div>
+  <div class="ctx-item danger" onclick="deleteNodePermanently(document.getElementById('ctxMenu').dataset.nodeId)">🗑️ Delete Permanently</div>
 </div>
 
 <!-- ===== EDIT PANEL ===== -->
@@ -1545,7 +1545,7 @@ function renderTree(){
 
     // Show eye icon if not on canvas
     const eyeBtn = (n.id!=='root' && !onCanvas)
-      ? `<span class="tn-eye" title="Canvas pe add karo" onclick="event.stopPropagation();addToCanvas('${n.id}')">👁️</span>`
+      ? `<span class="tn-eye" title="Add back to canvas" onclick="event.stopPropagation();addToCanvas('${n.id}')">👁️</span>`
       : '';
 
     d.innerHTML=`<span class="ni">${n.icon}</span> <span class="tn-name" style="opacity:${onCanvas||n.id==='root'?1:0.45}">${n.name}</span>${eyeBtn}<span class="na">▸</span>`;
@@ -1567,7 +1567,7 @@ function renderTree(){
   document.getElementById('sbNodes').textContent=(state.scNodes.length-1)+' nodes';
 }
 
-// Canvas se hata diya tha — wapas add karo
+// Node was hidden from canvas — add it back
 function addToCanvas(id){
   const node = state.scNodes.find(n=>n.id===id);
   if(!node||state.objects[id]) return;
@@ -1576,8 +1576,8 @@ function addToCanvas(id){
              :node.name.toLowerCase().includes('platform')?'platform':'generic';
   spawnAt(id, node.icon, node.name, cls, 0, 0);
   selTN(id);
-  toast('✓ '+node.name+' canvas pe wapas aaya!');
-  log('info','  "'+node.name+'" canvas pe add kiya.');
+  toast('✓ '+node.name+' added back to canvas!');
+  log('info','  "'+node.name+'" added back to canvas.');
 }
 
 // ── Tree → Canvas Drag ─────────────────────────────────────────
@@ -1901,31 +1901,31 @@ function ctxDelete(){
   if(!node) return;
   closeCtxMenu();
 
-  if(!confirm(`"${node.name}" canvas se hatana chahte ho?`)) return;
+  if(!confirm(`Remove "${node.name}" from canvas? (It will remain in the Scene Tree)`)) return;
 
-  // Sirf canvas se hataao — scene tree mein rakho
+  // Remove from canvas only — keep in scene tree
   const el = document.getElementById('g'+id);
   if(el) el.remove();
   delete state.objects[id];
 
-  // Scene tree mein node rahe — sirf canvas object hata
   state.selNode = null;
 
-  // Inspector clear karo
+  // Clear inspector
   document.getElementById('rpCon').innerHTML='<div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect properties.</div>';
   document.getElementById('insName').textContent='— None —';
 
-  // Tree ko refresh karo — node wahan rahega
+  // Refresh tree — node stays
   renderTree();
-  log('info', '  "'+node.name+'" canvas se hata diya (tree mein hai).');
-  toast('🗑 Canvas se hata diya', 'er');
+  log('info', '  "'+node.name+'" removed from canvas (still in Scene Tree).');
+  toast('🙈 Removed from canvas', 'er');
 }
 
-// Scene tree se PERMANENTLY delete karna ho to ye function use karo
+// Permanently delete from both canvas and tree
 function deleteNodePermanently(id){
+  closeCtxMenu();
   const node = state.scNodes.find(n=>n.id===id);
   if(!node) return;
-  if(!confirm(`"${node.name}" permanently delete karna chahte ho? Tree se bhi hata diya jaayega.`)) return;
+  if(!confirm(`Permanently delete "${node.name}"? This removes it from both canvas and Scene Tree.`)) return;
 
   const el = document.getElementById('g'+id);
   if(el) el.remove();
