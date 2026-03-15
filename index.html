@@ -2688,26 +2688,12 @@ function start2DGame() {
 
   // ── Draw background ──
   function drawBg() {
-    // Sky gradient
+    // Clean sky gradient — no grid lines in preview
     const grad = ctx.createLinearGradient(0, 0, 0, H());
     grad.addColorStop(0, '#0a0e1a');
     grad.addColorStop(1, '#1a2440');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W(), H());
-    // Grid lines (IDE feel)
-    ctx.strokeStyle = 'rgba(71,140,191,0.08)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x < W(); x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H()); ctx.stroke(); }
-    for (let y = 0; y < H(); y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W(), y); ctx.stroke(); }
-    // Scene origin cross
-    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(cx0(), 0); ctx.lineTo(cx0(), H()); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, cy0()); ctx.lineTo(W(), cy0()); ctx.stroke();
-    // Origin label
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '10px monospace';
-    ctx.fillText('(0,0)', cx0()+4, cy0()-4);
   }
 
   // ── Draw platforms ──
@@ -2809,13 +2795,7 @@ function start2DGame() {
 
   // ── HUD ──
   function drawHUD() {
-    // Score
     document.getElementById('score2d').textContent = score;
-    // Scene info
-    ctx.fillStyle = 'rgba(71,140,191,0.7)';
-    ctx.font = '10px monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText(`Nodes: ${state.scNodes.length - 1}  |  Pos: (${Math.round(player.x - cx0())}, ${Math.round(player.y - cy0())})`, 10, H() - 40);
   }
 
   function collideRect(a, bx, by, bw, bh) {
