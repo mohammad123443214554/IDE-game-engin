@@ -279,10 +279,32 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .ide-user-av{width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--green));display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:#fff;flex-shrink:0}
 .ide-user-nm{font-size:.7rem;color:var(--text);font-weight:600}
 
-.ide-body{flex:1;display:flex;overflow:hidden}
+.ide-body{flex:1;display:flex;overflow:hidden;position:relative}
+
+/* ===== RESIZER ===== */
+.resizer{
+  flex-shrink:0;background:var(--border);
+  transition:background .15s;
+  position:relative;z-index:10;
+}
+.resizer:hover,.resizer.dragging{background:var(--accent)}
+.resizer.v{width:4px;cursor:col-resize}
+.resizer.v::after{
+  content:'⋮';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  color:var(--text3);font-size:.9rem;line-height:1;pointer-events:none;
+  transition:color .15s;
+}
+.resizer.v:hover::after,.resizer.v.dragging::after{color:#fff}
+.resizer.h{height:4px;cursor:row-resize;width:100%}
+.resizer.h::after{
+  content:'···';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  color:var(--text3);font-size:.7rem;letter-spacing:2px;pointer-events:none;
+  transition:color .15s;
+}
+.resizer.h:hover::after,.resizer.h.dragging::after{color:#fff}
 
 /* Left Panel */
-.ide-lp{width:210px;min-width:210px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.ide-lp{width:210px;min-width:100px;max-width:400px;background:var(--panel);border-right:none;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
 .ptb{display:flex;border-bottom:1px solid var(--border);background:var(--bg2)}
 .ptb-btn{flex:1;padding:7px 2px;text-align:center;background:transparent;color:var(--text3);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid transparent;transition:all .15s}
 .ptb-btn.act{color:var(--accent);border-bottom-color:var(--accent);background:var(--panel)}
@@ -299,7 +321,7 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .tn .na{font-size:.6rem;color:var(--text3);margin-left:auto;flex-shrink:0}
 
 /* Main Canvas */
-.ide-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.ide-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:200px}
 .etabs{display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;min-height:33px}
 .etab{display:flex;align-items:center;gap:6px;padding:6px 14px;font-size:.77rem;color:var(--text3);border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;transition:all .15s;flex-shrink:0;border-bottom:2px solid transparent;min-height:33px}
 .etab:hover{background:var(--bg3);color:var(--text)}
@@ -308,7 +330,7 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .etab-close:hover{background:var(--red);color:#fff}
 
 /* Canvas viewport */
-.cva{flex:1;position:relative;overflow:hidden;background:var(--bg3)}
+.cva{flex:1;position:relative;overflow:hidden;background:var(--bg3);min-height:200px}
 .cv-toolbar{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;gap:2px;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:3px;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 .ct{width:28px;height:28px;border-radius:5px;background:transparent;color:var(--text2);font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer}
 .ct:hover{background:var(--bg3);color:var(--text)}
@@ -334,7 +356,7 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .code-ed{flex:1;padding:14px 16px;font-size:.8rem;line-height:1.7;white-space:pre;color:var(--text);outline:none;min-width:0;font-family:var(--fc);tab-size:4}
 
 /* Bottom */
-.ide-bot{height:155px;min-height:155px;background:var(--panel);border-top:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.ide-bot{height:155px;min-height:60px;max-height:60vh;background:var(--panel);border-top:none;display:flex;flex-direction:column;flex-shrink:0}
 .bot-tabs{display:flex;background:var(--bg2);border-bottom:1px solid var(--border)}
 .bot-tab{padding:6px 14px;font-size:.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;border-bottom:2px solid transparent;transition:all .15s;cursor:pointer}
 .bot-tab.act{color:var(--accent);border-bottom-color:var(--accent);background:var(--panel)}
@@ -344,7 +366,7 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .ll.li{color:var(--text2)} .ll.lk{color:var(--green)} .ll.lw{color:var(--yellow)} .ll.le{color:var(--red)}
 
 /* Right Inspector */
-.ide-rp{width:240px;min-width:240px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.ide-rp{width:240px;min-width:100px;max-width:420px;background:var(--panel);border-left:none;display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
 .rp-hdr{padding:7px 12px;font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;justify-content:space-between;align-items:center}
 .rp-con{flex:1;overflow-y:auto}
 .rp-gh{display:flex;align-items:center;gap:6px;padding:7px 12px;font-size:.72rem;font-weight:600;color:var(--text2);cursor:pointer;background:var(--bg2);transition:background .1s;border-bottom:1px solid var(--border)}
@@ -372,7 +394,26 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 .dds{height:1px;background:var(--border);margin:4px 0}
 .ddk{margin-left:auto;font-family:var(--fc);font-size:.62rem;color:var(--text3)}
 
-/* Lock overlay */
+/* Panel collapse btn */
+.panel-toggle{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:16px;height:32px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:var(--text3);cursor:pointer;
+  transition:all .15s;z-index:11;
+}
+.panel-toggle:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.resizer.v .panel-toggle{left:-8px}
+/* Resizer tooltip */
+.resizer[title]:hover::before{
+  content:attr(title);
+  position:absolute;top:-28px;left:50%;transform:translateX(-50%);
+  background:var(--bg2);border:1px solid var(--border);color:var(--text2);
+  font-size:.65rem;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;
+  font-family:var(--fu);
+}
+
 .lock-ov{position:absolute;inset:0;z-index:50;background:rgba(15,17,23,.88);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
 .lock-ov .l-ico{font-size:2.5rem;opacity:.5}
 .lock-ov h3{font-size:.95rem;font-weight:600;color:#fff}
@@ -767,9 +808,9 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
     </div>
   </div>
 
-  <div class="ide-body">
+  <div class="ide-body" id="ideBody">
     <!-- Left Panel -->
-    <div class="ide-lp">
+    <div class="ide-lp" id="ideLP">
       <div class="ptb">
         <button class="ptb-btn act" onclick="swLP(this,'lt1')">Scene</button>
         <button class="ptb-btn" onclick="swLP(this,'lt2')">Files</button>
@@ -799,8 +840,11 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
       </div>
     </div>
 
+    <!-- Left Resizer -->
+    <div class="resizer v" id="resizerLeft" title="Drag to resize"></div>
+
     <!-- Main Editor -->
-    <div class="ide-main">
+    <div class="ide-main" id="ideMain">
       <div class="etabs" id="eTabs">
         <div class="etab act" data-tab="scene"><span>🎬</span> Main Scene<button class="etab-close">✕</button></div>
       </div>
@@ -827,8 +871,11 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
       </div>
     </div>
 
+    <!-- Right Resizer -->
+    <div class="resizer v" id="resizerRight" title="Drag to resize"></div>
+
     <!-- Inspector -->
-    <div class="ide-rp">
+    <div class="ide-rp" id="ideRP">
       <div class="rp-hdr">Inspector <span style="color:var(--accent);font-size:.7rem" id="insName">— None —</span></div>
       <div class="rp-con" id="rpCon">
         <div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect its properties.</div>
@@ -836,8 +883,11 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
     </div>
   </div>
 
+  <!-- Bottom Resizer -->
+  <div class="resizer h" id="resizerBottom" title="Drag to resize"></div>
+
   <!-- Bottom Panel -->
-  <div class="ide-bot">
+  <div class="ide-bot" id="ideBot">
     <div class="bot-tabs">
       <button class="bot-tab act" onclick="swBot(this,'bo1')">Output</button>
       <button class="bot-tab" onclick="swBot(this,'bo2')">Console</button>
@@ -1462,8 +1512,101 @@ function log(type,msg){const o=document.getElementById('bo1');const d=document.c
 function toast(msg,t='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+t+' show';setTimeout(()=>el.classList.remove('show'),3200);}
 
 // ================================================================
-//  KEYBOARD
+//  RESIZABLE PANELS
 // ================================================================
+function initResizers() {
+  // Left panel resizer
+  makeResizer(
+    document.getElementById('resizerLeft'),
+    document.getElementById('ideLP'),
+    'h',
+    100, 400
+  );
+  // Right panel resizer
+  makeResizer(
+    document.getElementById('resizerRight'),
+    document.getElementById('ideRP'),
+    'h-right',
+    100, 420
+  );
+  // Bottom panel resizer
+  makeResizer(
+    document.getElementById('resizerBottom'),
+    document.getElementById('ideBot'),
+    'v-bottom',
+    60, window.innerHeight * 0.6
+  );
+}
+
+function makeResizer(resizerEl, targetEl, direction, minSize, maxSize) {
+  if (!resizerEl || !targetEl) return;
+  let startPos, startSize;
+
+  function onStart(e) {
+    e.preventDefault();
+    resizerEl.classList.add('dragging');
+    document.body.style.cursor = direction.startsWith('h') ? 'col-resize' : 'row-resize';
+    document.body.style.userSelect = 'none';
+
+    if (direction === 'h' || direction === 'h-right') {
+      startPos = e.touches ? e.touches[0].clientX : e.clientX;
+      startSize = targetEl.getBoundingClientRect().width;
+    } else {
+      startPos = e.touches ? e.touches[0].clientY : e.clientY;
+      startSize = targetEl.getBoundingClientRect().height;
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+    document.addEventListener('touchmove', onMove, {passive:false});
+    document.addEventListener('touchend', onEnd);
+  }
+
+  function onMove(e) {
+    e.preventDefault();
+    const pos = e.touches ? e.touches[0] : e;
+    let delta, newSize;
+
+    if (direction === 'h') {
+      delta = pos.clientX - startPos;
+      newSize = Math.min(maxSize, Math.max(minSize, startSize + delta));
+      targetEl.style.width = newSize + 'px';
+    } else if (direction === 'h-right') {
+      delta = startPos - pos.clientX;
+      newSize = Math.min(maxSize, Math.max(minSize, startSize + delta));
+      targetEl.style.width = newSize + 'px';
+    } else {
+      delta = startPos - pos.clientY;
+      newSize = Math.min(maxSize, Math.max(minSize, startSize + delta));
+      targetEl.style.height = newSize + 'px';
+    }
+  }
+
+  function onEnd() {
+    resizerEl.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  }
+
+  resizerEl.addEventListener('mousedown', onStart);
+  resizerEl.addEventListener('touchstart', onStart, {passive:false});
+}
+
+// Double-click to reset panel to default size
+document.addEventListener('DOMContentLoaded', () => {
+  initResizers();
+  const rL = document.getElementById('resizerLeft');
+  const rR = document.getElementById('resizerRight');
+  const rB = document.getElementById('resizerBottom');
+  if(rL) rL.addEventListener('dblclick', () => { document.getElementById('ideLP').style.width = '210px'; toast('↔ Panel reset','in'); });
+  if(rR) rR.addEventListener('dblclick', () => { document.getElementById('ideRP').style.width = '240px'; toast('↔ Panel reset','in'); });
+  if(rB) rB.addEventListener('dblclick', () => { document.getElementById('ideBot').style.height = '155px'; toast('↕ Panel reset','in'); });
+});
+
 function setupKeyboard(){
   document.addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey){
