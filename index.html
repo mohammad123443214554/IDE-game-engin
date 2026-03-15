@@ -1990,22 +1990,29 @@ function start2DGame() {
   // Always add ground floor
   platforms.push({ x: 0, y: () => H() - 30, w: () => W(), h: 30, color: '#3a7a3a', isGround: true });
 
-  // Read from state.objects
+  // Read from state.objects — use EXACT size, color, position from canvas
   Object.entries(state.objects).forEach(([id, obj]) => {
     const node = state.scNodes.find(n => n.id === id);
     if (!node) return;
     const nm = node.name.toLowerCase();
-    const sx = cx0() + obj.x;  // scene x → screen x
-    const sy = cy0() + obj.y;  // scene y → screen y
+    // Use actual w/h from state (set by resize), fallback to defaults
+    const ow = obj.w || 40;
+    const oh = obj.h || 40;
+    const ocolor = obj.color || '#478cbf';
+    const oicon = obj.icon || node.icon || '📦';
+
+    // Center object on its scene position
+    const sx = cx0() + obj.x - ow/2;
+    const sy = cy0() + obj.y - oh/2;
 
     if (nm.includes('player')) {
-      player = { x: sx - 18, y: sy - 18, w: 36, h: 36, vx: 0, vy: 0, onGround: false, emoji: node.icon || '👾', color: '#478cbf', name: node.name };
+      player = { x: sx, y: sy, w: ow, h: oh, vx: 0, vy: 0, onGround: false, emoji: oicon, color: ocolor, name: node.name };
     } else if (nm.includes('platform')) {
-      platforms.push({ x: sx - 65, y: () => sy, w: 130, h: 18, color: '#4a9a4a' });
+      platforms.push({ x: sx, y: () => cy0() + obj.y - oh/2, w: ow, h: oh, color: ocolor });
     } else if (nm.includes('enemy')) {
-      enemies.push({ x: sx - 16, y: sy - 16, w: 32, h: 32, vx: 1.4, dir: 1, color: '#e06c75', emoji: node.icon || '👹', minX: sx - 80, maxX: sx + 80, name: node.name });
+      enemies.push({ x: sx, y: sy, w: ow, h: oh, vx: 1.4, dir: 1, color: ocolor, emoji: oicon, minX: sx - 80, maxX: sx + 80, name: node.name });
     } else {
-      genericNodes.push({ x: sx - 16, y: sy - 16, w: 32, h: 32, color: '#7a7aaa', emoji: node.icon || '📦', name: node.name });
+      genericNodes.push({ x: sx, y: sy, w: ow, h: oh, color: ocolor, emoji: oicon, name: node.name });
     }
   });
 
@@ -2089,19 +2096,22 @@ function start2DGame() {
   // ── Draw enemies ──
   function drawEnemies() {
     enemies.forEach(en => {
-      const py = typeof platforms[1]?.y === 'function' ? platforms[1].y() - en.h : en.y;
-      en.y = py;
+      // Move left-right
       en.x += en.vx * en.dir;
       if (en.x > en.maxX || en.x < en.minX) en.dir *= -1;
-      ctx.fillStyle = en.color;
+      // Draw body with actual color
+      ctx.fillStyle = en.color || '#e06c75';
       ctx.beginPath();
-      ctx.roundRect(en.x, en.y, en.w, en.h, 6);
+      ctx.roundRect(en.x, en.y, en.w, en.h, Math.min(en.w, en.h)/2);
       ctx.fill();
-      ctx.font = '18px serif';
+      // Emoji — scale with size
+      const emojiSize = Math.min(en.w, en.h) * 0.6;
+      ctx.font = emojiSize+'px serif';
       ctx.textAlign = 'center';
-      ctx.fillText(en.emoji, en.x + en.w/2, en.y + en.h/2 + 7);
-      ctx.fillStyle = 'rgba(255,255,255,0.5)';
-      ctx.font = '9px sans-serif';
+      ctx.fillText(en.emoji, en.x + en.w/2, en.y + en.h/2 + emojiSize*0.3);
+      // Name label
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = '10px sans-serif';
       ctx.fillText(en.name, en.x + en.w/2, en.y - 4);
     });
   }
@@ -2113,18 +2123,20 @@ function start2DGame() {
     ctx.beginPath();
     ctx.ellipse(player.x + player.w/2, player.y + player.h + 2, player.w/2, 5, 0, 0, Math.PI*2);
     ctx.fill();
-    // Body
+    // Body — use actual color from scene
     const grad = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h);
-    grad.addColorStop(0, '#5ba3d9');
-    grad.addColorStop(1, '#2a5a8a');
+    const c1 = player.color || '#478cbf';
+    grad.addColorStop(0, c1);
+    grad.addColorStop(1, c1+'99');
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.roundRect(player.x, player.y, player.w, player.h, 6);
     ctx.fill();
-    // Emoji
-    ctx.font = '22px serif';
+    // Emoji — scale with size
+    const emojiSize = Math.min(player.w, player.h) * 0.55;
+    ctx.font = emojiSize+'px serif';
     ctx.textAlign = 'center';
-    ctx.fillText(player.emoji, player.x + player.w/2, player.y + player.h/2 + 8);
+    ctx.fillText(player.emoji, player.x + player.w/2, player.y + player.h/2 + emojiSize*0.35);
     // Name label
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 10px sans-serif';
