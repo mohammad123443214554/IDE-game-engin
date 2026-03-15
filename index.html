@@ -437,6 +437,48 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
   font-family:var(--fu);
 }
 
+/* ── Resize Handles ── */
+.rh{position:absolute;width:8px;height:8px;background:#fff;border:1.5px solid var(--accent);border-radius:2px;z-index:30;opacity:0;transition:opacity .15s;pointer-events:all}
+.go.sel .rh{opacity:1}
+.rh-nw{top:-4px;left:-4px;cursor:nw-resize}
+.rh-n{top:-4px;left:50%;transform:translateX(-50%);cursor:n-resize}
+.rh-ne{top:-4px;right:-4px;cursor:ne-resize}
+.rh-e{top:50%;right:-4px;transform:translateY(-50%);cursor:e-resize}
+.rh-se{bottom:-4px;right:-4px;cursor:se-resize}
+.rh-s{bottom:-4px;left:50%;transform:translateX(-50%);cursor:s-resize}
+.rh-sw{bottom:-4px;left:-4px;cursor:sw-resize}
+.rh-w{top:50%;left:-4px;transform:translateY(-50%);cursor:w-resize}
+
+/* ── Context Menu ── */
+#ctxMenu{display:none;position:fixed;z-index:9000;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:5px 0;min-width:165px;box-shadow:0 8px 28px rgba(0,0,0,.55);animation:fadeUp .12s ease}
+.ctx-item{display:flex;align-items:center;gap:9px;padding:8px 14px;font-size:.82rem;color:var(--text2);cursor:pointer;transition:background .1s}
+.ctx-item:hover{background:var(--bg3);color:var(--text)}
+.ctx-item.danger{color:var(--red)}
+.ctx-item.danger:hover{background:rgba(224,108,117,.1)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 0}
+
+/* ── Edit Panel ── */
+#editPanel{display:none;position:fixed;z-index:8000;bottom:80px;right:24px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;width:260px;box-shadow:0 12px 40px rgba(0,0,0,.5);animation:fadeUp .15s ease}
+.ep-title{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.ep-close{background:var(--bg3);border:1px solid var(--border);color:var(--text3);width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.8rem;cursor:pointer;transition:all .15s}
+.ep-close:hover{color:#fff;border-color:var(--accent)}
+.ep-row{margin-bottom:12px}
+.ep-label{font-size:.68rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:block}
+.ep-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:var(--fu);font-size:.85rem;transition:border-color .15s}
+.ep-input:focus{border-color:var(--accent)}
+.ep-row-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.ep-color-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ep-color-prev{width:32px;height:32px;border-radius:6px;border:2px solid var(--border);flex-shrink:0;cursor:pointer}
+.ep-quick-colors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.ep-qc{width:22px;height:22px;border-radius:4px;cursor:pointer;border:2px solid transparent;transition:all .15s;flex-shrink:0}
+.ep-qc:hover{border-color:#fff;transform:scale(1.15)}
+.ep-ico-grid{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.ep-ico{width:28px;height:28px;border-radius:5px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;transition:all .15s}
+.ep-ico:hover,.ep-ico.sel{border-color:var(--accent);background:rgba(71,140,191,.12)}
+.ep-apply{width:100%;padding:10px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:.88rem;font-weight:600;font-family:var(--fu);transition:all .2s;cursor:pointer;margin-top:4px}
+.ep-apply:hover{background:var(--ah);box-shadow:0 6px 18px rgba(71,140,191,.3)}
+.ep-slider{width:100%;accent-color:var(--accent)}
+
 .lock-ov{position:absolute;inset:0;z-index:50;background:rgba(15,17,23,.88);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
 .lock-ov .l-ico{font-size:2.5rem;opacity:.5}
 .lock-ov h3{font-size:.95rem;font-weight:600;color:#fff}
@@ -994,6 +1036,67 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
   </div>
 </div>
 
+<!-- ===== RIGHT-CLICK CONTEXT MENU ===== -->
+<div id="ctxMenu">
+  <div class="ctx-item" onclick="ctxDuplicate()">📋 Duplicate</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" onclick="ctxEdit()">✏️ Edit Object</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" onclick="ctxDelete()">🗑️ Delete</div>
+</div>
+
+<!-- ===== EDIT PANEL ===== -->
+<div id="editPanel">
+  <div class="ep-title">
+    ✏️ Edit Object
+    <button class="ep-close" onclick="closeEditPanel()">✕</button>
+  </div>
+  <div class="ep-row">
+    <label class="ep-label">Name</label>
+    <input class="ep-input" id="ep-name" placeholder="Object name">
+  </div>
+  <div class="ep-row">
+    <label class="ep-label">Icon / Emoji</label>
+    <div class="ep-ico-grid">
+      <div class="ep-ico" onclick="pickIcon(this,'👾')">👾</div>
+      <div class="ep-ico" onclick="pickIcon(this,'👹')">👹</div>
+      <div class="ep-ico" onclick="pickIcon(this,'🟩')">🟩</div>
+      <div class="ep-ico" onclick="pickIcon(this,'⭐')">⭐</div>
+      <div class="ep-ico" onclick="pickIcon(this,'🔥')">🔥</div>
+      <div class="ep-ico" onclick="pickIcon(this,'💎')">💎</div>
+      <div class="ep-ico" onclick="pickIcon(this,'🚀')">🚀</div>
+      <div class="ep-ico" onclick="pickIcon(this,'💣')">💣</div>
+      <div class="ep-ico" onclick="pickIcon(this,'🏆')">🏆</div>
+      <div class="ep-ico" onclick="pickIcon(this,'❤️')">❤️</div>
+    </div>
+    <input class="ep-input" id="ep-icon" placeholder="Or type any emoji" style="margin-top:4px">
+  </div>
+  <div class="ep-row">
+    <label class="ep-label">Color</label>
+    <div class="ep-color-row">
+      <div class="ep-color-prev" id="ep-color-prev" onclick="document.getElementById('ep-color-native').click()"></div>
+      <input type="color" id="ep-color-native" style="display:none" oninput="syncColor(this.value)">
+      <input class="ep-input" id="ep-color" placeholder="#478cbf" oninput="syncColorText(this.value)" style="flex:1">
+    </div>
+    <div class="ep-quick-colors" id="epQuickColors"></div>
+  </div>
+  <div class="ep-row-2">
+    <div>
+      <label class="ep-label">Width (px)</label>
+      <input class="ep-input" id="ep-w" type="number" min="20" max="500" placeholder="W">
+    </div>
+    <div>
+      <label class="ep-label">Height (px)</label>
+      <input class="ep-input" id="ep-h" type="number" min="20" max="500" placeholder="H">
+    </div>
+  </div>
+  <div class="ep-row">
+    <label class="ep-label">Opacity: <span id="ep-opacity-val">100%</span></label>
+    <input class="ep-slider" id="ep-opacity" type="range" min="10" max="100" value="100" oninput="document.getElementById('ep-opacity-val').textContent=this.value+'%'">
+  </div>
+  <button class="ep-apply" onclick="applyEdit()">✓ Apply Changes</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1432,52 +1535,298 @@ function addNode(type,icon,cls){
 }
 
 // ================================================================
-//  CANVAS
+//  CANVAS — with Resize Handles, Right-Click Menu, Edit Panel
 // ================================================================
+
+// Object default sizes per type
+const OBJ_DEFAULTS = {
+  player:   { w: 40, h: 40, color: '#478cbf' },
+  enemy:    { w: 38, h: 38, color: '#e06c75' },
+  platform: { w: 130, h: 22, color: '#6dcf6f' },
+  generic:  { w: 36, h: 36, color: '#7a7aaa' },
+};
+
 function spawnDefaults(){
   spawnAt('n1','👾','Player','player',0,0);
   spawnAt('n2','👹','Enemy','enemy',150,-80);
   spawnAt('n3','🟩','Platform','platform',0,100);
 }
+
 function spawnObj(id,icon,name,cls){
   const x=(Math.random()-.5)*300, y=(Math.random()-.5)*140;
   spawnAt(id,icon,name,cls,x,y);
 }
-function spawnAt(id,icon,name,cls,x,y){
-  const vp=document.getElementById('cvOrigin');
-  const el=document.createElement('div');
-  el.className='go'; el.id='g'+id;
-  el.style.left=x+'px'; el.style.top=y+'px';
-  const inner = cls==='player'?`<div class="go-player-box">${icon}</div>`
-               :cls==='enemy'?`<div class="go-enemy-box">${icon}</div>`
-               :cls==='platform'?`<div class="go-platform-box"></div>`
-               :`<div class="go-generic-box">${icon}</div>`;
-  el.innerHTML=`<div class="go-wrap">${inner}</div><div class="go-lbl">${name}</div>`;
-  el.onclick=e=>{e.stopPropagation();selObj(id);};
-  makeDraggable(el,id,x,y);
+
+function spawnAt(id,icon,name,cls,x,y,opts={}){
+  const vp = document.getElementById('cvOrigin');
+  const def = OBJ_DEFAULTS[cls] || OBJ_DEFAULTS.generic;
+  const w = opts.w || def.w;
+  const h = opts.h || def.h;
+  const color = opts.color || def.color;
+
+  const el = document.createElement('div');
+  el.className = 'go';
+  el.id = 'g'+id;
+  el.style.left = x+'px';
+  el.style.top = y+'px';
+  el.style.width = w+'px';
+  el.style.height = h+'px';
+
+  el.innerHTML = buildObjInner(cls, icon, color, w, h, name);
+
+  el.onclick = e => { e.stopPropagation(); selObj(id); };
+  el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+
+  makeDraggable(el, id);
+  makeResizeHandles(el, id);
   vp.appendChild(el);
-  state.objects[id]={el,x,y,name,icon};
+
+  state.objects[id] = { el, x, y, w, h, name, icon, cls, color };
 }
+
+function buildObjInner(cls, icon, color, w, h, name){
+  let inner = '';
+  if(cls==='platform'){
+    inner = `<div class="go-platform-box" style="background:${color};width:${w}px;height:${h}px;border-radius:4px"></div>`;
+  } else {
+    const boxCls = cls==='player'?'go-player-box':cls==='enemy'?'go-enemy-box':'go-generic-box';
+    inner = `<div class="${boxCls}" style="background:${color};width:${w}px;height:${h}px">${icon}</div>`;
+  }
+  return `<div class="go-wrap">${inner}</div><div class="go-lbl">${name}</div>`;
+}
+
+function rebuildObj(id){
+  const obj = state.objects[id];
+  if(!obj) return;
+  const el = obj.el;
+  el.style.width = obj.w+'px';
+  el.style.height = obj.h+'px';
+  el.innerHTML = buildObjInner(obj.cls||'generic', obj.icon, obj.color, obj.w, obj.h, obj.name);
+  // Re-attach events
+  el.onclick = e => { e.stopPropagation(); selObj(id); };
+  el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+  makeResizeHandles(el, id);
+}
+
 function selObj(id){
   document.querySelectorAll('.go').forEach(e=>e.classList.remove('sel'));
-  const el=document.getElementById('g'+id);if(el)el.classList.add('sel');
+  const el=document.getElementById('g'+id);
+  if(el) el.classList.add('sel');
   selTN(id);
 }
-function makeDraggable(el,id){
-  let ox,oy,mx,my;
-  el.addEventListener('mousedown',e=>{
-    e.preventDefault(); ox=state.objects[id]?.x||0; oy=state.objects[id]?.y||0; mx=e.clientX; my=e.clientY;
-    const mm=ev=>{const nx=ox+(ev.clientX-mx),ny=oy+(ev.clientY-my);el.style.left=nx+'px';el.style.top=ny+'px';if(state.objects[id]){state.objects[id].x=nx;state.objects[id].y=ny;}updPXY(nx,ny);};
-    const mu=()=>{document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu);};
-    document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu);
+
+// ── Draggable ──────────────────────────────────────────────────
+function makeDraggable(el, id){
+  let ox, oy, mx, my, dragging=false;
+  el.addEventListener('mousedown', e=>{
+    if(e.button!==0) return;
+    if(e.target.classList.contains('rh')) return; // resize handle
+    e.preventDefault();
+    dragging=true;
+    ox=state.objects[id]?.x||0; oy=state.objects[id]?.y||0;
+    mx=e.clientX; my=e.clientY;
+    el.style.cursor='grabbing';
+    const mm=ev=>{
+      const nx=ox+(ev.clientX-mx), ny=oy+(ev.clientY-my);
+      el.style.left=nx+'px'; el.style.top=ny+'px';
+      if(state.objects[id]){state.objects[id].x=nx; state.objects[id].y=ny;}
+      updPXY(nx,ny);
+    };
+    const mu=()=>{
+      dragging=false; el.style.cursor='';
+      document.removeEventListener('mousemove',mm);
+      document.removeEventListener('mouseup',mu);
+    };
+    document.addEventListener('mousemove',mm);
+    document.addEventListener('mouseup',mu);
   });
   el.addEventListener('touchstart',e=>{
-    ox=state.objects[id]?.x||0;oy=state.objects[id]?.y||0;mx=e.touches[0].clientX;my=e.touches[0].clientY;
-    const tm=ev=>{const nx=ox+(ev.touches[0].clientX-mx),ny=oy+(ev.touches[0].clientY-my);el.style.left=nx+'px';el.style.top=ny+'px';if(state.objects[id]){state.objects[id].x=nx;state.objects[id].y=ny;}};
-    el.addEventListener('touchmove',tm,{passive:true});el.addEventListener('touchend',()=>el.removeEventListener('touchmove',tm),{once:true});
+    if(e.target.classList.contains('rh')) return;
+    ox=state.objects[id]?.x||0; oy=state.objects[id]?.y||0;
+    mx=e.touches[0].clientX; my=e.touches[0].clientY;
+    const tm=ev=>{
+      const nx=ox+(ev.touches[0].clientX-mx), ny=oy+(ev.touches[0].clientY-my);
+      el.style.left=nx+'px'; el.style.top=ny+'px';
+      if(state.objects[id]){state.objects[id].x=nx; state.objects[id].y=ny;}
+    };
+    el.addEventListener('touchmove',tm,{passive:true});
+    el.addEventListener('touchend',()=>el.removeEventListener('touchmove',tm),{once:true});
   },{passive:true});
 }
+
+// ── Resize Handles ─────────────────────────────────────────────
+function makeResizeHandles(el, id){
+  // Remove old handles
+  el.querySelectorAll('.rh').forEach(h=>h.remove());
+  // 8 corners + edges
+  const positions = ['nw','n','ne','e','se','s','sw','w'];
+  positions.forEach(pos=>{
+    const h = document.createElement('div');
+    h.className = 'rh rh-'+pos;
+    h.dataset.pos = pos;
+    h.addEventListener('mousedown', e=>startResize(e, id, pos));
+    h.addEventListener('touchstart', e=>startResizeTouch(e, id, pos), {passive:false});
+    el.appendChild(h);
+  });
+}
+
+function startResize(e, id, pos){
+  e.preventDefault(); e.stopPropagation();
+  const obj = state.objects[id];
+  if(!obj) return;
+  const startX=e.clientX, startY=e.clientY;
+  const startW=obj.w, startH=obj.h, startOX=obj.x, startOY=obj.y;
+
+  document.body.style.cursor = getResizeCursor(pos);
+  document.body.style.userSelect='none';
+
+  const mm=ev=>{
+    const dx=ev.clientX-startX, dy=ev.clientY-startY;
+    applyResize(id, pos, dx, dy, startW, startH, startOX, startOY);
+  };
+  const mu=()=>{
+    document.body.style.cursor=''; document.body.style.userSelect='';
+    document.removeEventListener('mousemove',mm);
+    document.removeEventListener('mouseup',mu);
+    rebuildObj(id);
+  };
+  document.addEventListener('mousemove',mm);
+  document.addEventListener('mouseup',mu);
+}
+
+function startResizeTouch(e, id, pos){
+  e.preventDefault(); e.stopPropagation();
+  const obj = state.objects[id];
+  if(!obj) return;
+  const startX=e.touches[0].clientX, startY=e.touches[0].clientY;
+  const startW=obj.w, startH=obj.h, startOX=obj.x, startOY=obj.y;
+  const tm=ev=>{
+    const dx=ev.touches[0].clientX-startX, dy=ev.touches[0].clientY-startY;
+    applyResize(id, pos, dx, dy, startW, startH, startOX, startOY);
+  };
+  e.target.addEventListener('touchmove',tm,{passive:false});
+  e.target.addEventListener('touchend',()=>{
+    e.target.removeEventListener('touchmove',tm);
+    rebuildObj(id);
+  },{once:true});
+}
+
+function applyResize(id, pos, dx, dy, sw, sh, sox, soy){
+  const obj = state.objects[id];
+  if(!obj) return;
+  const MIN=20;
+  let nw=sw, nh=sh, nx=sox, ny=soy;
+  if(pos.includes('e'))  nw=Math.max(MIN, sw+dx);
+  if(pos.includes('s'))  nh=Math.max(MIN, sh+dy);
+  if(pos.includes('w')){ nw=Math.max(MIN, sw-dx); if(nw>MIN) nx=sox+dx; }
+  if(pos.includes('n')){ nh=Math.max(MIN, sh-dy); if(nh>MIN) ny=soy+dy; }
+  obj.w=nw; obj.h=nh; obj.x=nx; obj.y=ny;
+  obj.el.style.width=nw+'px'; obj.el.style.height=nh+'px';
+  obj.el.style.left=nx+'px'; obj.el.style.top=ny+'px';
+  // Update size in inspector
+  const sw2=document.getElementById('prop_w'), sh2=document.getElementById('prop_h');
+  if(sw2) sw2.value=Math.round(nw); if(sh2) sh2.value=Math.round(nh);
+}
+
+function getResizeCursor(pos){
+  const map={nw:'nw-resize',n:'n-resize',ne:'ne-resize',e:'e-resize',se:'se-resize',s:'s-resize',sw:'sw-resize',w:'w-resize'};
+  return map[pos]||'move';
+}
+
+// ── Right-Click Context Menu ───────────────────────────────────
+function showCtxMenu(e, id){
+  closeCtxMenu(); closeEditPanel();
+  const menu = document.getElementById('ctxMenu');
+  menu.style.display='block';
+  menu.style.left = Math.min(e.clientX, window.innerWidth-180)+'px';
+  menu.style.top  = Math.min(e.clientY, window.innerHeight-160)+'px';
+  menu.dataset.nodeId = id;
+}
+function closeCtxMenu(){ document.getElementById('ctxMenu').style.display='none'; }
+
+function ctxDuplicate(){
+  const id = document.getElementById('ctxMenu').dataset.nodeId;
+  const obj = state.objects[id];
+  const node = state.scNodes.find(n=>n.id===id);
+  if(!obj||!node) return;
+  closeCtxMenu();
+  if(!isPro()&&state.scNodes.length>=6){ toast('🔒 Free: max 5 nodes','er'); return; }
+  const newId = addNd(node.name.replace(/_\d+$/,''), node.icon);
+  renderTree();
+  spawnAt(newId, obj.icon, node.name+'_copy', obj.cls||'generic', obj.x+30, obj.y+30, {w:obj.w, h:obj.h, color:obj.color});
+  selTN(newId);
+  toast('✓ Duplicated!');
+}
+
+function ctxDelete(){
+  const id = document.getElementById('ctxMenu').dataset.nodeId;
+  closeCtxMenu();
+  const el = document.getElementById('g'+id);
+  if(el) el.remove();
+  delete state.objects[id];
+  state.scNodes = state.scNodes.filter(n=>n.id!==id);
+  renderTree();
+  document.getElementById('rpCon').innerHTML='<div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect properties.</div>';
+  document.getElementById('insName').textContent='— None —';
+  toast('🗑 Deleted','er');
+}
+
+function ctxEdit(){
+  const id = document.getElementById('ctxMenu').dataset.nodeId;
+  closeCtxMenu();
+  showEditPanel(id);
+}
+
+// ── Edit Panel ─────────────────────────────────────────────────
+function showEditPanel(id){
+  const obj = state.objects[id];
+  const node = state.scNodes.find(n=>n.id===id);
+  if(!obj) return;
+  const panel = document.getElementById('editPanel');
+  panel.style.display='block';
+  panel.dataset.nodeId=id;
+  document.getElementById('ep-name').value = node?.name||obj.name;
+  document.getElementById('ep-color').value = obj.color||'#478cbf';
+  document.getElementById('ep-w').value = Math.round(obj.w);
+  document.getElementById('ep-h').value = Math.round(obj.h);
+  document.getElementById('ep-icon').value = obj.icon||'📦';
+  document.getElementById('ep-opacity').value = obj.opacity||100;
+  document.getElementById('ep-opacity-val').textContent = (obj.opacity||100)+'%';
+}
+
+function applyEdit(){
+  const panel = document.getElementById('editPanel');
+  const id = panel.dataset.nodeId;
+  const obj = state.objects[id];
+  const node = state.scNodes.find(n=>n.id===id);
+  if(!obj) return;
+  obj.color   = document.getElementById('ep-color').value;
+  obj.w       = parseInt(document.getElementById('ep-w').value)||obj.w;
+  obj.h       = parseInt(document.getElementById('ep-h').value)||obj.h;
+  obj.icon    = document.getElementById('ep-icon').value;
+  obj.opacity = parseInt(document.getElementById('ep-opacity').value)||100;
+  const newName = document.getElementById('ep-name').value;
+  if(newName && node) node.name = newName;
+  obj.name = newName || obj.name;
+  obj.el.style.opacity = obj.opacity/100;
+  rebuildObj(id);
+  renderTree();
+  selTN(id);
+  toast('✓ Applied!');
+}
+
+function closeEditPanel(){
+  document.getElementById('editPanel').style.display='none';
+}
+
+// Close menus on outside click
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#ctxMenu')) closeCtxMenu();
+  if(!e.target.closest('#editPanel') && !e.target.closest('.go')) closeEditPanel();
+});
+
 function updPXY(x,y){const a=document.getElementById('ppx'),b=document.getElementById('ppy');if(a)a.value=Math.round(x);if(b)b.value=Math.round(y);}
+
 
 // ================================================================
 //  INSPECTOR
@@ -2230,18 +2579,53 @@ function ensureResizers() {
 }
 document.addEventListener('DOMContentLoaded', ensureResizers);
 
+// ── Edit Panel helpers ──
+const QUICK_COLORS=['#478cbf','#6dcf6f','#e06c75','#e5c07b','#c678dd','#56b6c2','#e8934a','#ff6b6b','#4ecdc4','#ffeaa7','#fd79a8','#ffffff'];
+
+function initEditPanel(){
+  const qc=document.getElementById('epQuickColors');
+  if(!qc||qc.children.length>0) return;
+  QUICK_COLORS.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='ep-qc';d.style.background=c;d.title=c;
+    d.onclick=()=>syncColor(c);
+    qc.appendChild(d);
+  });
+}
+function syncColor(val){
+  document.getElementById('ep-color').value=val;
+  try{document.getElementById('ep-color-native').value=val;}catch(e){}
+  document.getElementById('ep-color-prev').style.background=val;
+}
+function syncColorText(val){
+  if(/^#[0-9a-fA-F]{6}$/.test(val)){
+    try{document.getElementById('ep-color-native').value=val;}catch(e){}
+    document.getElementById('ep-color-prev').style.background=val;
+  }
+}
+function pickIcon(el,icon){
+  document.querySelectorAll('.ep-ico').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('ep-icon').value=icon;
+}
+
 function setupKeyboard(){
   document.addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey){
       if(e.key==='n'){e.preventDefault();newScene();}
       if(e.key==='s'){e.preventDefault();saveScene();}
+      if(e.key==='d'&&state.selNode&&state.objects[state.selNode]){e.preventDefault();document.getElementById('ctxMenu').dataset.nodeId=state.selNode;ctxDuplicate();}
     }
-    if(!e.target.closest('#codeEd')){
+    if(!e.target.closest('#codeEd')&&!e.target.closest('.ep-input')){
       if(e.key==='q')setTool('select');
       if(e.key==='w')setTool('move');
       if(e.key==='e')setTool('rotate');
       if(e.key==='r')setTool('scale');
       if(e.key==='F5'){e.preventDefault();runGame();}
+      if((e.key==='Delete'||e.key==='Backspace')&&state.selNode&&state.objects[state.selNode]){
+        document.getElementById('ctxMenu').dataset.nodeId=state.selNode;
+        ctxDelete();
+      }
     }
   });
 }
