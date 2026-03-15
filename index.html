@@ -283,23 +283,46 @@ h1 .bl{color:var(--accent)} h1 .gr{color:var(--green)}
 
 /* ===== RESIZER ===== */
 .resizer{
-  flex-shrink:0;background:var(--border);
+  flex-shrink:0;
+  position:relative;z-index:20;
   transition:background .15s;
-  position:relative;z-index:10;
 }
-.resizer:hover,.resizer.dragging{background:var(--accent)}
-.resizer.v{width:4px;cursor:col-resize}
+.resizer.v{
+  width:5px;cursor:col-resize;
+  background:var(--border);
+}
+.resizer.v:hover,.resizer.v.dragging{
+  background:var(--accent);
+}
+/* Wider invisible grab zone */
+.resizer.v::before{
+  content:'';position:absolute;top:0;bottom:0;
+  left:-4px;right:-4px;cursor:col-resize;z-index:21;
+}
 .resizer.v::after{
-  content:'⋮';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  color:var(--text3);font-size:.9rem;line-height:1;pointer-events:none;
-  transition:color .15s;
+  content:'⋮';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:var(--text3);font-size:10px;pointer-events:none;
+  transition:color .15s;line-height:1;
 }
 .resizer.v:hover::after,.resizer.v.dragging::after{color:#fff}
-.resizer.h{height:4px;cursor:row-resize;width:100%}
+
+.resizer.h{
+  height:5px;cursor:row-resize;width:100%;
+  background:var(--border);
+}
+.resizer.h:hover,.resizer.h.dragging{
+  background:var(--accent);
+}
+.resizer.h::before{
+  content:'';position:absolute;left:0;right:0;
+  top:-4px;bottom:-4px;cursor:row-resize;z-index:21;
+}
 .resizer.h::after{
-  content:'···';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  color:var(--text3);font-size:.7rem;letter-spacing:2px;pointer-events:none;
-  transition:color .15s;
+  content:'···';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  color:var(--text3);font-size:8px;letter-spacing:2px;
+  pointer-events:none;transition:color .15s;
 }
 .resizer.h:hover::after,.resizer.h.dragging::after{color:#fff}
 
@@ -1305,6 +1328,8 @@ function openIDE() {
   if (state.scNodes.length === 0) initScene();
   updateIDEUserUI();
   closeDD();
+  // Init resizers every time IDE opens (fixes first-load issue)
+  setTimeout(ensureResizers, 50);
 }
 
 function goHome() {
@@ -2183,16 +2208,20 @@ function makeResizer(resizerEl, targetEl, direction, minSize, maxSize) {
   resizerEl.addEventListener('touchstart', onStart, {passive:false});
 }
 
-// Double-click to reset panel to default size
-document.addEventListener('DOMContentLoaded', () => {
+// Init resizers + double-click to reset
+let resizersDone = false;
+function ensureResizers() {
+  if (resizersDone) return;
+  resizersDone = true;
   initResizers();
   const rL = document.getElementById('resizerLeft');
   const rR = document.getElementById('resizerRight');
   const rB = document.getElementById('resizerBottom');
-  if(rL) rL.addEventListener('dblclick', () => { document.getElementById('ideLP').style.width = '210px'; toast('↔ Panel reset','in'); });
-  if(rR) rR.addEventListener('dblclick', () => { document.getElementById('ideRP').style.width = '240px'; toast('↔ Panel reset','in'); });
-  if(rB) rB.addEventListener('dblclick', () => { document.getElementById('ideBot').style.height = '155px'; toast('↕ Panel reset','in'); });
-});
+  if(rL) rL.addEventListener('dblclick', () => { document.getElementById('ideLP').style.width = '210px'; toast('↔ Reset','in'); });
+  if(rR) rR.addEventListener('dblclick', () => { document.getElementById('ideRP').style.width = '240px'; toast('↔ Reset','in'); });
+  if(rB) rB.addEventListener('dblclick', () => { document.getElementById('ideBot').style.height = '155px'; toast('↕ Reset','in'); });
+}
+document.addEventListener('DOMContentLoaded', ensureResizers);
 
 function setupKeyboard(){
   document.addEventListener('keydown',e=>{
