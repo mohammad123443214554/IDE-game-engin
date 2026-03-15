@@ -1058,30 +1058,35 @@ h1 .dim{color:var(--text3)}
       <span style="font-size:.75rem;color:var(--text2);font-weight:500" id="sbScene">Game Scene</span>
       <div style="width:1px;height:16px;background:var(--border)"></div>
 
-      <!-- 2D Preview button -->
-      <div style="display:flex;align-items:stretch;position:relative">
-        <button class="brun" id="btnRun2d" onclick="runGame('2d')" style="gap:5px;padding:4px 14px;font-size:.78rem;border-radius:4px 0 0 4px;border-right:1px solid rgba(255,255,255,.15)">
+      <!-- Preview split button -->
+      <div style="display:flex;align-items:stretch;position:relative;z-index:100">
+        <button class="brun" id="btnRun2d" onclick="runGame('2d')"
+          style="border-radius:4px 0 0 4px;border-right:1px solid rgba(255,255,255,.25);padding:4px 14px;font-size:.78rem">
           ▶ Preview
         </button>
-        <button class="brun" onclick="tDD('ddPreview')" style="padding:4px 7px;font-size:.65rem;border-radius:0 4px 4px 0;min-width:0" title="More preview options">▾</button>
-        <div class="ddm" id="ddPreview" style="min-width:180px;left:0;top:100%">
-          <div class="ddi" onclick="closeDD();runGame('2d')" style="display:flex;align-items:center;gap:8px">
-            <span style="color:var(--green)">▶</span>
+        <button class="brun" onclick="togglePreviewDD()"
+          style="border-radius:0 4px 4px 0;padding:4px 9px;font-size:.7rem;min-width:0"
+          id="btnPreviewArrow">
+          ▾
+        </button>
+        <div id="previewDropdown" style="
+          display:none;position:absolute;top:calc(100% + 4px);left:0;
+          background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+          min-width:210px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999">
+          <div style="padding:5px 10px 3px;font-size:.63rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em">Preview mode</div>
+          <div class="ddi" onclick="hidePreviewDD();runGame('2d')" style="gap:10px">
+            <span style="color:var(--green);font-size:1rem">▶</span>
             <div>
-              <div style="font-size:.8rem;font-weight:500;color:var(--text)">2D Preview</div>
-              <div style="font-size:.68rem;color:var(--text3)">Play game in 2D mode</div>
+              <div style="font-size:.82rem;font-weight:600;color:var(--text)">2D Preview</div>
+              <div style="font-size:.7rem;color:var(--text3)">Arrow keys + Space to jump</div>
             </div>
           </div>
-          <div class="ddi" onclick="closeDD();runGame('3d')" style="display:flex;align-items:center;gap:8px">
-            <span style="color:var(--purple)">▶</span>
+          <div class="ddi" onclick="hidePreviewDD();runGame('3d')" style="gap:10px">
+            <span style="color:var(--purple);font-size:1rem">▶</span>
             <div>
-              <div style="font-size:.8rem;font-weight:500;color:var(--text)">3D Preview</div>
-              <div style="font-size:.68rem;color:var(--text3)">Play game in 3D mode</div>
+              <div style="font-size:.82rem;font-weight:600;color:var(--text)">3D Preview</div>
+              <div style="font-size:.7rem;color:var(--text3)">WASD + mouse to look around</div>
             </div>
-          </div>
-          <div class="dds"></div>
-          <div class="ddi" onclick="closeDD();runGame('2d')">
-            <span style="font-size:.75rem">⚙</span> Preview settings
           </div>
         </div>
       </div>
@@ -1093,6 +1098,7 @@ h1 .dim{color:var(--text3)}
     <div class="ide-right" style="gap:6px">
       <div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px;gap:1px">
         <button class="imdb act" id="b2d" onclick="setMode('2d')" style="padding:3px 10px;font-size:.72rem">2D</button>
+        <button class="imdb" id="b3d" onclick="setMode('3d')" style="padding:3px 10px;font-size:.72rem">3D</button>
         <button class="imdb" id="bsc" onclick="setMode('script')" style="padding:3px 10px;font-size:.72rem">Events</button>
       </div>
       <div class="ide-plan plan-free" id="idePlanChip">FREE</div>
@@ -2554,14 +2560,18 @@ function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','
 function setMode(m){
   state.curMode=m;
   const isEvents = m==='script';
+  const is3d = m==='3d';
   document.getElementById('cva').style.display = isEvents?'none':'flex';
   document.getElementById('cea').classList.toggle('vis', isEvents);
   // Update mode buttons
-  document.getElementById('b2d')?.classList.toggle('act', !isEvents);
+  document.getElementById('b2d')?.classList.toggle('act', m==='2d');
+  document.getElementById('b3d')?.classList.toggle('act', is3d);
   document.getElementById('bsc')?.classList.toggle('act', isEvents);
   // Update scene tabs
   document.getElementById('sceneTab1')?.classList.toggle('act', !isEvents);
   document.getElementById('sceneTabEvents')?.classList.toggle('act', isEvents);
+  // 3D mode — launch 3D preview directly
+  if(is3d) runGame('3d');
 }
 function setTool(t){
   state.curTool=t;
@@ -3131,8 +3141,27 @@ function start3DGame() {
 // ================================================================
 //  DROPDOWNS
 // ================================================================
+function togglePreviewDD(){
+  const dd = document.getElementById('previewDropdown');
+  const isOpen = dd.style.display === 'block';
+  hidePreviewDD();
+  if(!isOpen) dd.style.display = 'block';
+}
+function hidePreviewDD(){
+  const dd = document.getElementById('previewDropdown');
+  if(dd) dd.style.display = 'none';
+}
+// Close preview dropdown when clicking outside
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('previewDropdown');
+  const btn = document.getElementById('btnPreviewArrow');
+  if(dd && btn && !dd.contains(e.target) && !btn.contains(e.target)){
+    dd.style.display = 'none';
+  }
+});
+
 function tDD(id){const el=document.getElementById(id);const o=el.classList.contains('open');closeDD();if(!o)el.classList.add('open');}
-function closeDD(){document.querySelectorAll('.ddm').forEach(d=>d.classList.remove('open'));}
+function closeDD(){document.querySelectorAll('.ddm').forEach(d=>d.classList.remove('open'));hidePreviewDD();}
 document.addEventListener('click',e=>{if(!e.target.closest('.ide-menus')&&!e.target.closest('.ddm'))closeDD();});
 
 // ================================================================
