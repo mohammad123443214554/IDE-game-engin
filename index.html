@@ -593,6 +593,96 @@ h1 .dim{color:var(--text3)}
   .p-mock{display:none}
 }
 
+/* ============================================================
+   GDEVELOP-STYLE COMPONENTS
+   ============================================================ */
+.gd-scene-tab{display:flex;align-items:center;gap:5px;padding:0 12px;height:100%;font-size:.75rem;color:var(--text2);border-right:1px solid var(--border);cursor:pointer;transition:background .1s;white-space:nowrap}
+.gd-scene-tab:hover{background:var(--bg3);color:var(--text)}
+.gd-scene-tab.act{background:var(--bg);color:var(--text);border-bottom:2px solid var(--accent)}
+.gd-tab-x{margin-left:4px;opacity:.4;font-size:.65rem;padding:1px 3px;border-radius:2px;transition:all .1s}
+.gd-scene-tab:hover .gd-tab-x{opacity:.7}
+.gd-tab-x:hover{opacity:1!important;background:var(--red);color:#fff}
+.gd-panel-hdr{display:flex;align-items:center;gap:6px;padding:7px 10px;font-size:.7rem;font-weight:600;color:var(--text2);border-bottom:1px solid var(--border);background:var(--bg2);text-transform:uppercase;letter-spacing:.05em;flex-shrink:0}
+.gd-canvas-toolbar{display:flex;align-items:center;justify-content:space-between;height:40px;min-height:40px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 10px}
+.gd-tool{width:28px;height:28px;border-radius:4px;background:transparent;color:var(--text2);font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .1s;cursor:pointer;border:1px solid transparent}
+.gd-tool:hover{background:var(--bg3);color:var(--text);border-color:var(--border)}
+.gd-tool.act{background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.gd-obj-group{border-bottom:1px solid var(--border)}
+.gd-obj-group-hdr{display:flex;align-items:center;gap:6px;padding:7px 10px;font-size:.75rem;font-weight:600;color:var(--text);cursor:pointer;background:var(--bg2);transition:background .1s}
+.gd-obj-group-hdr:hover{background:var(--bg3)}
+.gd-grp-arr{font-size:.6rem;color:var(--text3);transition:transform .15s;flex-shrink:0}
+.gd-grp-arr.rot{transform:rotate(90deg)}
+.gd-obj-list{padding:2px 0}
+.gd-obj-item{display:flex;align-items:center;gap:8px;padding:6px 12px;font-size:.78rem;color:var(--text2);cursor:pointer;transition:background .1s;border-left:2px solid transparent}
+.gd-obj-item:hover{background:var(--bg3);color:var(--text)}
+.gd-obj-item.sel{background:rgba(59,130,246,.08);color:var(--text);border-left-color:var(--accent)}
+.gd-obj-icon{width:24px;height:24px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.gd-obj-name{flex:1;font-size:.78rem}
+.gd-obj-menu{opacity:0;font-size:.7rem;color:var(--text3);padding:2px 5px;border-radius:3px;transition:opacity .1s;cursor:pointer}
+.gd-obj-item:hover .gd-obj-menu{opacity:1}
+.gd-obj-menu:hover{background:var(--bg4);color:var(--text)}
+.gd-add-obj-btn{background:var(--accent);color:#fff;border:none;border-radius:4px;width:22px;height:22px;font-size:1rem;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .1s;flex-shrink:0}
+.gd-add-obj-btn:hover{opacity:.85}
+.gd-events-editor{display:flex;flex-direction:column;flex:1;overflow:hidden;background:var(--bg)}
+.gd-events-toolbar{display:flex;align-items:center;gap:6px;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0}
+.gd-ev-btn{background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:5px;padding:4px 10px;font-size:.75rem;font-weight:500;font-family:'Geist',sans-serif;transition:all .1s;cursor:pointer}
+.gd-ev-btn:hover{background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.gd-event-row{display:flex;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;overflow:hidden;background:var(--bg2)}
+.gd-conditions{width:40%;border-right:1px solid var(--border);display:flex;flex-direction:column}
+.gd-actions{flex:1;display:flex;flex-direction:column}
+.gd-cond-hdr,.gd-act-hdr{padding:5px 10px;font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:var(--bg3);border-bottom:1px solid var(--border)}
+.gd-condition-item,.gd-action-item{padding:6px 10px;font-size:.75rem;color:var(--text2);border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .1s}
+.gd-condition-item:hover,.gd-action-item:hover{background:var(--bg3);color:var(--text)}
+.gd-add-cond,.gd-add-act{padding:5px 10px;font-size:.72rem;color:var(--text3);cursor:pointer;transition:color .1s;display:flex;align-items:center;gap:4px}
+.gd-add-cond:hover,.gd-add-act:hover{color:var(--accent)}
+
+/* Export modal */
+.export-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:640px;margin:20px;position:relative;animation:fadeUp .2s ease;overflow:hidden}
+.export-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg3)}
+.export-tab{flex:1;padding:12px;text-align:center;font-size:.85rem;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border-bottom:2px solid transparent}
+.export-tab.act{color:var(--text);border-bottom-color:var(--accent);background:var(--bg2)}
+.export-tab:hover:not(.act){color:var(--text)}
+.export-body{padding:28px}
+.export-back{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--text2);cursor:pointer;margin-bottom:20px;transition:color .1s;width:fit-content}
+.export-back:hover{color:var(--text)}
+.export-desc{font-size:.82rem;color:var(--text2);text-align:center;line-height:1.6;margin-bottom:24px;max-width:480px;margin-inline:auto}
+.export-platforms{display:flex;justify-content:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.export-platform-ico{width:52px;height:52px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem;cursor:pointer;transition:all .15s}
+.export-platform-ico:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}
+.export-btn{display:block;margin:0 auto;background:var(--purple);color:#fff;border:none;padding:12px 32px;border-radius:7px;font-size:.9rem;font-weight:600;font-family:'Geist',sans-serif;cursor:pointer;transition:all .15s}
+.export-btn:hover{opacity:.85}
+.export-close-btn{position:absolute;top:14px;right:14px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .15s;cursor:pointer}
+.export-close-btn:hover{color:var(--text);border-color:var(--border2)}
+.export-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg3)}
+.export-footer-link{font-size:.78rem;color:var(--text2);cursor:pointer;transition:color .1s;display:flex;align-items:center;gap:5px}
+.export-footer-link:hover{color:var(--accent)}
+
+/* Add Object modal */
+.addobj-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:100%;max-width:700px;max-height:85vh;margin:20px;position:relative;animation:fadeUp .2s ease;display:flex;flex-direction:column}
+.addobj-hdr{padding:20px 24px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.addobj-hdr h2{font-size:1rem;font-weight:600;color:var(--text);margin-bottom:4px}
+.addobj-hdr p{font-size:.8rem;color:var(--text2)}
+.addobj-search{padding:10px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
+.addobj-search input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:8px 12px;color:var(--text);font-family:'Geist',sans-serif;font-size:.85rem}
+.addobj-search input:focus{outline:none;border-color:var(--accent)}
+.addobj-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.addobj-sidebar{width:150px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:6px}
+.addobj-cat{padding:6px 8px;border-radius:5px;font-size:.78rem;color:var(--text2);cursor:pointer;transition:all .1s}
+.addobj-cat:hover{background:var(--bg3);color:var(--text)}
+.addobj-cat.act{background:rgba(59,130,246,.1);color:var(--accent)}
+.addobj-grid{flex:1;overflow-y:auto;padding:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;align-content:start}
+.addobj-card{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:12px;cursor:pointer;transition:all .15s;text-align:center}
+.addobj-card:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
+.addobj-card.sel{border-color:var(--accent);background:rgba(59,130,246,.1)}
+.addobj-card-ico{font-size:1.8rem;margin-bottom:6px;display:block}
+.addobj-card-name{font-size:.72rem;font-weight:500;color:var(--text);line-height:1.3}
+.addobj-card-desc{font-size:.65rem;color:var(--text3);margin-top:2px;line-height:1.4}
+.addobj-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--bg3)}
+.addobj-close{position:absolute;top:14px;right:14px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .15s;cursor:pointer}
+.addobj-close:hover{color:var(--text);border-color:var(--border2)}
+.upload-zone{border:2px dashed var(--border);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all .15s;margin-top:8px}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:rgba(59,130,246,.04)}
+
 </style>
 </head>
 <body>
@@ -883,62 +973,76 @@ h1 .dim{color:var(--text3)}
 
 <!-- ============================= IDE ============================= -->
 <div id="pgIDE">
-  <!-- Topbar -->
+
+  <!-- ===== GDEVELOP-STYLE TOPBAR ===== -->
   <div class="ide-topbar">
-    <div class="ide-logo">
-      <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="ide-logo-fb" style="display:none">I</div>
-      <span class="ide-logo-nm">IDE <em>GE</em></span>
+    <!-- Left: Logo + Menus -->
+    <div style="display:flex;align-items:center;height:100%">
+      <div class="ide-logo">
+        <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="ide-logo-fb" style="display:none">G</div>
+        <span class="ide-logo-nm">IDE <em>GE</em></span>
+      </div>
+      <div class="ide-menus">
+        <div style="position:relative">
+          <button class="imb" onclick="tDD('dd1')">File</button>
+          <div class="ddm" id="dd1">
+            <div class="ddi" onclick="newScene()">New Project<span class="ddk">Ctrl+N</span></div>
+            <div class="ddi">Open Project<span class="ddk">Ctrl+O</span></div>
+            <div class="dds"></div>
+            <div class="ddi" onclick="saveScene()">Save<span class="ddk">Ctrl+S</span></div>
+            <div class="dds"></div>
+            <div class="ddi" onclick="openExport()">Export Game...</div>
+          </div>
+        </div>
+        <div style="position:relative">
+          <button class="imb" onclick="tDD('dd2')">Edit</button>
+          <div class="ddm" id="dd2">
+            <div class="ddi">Undo<span class="ddk">Ctrl+Z</span></div>
+            <div class="ddi">Redo<span class="ddk">Ctrl+Y</span></div>
+            <div class="dds"></div>
+            <div class="ddi">Cut<span class="ddk">Ctrl+X</span></div>
+            <div class="ddi">Copy<span class="ddk">Ctrl+C</span></div>
+            <div class="ddi">Paste<span class="ddk">Ctrl+V</span></div>
+          </div>
+        </div>
+        <div style="position:relative">
+          <button class="imb" onclick="tDD('dd3')">View</button>
+          <div class="ddm" id="dd3">
+            <div class="ddi" onclick="setMode('2d')">Scene Editor (2D)</div>
+            <div class="ddi" onclick="setMode('script')">Events Editor</div>
+            <div class="dds"></div>
+            <div class="ddi" onclick="openSettings()">Preferences</div>
+          </div>
+        </div>
+        <div style="position:relative">
+          <button class="imb" onclick="tDD('dd4')">Help</button>
+          <div class="ddm" id="dd4">
+            <div class="ddi">Documentation</div>
+            <div class="ddi">Community</div>
+            <div class="dds"></div>
+            <div class="ddi" onclick="goHome()">Back to Home</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="ide-menus">
-      <div style="position:relative"><button class="imb" onclick="tDD('dd1')">Scene ▾</button>
-        <div class="ddm" id="dd1">
-          <div class="ddi" onclick="newScene()">📄 New Scene<span class="ddk">Ctrl+N</span></div>
-          <div class="ddi">📂 Open Scene<span class="ddk">Ctrl+O</span></div>
-          <div class="dds"></div>
-          <div class="ddi" onclick="saveScene()">💾 Save<span class="ddk">Ctrl+S</span></div>
-        </div>
-      </div>
-      <div style="position:relative"><button class="imb" onclick="tDD('dd2')">Project ▾</button>
-        <div class="ddm" id="dd2">
-          <div class="ddi">⚙️ Project Settings</div>
-          <div class="ddi" onclick="chkPro('Export Game')">📦 Export Game...</div>
-          <div class="dds"></div>
-          <div class="ddi">🔌 Plugins</div>
-        </div>
-      </div>
-      <div style="position:relative"><button class="imb" onclick="tDD('dd3')">Node ▾</button>
-        <div class="ddm" id="dd3">
-          <div class="ddi" onclick="addNode('Player','👾','player')">👾 Add Player (CharacterBody2D)</div>
-          <div class="ddi" onclick="addNode('Enemy','👹','enemy')">👹 Add Enemy</div>
-          <div class="ddi" onclick="addNode('Platform','🟩','platform')">🟩 Add Platform (StaticBody2D)</div>
-          <div class="ddi" onclick="addNode('Node2D','📦','generic')">📦 Add Node2D</div>
-          <div class="ddi" onclick="addNode('Label','🔤','generic')">🔤 Add Label</div>
-          <div class="dds"></div>
-          <div class="ddi" onclick="chkPro('AudioStreamPlayer')">🎵 AudioStreamPlayer (Pro)</div>
-          <div class="ddi" onclick="chkPro('Camera2D')">🎥 Camera2D (Pro)</div>
-          <div class="ddi" onclick="chkPro('Light2D')">💡 Light2D (Pro)</div>
-        </div>
-      </div>
-      <div style="position:relative"><button class="imb" onclick="tDD('dd4')">Help ▾</button>
-        <div class="ddm" id="dd4">
-          <div class="ddi">📖 Documentation</div>
-          <div class="ddi">💬 Community</div>
-          <div class="dds"></div>
-          <div class="ddi" onclick="goHome()">🏠 Back to Home</div>
-        </div>
-      </div>
+
+    <!-- Center: Scene name + Preview controls -->
+    <div class="ide-center" style="gap:8px">
+      <span style="font-size:.75rem;color:var(--text2);font-weight:500" id="sbScene">Game Scene</span>
+      <div style="width:1px;height:16px;background:var(--border)"></div>
+      <button class="brun" id="btnRun2d" onclick="runGame('2d')" style="gap:5px;padding:4px 16px;font-size:.78rem">
+        <span>▶</span> Preview
+      </button>
+      <button class="bstop" id="btnStop" onclick="stopGame()" style="padding:4px 16px;font-size:.78rem">■ Stop</button>
     </div>
-    <div class="ide-center">
-      <button class="imdb act" id="b2d" onclick="setMode('2d')">2D</button>
-      <button class="imdb" id="b3d" onclick="chkPro('3D Editor')">3D</button>
-      <button class="imdb" id="bsc" onclick="setMode('script')">Script</button>
-      <button class="imdb" id="bas" onclick="chkPro('Asset Library')">Asset Lib</button>
-    </div>
-    <div class="ide-right">
-      <button class="brun" id="btnRun2d" onclick="runGame('2d')">▶ 2D</button>
-      <button class="brun" id="btnRun3d" onclick="runGame('3d')">▶ 3D</button>
-      <button class="bstop" id="btnStop" onclick="stopGame()">■ Stop</button>
+
+    <!-- Right: Mode tabs + user -->
+    <div class="ide-right" style="gap:6px">
+      <div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px;gap:1px">
+        <button class="imdb act" id="b2d" onclick="setMode('2d')" style="padding:3px 10px;font-size:.72rem">2D</button>
+        <button class="imdb" id="bsc" onclick="setMode('script')" style="padding:3px 10px;font-size:.72rem">Events</button>
+      </div>
       <div class="ide-plan plan-free" id="idePlanChip">FREE</div>
       <button class="bupg" id="ideUpgBtn" onclick="handlePaidPlan('Pro Monthly',199,'monthly')">Upgrade</button>
       <div class="user-dd" id="ideUserDD">
@@ -956,119 +1060,352 @@ h1 .dim{color:var(--text3)}
         </div>
       </div>
       <button class="ide-settings-btn" onclick="openSettings()" title="Settings">⚙</button>
-      <button class="bback" onclick="goHome()">Home</button>
     </div>
   </div>
 
+  <!-- ===== SCENE TABS (like GDevelop) ===== -->
+  <div id="sceneTabs" style="display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);height:34px;padding:0 8px;gap:2px;flex-shrink:0">
+    <div class="gd-scene-tab act" id="sceneTab1" onclick="switchScene('Game Scene')">
+      <span style="font-size:.75rem">🎬</span>
+      <span>Game Scene</span>
+      <span class="gd-tab-x" onclick="event.stopPropagation()">✕</span>
+    </div>
+    <div class="gd-scene-tab" id="sceneTabEvents" onclick="setMode('script')">
+      <span style="font-size:.75rem">⚡</span>
+      <span>Game Scene (Events)</span>
+      <span class="gd-tab-x" onclick="event.stopPropagation()">✕</span>
+    </div>
+    <button onclick="newScene()" style="margin-left:4px;background:transparent;border:1px dashed var(--border);border-radius:4px;width:22px;height:22px;color:var(--text3);font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .15s" title="New Scene">+</button>
+  </div>
+
+  <!-- ===== MAIN BODY ===== -->
   <div class="ide-body" id="ideBody">
-    <!-- Left Panel -->
-    <div class="ide-lp" id="ideLP">
-      <div class="ptb">
-        <button class="ptb-btn act" onclick="swLP(this,'lt1')">Scene</button>
-        <button class="ptb-btn" onclick="swLP(this,'lt2')">Files</button>
-        <button class="ptb-btn" onclick="swLP(this,'lt3')">Import</button>
+
+    <!-- LEFT: Properties panel (like GDevelop left panel) -->
+    <div class="ide-lp" id="ideLP" style="width:220px">
+      <div class="gd-panel-hdr">
+        <span>Properties</span>
+        <button class="tib" onclick="document.getElementById('ideLP').style.display='none'">✕</button>
       </div>
       <div class="psc" id="lt1">
-        <div class="thdr">Scene Tree
-          <div class="thdr-btns">
-            <button class="tib" onclick="addNode('Node2D','📦','generic')" title="Add Node">+</button>
-            <button class="tib" title="Search">🔍</button>
+        <div id="scTree" style="padding:8px 0">
+          <div style="padding:40px 16px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">
+            Click on an instance on the canvas or an object in the list to display their properties.
           </div>
         </div>
-        <div id="scTree"></div>
-      </div>
-      <div class="psc" id="lt2" style="display:none">
-        <div class="thdr">File System</div>
-        <div class="tn" style="--d:0"><span class="ni">📁</span>res://<span class="na">▸</span></div>
-        <div class="tn sel" style="--d:1"><span class="ni">📄</span>main.tscn</div>
-        <div class="tn" style="--d:1" onclick="openScript('main.gd')"><span class="ni">📜</span>main.gd</div>
-        <div class="tn" style="--d:1" onclick="openScript('player.gd')"><span class="ni">📜</span>player.gd</div>
-        <div class="tn" style="--d:1"><span class="ni">📁</span>assets/</div>
-        <div class="tn" style="--d:2"><span class="ni">🖼️</span>player.png</div>
-        <div class="tn" style="--d:2"><span class="ni">🖼️</span>tileset.png</div>
-      </div>
-      <div class="psc" id="lt3" style="display:none">
-        <div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Select a resource to configure import settings.</div>
       </div>
     </div>
 
     <!-- Left Resizer -->
-    <div class="resizer v" id="resizerLeft" title="Drag to resize"></div>
+    <div class="resizer v" id="resizerLeft"></div>
 
-    <!-- Main Editor -->
+    <!-- MAIN CANVAS -->
     <div class="ide-main" id="ideMain">
-      <div class="etabs" id="eTabs">
-        <div class="etab act" data-tab="scene"><span>🎬</span> Main Scene<button class="etab-close">✕</button></div>
-      </div>
-      <!-- Canvas -->
-      <div class="cva" id="cva">
-        <div class="cv-toolbar">
-          <button class="ct act" id="tSel" onclick="setTool('select')" title="Select (Q)">↖</button>
-          <button class="ct" id="tMov" onclick="setTool('move')" title="Move (W)">✥</button>
-          <button class="ct" id="tRot" onclick="setTool('rotate')" title="Rotate (E)">↻</button>
-          <button class="ct" id="tScl" onclick="setTool('scale')" title="Scale (R)">⤢</button>
+      <!-- Canvas toolbar (GDevelop style) -->
+      <div class="gd-canvas-toolbar">
+        <!-- Left tools -->
+        <div style="display:flex;align-items:center;gap:2px">
+          <button class="gd-tool act" id="tSel" onclick="setTool('select')" title="Select (S)">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l4 10 2-4 4-2L2 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/></svg>
+          </button>
+          <button class="gd-tool" id="tMov" onclick="setTool('move')" title="Move">✥</button>
+          <button class="gd-tool" id="tRot" onclick="setTool('rotate')" title="Rotate">↻</button>
+          <button class="gd-tool" id="tScl" onclick="setTool('scale')" title="Scale">⤢</button>
+          <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+          <button class="gd-tool" title="Toggle grid" onclick="toggleGrid(document.getElementById('settingGrid').checked=!document.getElementById('settingGrid').checked,document.getElementById('settingGrid').checked)">⊞</button>
         </div>
-        <div class="run-indicator" id="runInd"><div class="run-dot"></div>RUNNING</div>
-        <div class="cvvp" id="cvvp">
-          <div class="cv-grid"></div>
+        <!-- Center: coords display -->
+        <div style="display:flex;align-items:center;gap:8px;font-size:.68rem;color:var(--text3);font-family:'Geist Mono',monospace">
+          <span id="canvasCoords">0; 0</span>
+          <div style="width:1px;height:14px;background:var(--border)"></div>
+          <button class="gd-tool" style="font-size:.65rem;padding:2px 6px;width:auto" onclick="setMode('2d')">100%</button>
+        </div>
+        <!-- Right: preview button -->
+        <div style="display:flex;align-items:center;gap:4px">
+          <div class="run-indicator" id="runInd" style="position:static;display:none"><div class="run-dot"></div>RUNNING</div>
+        </div>
+      </div>
+
+      <!-- Canvas viewport -->
+      <div class="cva" id="cva">
+        <div class="cvvp" id="cvvp" style="inset:0" onmousemove="updateCoords(event)">
+          <div class="cv-grid" id="cvGrid"></div>
           <div class="cv-origin" id="cvOrigin"></div>
         </div>
       </div>
-      <!-- Code Editor -->
+
+      <!-- Events Editor (replaces code editor) -->
       <div class="cea" id="cea">
-        <div class="code-wrap">
-          <div class="line-nums" id="lineNums"></div>
-          <div class="code-ed" id="codeEd" contenteditable="true" spellcheck="false" oninput="updLn()"></div>
+        <div class="gd-events-editor">
+          <div class="gd-events-toolbar">
+            <button class="gd-ev-btn" onclick="addEvent()">+ Add event</button>
+            <button class="gd-ev-btn" onclick="addSubEvent()">+ Add sub-event</button>
+            <button class="gd-ev-btn">+ Add comment</button>
+          </div>
+          <div id="eventsContainer" style="flex:1;overflow-y:auto;padding:8px">
+            <div class="gd-event-row" id="ev1">
+              <div class="gd-conditions">
+                <div class="gd-cond-hdr">Conditions</div>
+                <div class="gd-add-cond" onclick="addCondition('ev1')">+ Add condition</div>
+              </div>
+              <div class="gd-actions">
+                <div class="gd-act-hdr">Actions</div>
+                <div class="gd-action-item">Player — Move left/right (Arrow keys)</div>
+                <div class="gd-action-item">Player — Jump (Space / Up Arrow)</div>
+                <div class="gd-add-act" onclick="addAction('ev1')">+ Add action</div>
+              </div>
+            </div>
+            <div class="gd-event-row" id="ev2">
+              <div class="gd-conditions">
+                <div class="gd-cond-hdr">Conditions</div>
+                <div class="gd-condition-item">Player — Is on platform</div>
+                <div class="gd-add-cond" onclick="addCondition('ev2')">+ Add condition</div>
+              </div>
+              <div class="gd-actions">
+                <div class="gd-act-hdr">Actions</div>
+                <div class="gd-action-item">Coins — Hide when collected</div>
+                <div class="gd-add-act" onclick="addAction('ev2')">+ Add action</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Right Resizer -->
-    <div class="resizer v" id="resizerRight" title="Drag to resize"></div>
+    <div class="resizer v" id="resizerRight"></div>
 
-    <!-- Inspector -->
-    <div class="ide-rp" id="ideRP">
-      <div class="rp-hdr">Inspector <span style="color:var(--accent);font-size:.7rem" id="insName">— None —</span></div>
-      <div class="rp-con" id="rpCon">
-        <div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect its properties.</div>
+    <!-- RIGHT: Objects Panel (GDevelop style) -->
+    <div class="ide-rp" id="ideRP" style="width:260px">
+      <div class="gd-panel-hdr" style="justify-content:space-between">
+        <span>Objects</span>
+        <button class="gd-add-obj-btn" onclick="openAddObject()" title="Add object">+</button>
+      </div>
+
+      <!-- Search -->
+      <div style="padding:6px 8px;border-bottom:1px solid var(--border)">
+        <input placeholder="Search objects..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 9px;color:var(--text);font-size:.78rem;font-family:'Geist',sans-serif" oninput="filterObjects(this.value)">
+      </div>
+
+      <div class="psc">
+        <!-- Global Objects group -->
+        <div class="gd-obj-group">
+          <div class="gd-obj-group-hdr" onclick="toggleGroup(this)">
+            <span class="gd-grp-arr">▶</span>
+            <span>Global Objects</span>
+          </div>
+        </div>
+
+        <!-- Scene Objects group -->
+        <div class="gd-obj-group">
+          <div class="gd-obj-group-hdr open" onclick="toggleGroup(this)">
+            <span class="gd-grp-arr rot">▶</span>
+            <span>Scene Objects</span>
+            <button class="gd-add-obj-btn" style="margin-left:auto;width:20px;height:20px;font-size:.85rem" onclick="event.stopPropagation();openAddObject()">+</button>
+          </div>
+          <div class="gd-obj-list" id="objList">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Inspector at bottom when object selected -->
+      <div id="inspectorSection" style="border-top:1px solid var(--border);flex-shrink:0;display:none">
+        <div class="gd-panel-hdr">
+          <span id="insName">Properties</span>
+        </div>
+        <div class="rp-con" id="rpCon" style="max-height:220px"></div>
       </div>
     </div>
   </div>
 
   <!-- Bottom Resizer -->
-  <div class="resizer h" id="resizerBottom" title="Drag to resize"></div>
+  <div class="resizer h" id="resizerBottom"></div>
 
   <!-- Bottom Panel -->
   <div class="ide-bot" id="ideBot">
     <div class="bot-tabs">
       <button class="bot-tab act" onclick="swBot(this,'bo1')">Output</button>
-      <button class="bot-tab" onclick="swBot(this,'bo2')">Console</button>
-      <button class="bot-tab" onclick="swBot(this,'bo3')">Debugger</button>
-      <button class="bot-tab" onclick="swBot(this,'bo4')">Search</button>
+      <button class="bot-tab" onclick="swBot(this,'bo2')">Debugger</button>
+      <button class="bot-tab" onclick="swBot(this,'bo3')">Network</button>
     </div>
     <div class="bot-con">
       <div id="bo1"></div>
-      <div id="bo2" style="display:none"><div class="ll li">&gt; Console ready.</div></div>
-      <div id="bo3" style="display:none"><div class="ll li">No active debug session.</div></div>
-      <div id="bo4" style="display:none"><div class="ll li">No search results.</div></div>
+      <div id="bo2" style="display:none"><div class="ll li">No active debug session. Click Preview to start.</div></div>
+      <div id="bo3" style="display:none"><div class="ll li">No network requests.</div></div>
     </div>
   </div>
 
   <!-- Status Bar -->
   <div class="ide-sb">
     <div class="sb-l">
-      <div class="si">🎮 IDE Game Engine</div>
-      <div class="si" id="sbScene">Main Scene</div>
-      <div class="si" id="sbNodes">0 nodes</div>
+      <div class="si" id="sbNodes">0 objects</div>
+      <div class="si" id="sbPlan">Free Plan</div>
     </div>
     <div class="sb-r">
-      <div class="si" id="sbPlan">Free Plan</div>
+      <div class="si" id="sbCursorPos">74; -116</div>
       <div class="si">v1.0.0</div>
     </div>
   </div>
 </div>
 
-<!-- ============================= GAME PREVIEW ============================= -->
+
+<!-- ============================= EXPORT MODAL ============================= -->
+<div class="overlay" id="exportOverlay" onclick="if(event.target===this)closeExport()">
+  <div class="export-box">
+    <button class="export-close-btn" onclick="closeExport()">✕</button>
+    <div class="export-tabs">
+      <div class="export-tab act">Publish</div>
+      <div class="export-tab">Invite</div>
+    </div>
+    <div id="exportPage1" class="export-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
+        <div class="addobj-card" onclick="showExportHTML5()" style="padding:18px">
+          <div class="addobj-card-ico">🌐</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Web (HTML5)</div>
+          <div class="addobj-card-desc">Play in any browser</div>
+        </div>
+        <div class="addobj-card" onclick="showExportZip()" style="padding:18px">
+          <div class="addobj-card-ico">📦</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Download as ZIP</div>
+          <div class="addobj-card-desc">Host anywhere yourself</div>
+        </div>
+        <div class="addobj-card" onclick="chkPro('Android export')" style="padding:18px">
+          <div class="addobj-card-ico">📱</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Android (Pro)</div>
+          <div class="addobj-card-desc">.apk file</div>
+        </div>
+        <div class="addobj-card" onclick="chkPro('Windows export')" style="padding:18px">
+          <div class="addobj-card-ico">🖥️</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Windows (Pro)</div>
+          <div class="addobj-card-desc">.exe installer</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HTML5 Export Page -->
+    <div id="exportPageHTML5" class="export-body" style="display:none">
+      <div class="export-back" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageHTML5').style.display='none'">
+        ← Back
+      </div>
+      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">🌐 HTML5</div>
+      <p class="export-desc">This will export your game as an HTML5 package. You can upload it to CrazyGames, Poki, Game Jolt, itch.io, Newgrounds and other platforms.</p>
+      <div class="export-platforms">
+        <div class="export-platform-ico" title="CrazyGames">🎮</div>
+        <div class="export-platform-ico" title="Game Jolt">⚡</div>
+        <div class="export-platform-ico" title="itch.io">👾</div>
+        <div class="export-platform-ico" title="Newgrounds">🐱</div>
+        <div class="export-platform-ico" title="Other">⬛</div>
+      </div>
+      <button class="export-btn" onclick="doExportHTML5()">Export as a HTML5 game</button>
+    </div>
+
+    <!-- ZIP Export Page -->
+    <div id="exportPageZip" class="export-body" style="display:none">
+      <div class="export-back" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageZip').style.display='none'">
+        ← Back
+      </div>
+      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">📦 Download as ZIP</div>
+      <p class="export-desc">Export your game as a ZIP file containing all HTML5 assets. You can then host it on any web server, Vercel, Netlify, GitHub Pages, or any other platform.</p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px">
+        <div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">Your game includes:</div>
+        <div style="font-size:.75rem;color:var(--text3);display:flex;flex-direction:column;gap:4px">
+          <span>✓ index.html — Game entry point</span>
+          <span>✓ game.js — Game logic &amp; engine</span>
+          <span>✓ assets/ — All objects &amp; sprites</span>
+          <span>✓ README.md — Deploy instructions</span>
+        </div>
+      </div>
+      <button class="export-btn" onclick="doExportZip()">📥 Download ZIP</button>
+    </div>
+
+    <div class="export-footer">
+      <div class="export-footer-link">? Help</div>
+      <div class="export-footer-link" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageHTML5').style.display='none';document.getElementById('exportPageZip').style.display='none'">See all exports</div>
+      <button class="pbtn out" style="padding:7px 18px;font-size:.8rem" onclick="closeExport()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= ADD OBJECT MODAL ============================= -->
+<div class="overlay" id="addObjOverlay" onclick="if(event.target===this)closeAddObject()">
+  <div class="addobj-box">
+    <button class="addobj-close" onclick="closeAddObject()">✕</button>
+    <div class="addobj-hdr">
+      <h2>Add a new object</h2>
+      <p>Choose the type of object to add to your scene, or upload a custom 3D object.</p>
+    </div>
+    <div class="addobj-search">
+      <input placeholder="Search objects..." id="objSearchInput" oninput="filterObjCards(this.value)">
+    </div>
+    <div class="addobj-body">
+      <!-- Sidebar categories -->
+      <div class="addobj-sidebar">
+        <div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:4px 8px 6px;font-weight:600">Categories</div>
+        <div class="addobj-cat act" onclick="filterObjCat(this,'all')">All objects</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'basic')">Basic shapes</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'physics')">Physics</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'ui')">UI & Text</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'effects')">Effects</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'audio')">Audio</div>
+        <div class="addobj-cat" onclick="filterObjCat(this,'3d')">3D Objects</div>
+        <div style="height:1px;background:var(--border);margin:8px 4px"></div>
+        <!-- Upload section -->
+        <div class="addobj-cat" onclick="filterObjCat(this,'upload')" style="color:var(--accent)">⬆ Upload Object</div>
+        <div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:10px 8px 6px;font-weight:600">3D Assets</div>
+        <a href="https://sketchfab.com/3d-models/free" target="_blank" class="addobj-cat" style="display:block;color:var(--accent);text-decoration:none" title="Free 3D models">
+          🌐 Sketchfab (free)
+        </a>
+        <a href="https://kenney.nl/assets" target="_blank" class="addobj-cat" style="display:block;color:var(--accent);text-decoration:none">
+          🎨 Kenney Assets
+        </a>
+        <a href="https://itch.io/game-assets/free" target="_blank" class="addobj-cat" style="display:block;color:var(--accent);text-decoration:none">
+          🕹️ itch.io Free
+        </a>
+      </div>
+
+      <!-- Object cards grid -->
+      <div class="addobj-grid" id="objCardsGrid"></div>
+
+      <!-- Upload panel (hidden by default) -->
+      <div id="uploadPanel" style="display:none;flex:1;padding:16px;overflow-y:auto;flex-direction:column">
+        <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:8px">Upload Custom Object</div>
+        <p style="font-size:.78rem;color:var(--text2);margin-bottom:12px;line-height:1.5">
+          Download a 3D object from <a href="https://sketchfab.com/3d-models/free" target="_blank" style="color:var(--accent)">Sketchfab</a>, 
+          <a href="https://kenney.nl/assets" target="_blank" style="color:var(--accent)">Kenney</a>, or 
+          <a href="https://itch.io/game-assets/free" target="_blank" style="color:var(--accent)">itch.io</a>, 
+          then upload it here.
+        </p>
+        <label class="upload-zone" id="uploadZone">
+          <input type="file" id="objFileInput" accept=".png,.jpg,.jpeg,.gif,.svg,.obj,.gltf,.glb" onchange="handleObjUpload(this)">
+          <div style="font-size:2rem;margin-bottom:8px">📁</div>
+          <div style="font-size:.85rem;font-weight:500;color:var(--text);margin-bottom:4px">Click to upload or drag & drop</div>
+          <div style="font-size:.75rem;color:var(--text3)">PNG, JPG, SVG, OBJ, GLTF, GLB supported</div>
+        </label>
+        <div id="uploadPreview" style="display:none;margin-top:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px">
+          <div style="font-size:.78rem;font-weight:600;color:var(--text);margin-bottom:6px">Ready to add:</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div id="uploadThumb" style="width:48px;height:48px;background:var(--bg4);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.5rem">📦</div>
+            <div>
+              <div id="uploadFileName" style="font-size:.8rem;color:var(--text);font-weight:500"></div>
+              <div id="uploadFileSize" style="font-size:.72rem;color:var(--text3);margin-top:2px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="addobj-footer">
+      <div style="font-size:.75rem;color:var(--text2)" id="selObjName">No object selected</div>
+      <div style="display:flex;gap:8px">
+        <button class="pbtn out" style="padding:8px 18px;font-size:.8rem" onclick="closeAddObject()">Cancel</button>
+        <button class="pbtn fil" style="padding:8px 18px;font-size:.8rem" id="addObjConfirmBtn" onclick="confirmAddObject()" disabled>Add to scene</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="overlay" id="previewOverlay" onclick="if(event.target===this)stopGame()">
   <div class="preview-modal" id="previewModal">
     <div class="preview-topbar">
@@ -1544,8 +1881,7 @@ function openIDE() {
   if (state.scNodes.length === 0) initScene();
   updateIDEUserUI();
   closeDD();
-  // Init resizers every time IDE opens (fixes first-load issue)
-  setTimeout(ensureResizers, 50);
+  setTimeout(() => { ensureResizers(); renderObjList(); }, 50);
 }
 
 function goHome() {
@@ -1649,7 +1985,9 @@ function renderTree(){
     }
     c.appendChild(d);
   });
-  document.getElementById('sbNodes').textContent=(state.scNodes.length-1)+' nodes';
+  document.getElementById('sbNodes').textContent=(state.scNodes.length-1)+' objects';
+  // Also update objects panel
+  if(typeof renderObjList === 'function') renderObjList();
 }
 
 // Node was hidden from canvas — add it back
@@ -2137,11 +2475,15 @@ function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','
 // ================================================================
 function setMode(m){
   state.curMode=m;
-  document.getElementById('cva').style.display=m==='script'?'none':'flex';
-  document.getElementById('cea').classList.toggle('vis',m==='script');
-  ['b2d','b3d','bsc','bas'].forEach(id=>document.getElementById(id)?.classList.remove('act'));
-  ({['2d']:'b2d',['3d']:'b3d',script:'bsc',asset:'bas'})[m]&&document.getElementById(({['2d']:'b2d',['3d']:'b3d',script:'bsc',asset:'bas'})[m])?.classList.add('act');
-  if(m==='script')openScript(state.activeScript);
+  const isEvents = m==='script';
+  document.getElementById('cva').style.display = isEvents?'none':'flex';
+  document.getElementById('cea').classList.toggle('vis', isEvents);
+  // Update mode buttons
+  document.getElementById('b2d')?.classList.toggle('act', !isEvents);
+  document.getElementById('bsc')?.classList.toggle('act', isEvents);
+  // Update scene tabs
+  document.getElementById('sceneTab1')?.classList.toggle('act', !isEvents);
+  document.getElementById('sceneTabEvents')?.classList.toggle('act', isEvents);
 }
 function setTool(t){
   state.curTool=t;
@@ -2845,8 +3187,324 @@ function ensureResizers() {
 document.addEventListener('DOMContentLoaded', ensureResizers);
 
 // ================================================================
-//  SETTINGS
+//  GDEVELOP-STYLE FUNCTIONS
 // ================================================================
+
+// Object types for Add Object modal
+const OBJ_TYPES = [
+  {id:'player', cat:'basic', ico:'🟧', name:'Sprite (Player)', desc:'Animated character', color:'#f97316'},
+  {id:'enemy',  cat:'basic', ico:'🔴', name:'Sprite (Enemy)',  desc:'AI character', color:'#ef4444'},
+  {id:'platform', cat:'physics', ico:'🟩', name:'TileMap', desc:'Ground & platforms', color:'#22c55e'},
+  {id:'generic', cat:'basic', ico:'⬜', name:'Sprite', desc:'Basic image object', color:'#6b7280'},
+  {id:'label',  cat:'ui', ico:'🔤', name:'Text object', desc:'Display text', color:'#3b82f6'},
+  {id:'particle', cat:'effects', ico:'✨', name:'Particles', desc:'Visual effects', color:'#a855f7'},
+  {id:'sound',  cat:'audio', ico:'🔊', name:'Sound', desc:'Play audio', color:'#06b6d4'},
+  {id:'button', cat:'ui', ico:'🔘', name:'Button', desc:'UI button', color:'#f59e0b'},
+  {id:'camera', cat:'basic', ico:'🎥', name:'Camera', desc:'Follow player', color:'#8b5cf6'},
+  {id:'tileset', cat:'basic', ico:'🧩', name:'Tileset', desc:'Tile-based map', color:'#14b8a6'},
+  {id:'bg',     cat:'basic', ico:'🌅', name:'Background', desc:'Scene background', color:'#0ea5e9'},
+  {id:'coin',   cat:'basic', ico:'🪙', name:'Collectible', desc:'Coins & items', color:'#eab308'},
+  {id:'box3d',  cat:'3d', ico:'📦', name:'3D Box', desc:'3D cube object', color:'#f97316'},
+  {id:'sphere3d', cat:'3d', ico:'🔵', name:'3D Sphere', desc:'3D ball', color:'#3b82f6'},
+  {id:'model3d', cat:'3d', ico:'🗿', name:'3D Model', desc:'Custom 3D model', color:'#6366f1'},
+];
+
+let selObjType = null;
+let uploadedObj = null;
+
+function renderObjCards(filter='', cat='all'){
+  const grid = document.getElementById('objCardsGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  OBJ_TYPES.filter(o => {
+    const matchCat = cat==='all' || o.cat===cat;
+    const matchSearch = !filter || o.name.toLowerCase().includes(filter.toLowerCase());
+    return matchCat && matchSearch;
+  }).forEach(o => {
+    const d = document.createElement('div');
+    d.className = 'addobj-card' + (selObjType===o.id?' sel':'');
+    d.innerHTML = `<span class="addobj-card-ico">${o.ico}</span><div class="addobj-card-name">${o.name}</div><div class="addobj-card-desc">${o.desc}</div>`;
+    d.onclick = () => {
+      selObjType = o.id;
+      document.querySelectorAll('.addobj-card').forEach(c=>c.classList.remove('sel'));
+      d.classList.add('sel');
+      document.getElementById('selObjName').textContent = o.name + ' selected';
+      document.getElementById('addObjConfirmBtn').disabled = false;
+    };
+    grid.appendChild(d);
+  });
+}
+
+function filterObjCards(v){
+  const cat = document.querySelector('.addobj-cat.act')?.dataset?.cat || 'all';
+  renderObjCards(v, cat);
+}
+
+function filterObjCat(el, cat){
+  document.querySelectorAll('.addobj-cat').forEach(c=>c.classList.remove('act'));
+  el.classList.add('act');
+  const upload = document.getElementById('uploadPanel');
+  const grid = document.getElementById('objCardsGrid');
+  if(cat==='upload'){
+    upload.style.display='flex';
+    grid.style.display='none';
+  } else {
+    upload.style.display='none';
+    grid.style.display='grid';
+    renderObjCards(document.getElementById('objSearchInput')?.value||'', cat);
+  }
+}
+
+function openAddObject(){
+  selObjType = null; uploadedObj = null;
+  document.getElementById('objSearchInput').value='';
+  document.getElementById('uploadPanel').style.display='none';
+  document.getElementById('objCardsGrid').style.display='grid';
+  document.getElementById('uploadPreview').style.display='none';
+  document.getElementById('selObjName').textContent='No object selected';
+  document.getElementById('addObjConfirmBtn').disabled=true;
+  document.querySelectorAll('.addobj-cat').forEach(c=>c.classList.remove('act'));
+  document.querySelector('.addobj-cat').classList.add('act');
+  renderObjCards();
+  document.getElementById('addObjOverlay').classList.add('open');
+}
+function closeAddObject(){ document.getElementById('addObjOverlay').classList.remove('open'); }
+
+function confirmAddObject(){
+  if(uploadedObj){
+    // Add uploaded object
+    const id = addNd(uploadedObj.name, '📦');
+    renderTree();
+    spawnAt(id, '📦', uploadedObj.name, 'generic',
+      (Math.random()-.5)*200, (Math.random()-.5)*100,
+      {color:'#6366f1'});
+    selTN(id);
+    renderObjList();
+    log('info', `  Object "${uploadedObj.name}" added from upload.`);
+    toast('✓ ' + uploadedObj.name + ' added!');
+  } else if(selObjType){
+    const t = OBJ_TYPES.find(o=>o.id===selObjType);
+    if(!t) return;
+    if(!isPro()&&state.scNodes.length>=6){
+      toast('🔒 Free: max 5 objects. Upgrade!','er');
+      closeAddObject(); handlePaidPlan('Pro Monthly',199,'monthly'); return;
+    }
+    const id = addNd(t.name.replace(/[^a-zA-Z0-9]/g,'_'), t.ico);
+    renderTree();
+    spawnAt(id, t.ico, t.name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+state.nodeCount,
+      selObjType, (Math.random()-.5)*200, (Math.random()-.5)*100,
+      {color:t.color});
+    selTN(id);
+    renderObjList();
+    log('info', `  Object "${t.name}" added to scene.`);
+    toast('✓ ' + t.name + ' added!');
+  }
+  closeAddObject();
+}
+
+function handleObjUpload(input){
+  const file = input.files[0];
+  if(!file) return;
+  uploadedObj = {name: file.name.replace(/\.[^.]+$/,''), file};
+  document.getElementById('uploadPreview').style.display='block';
+  document.getElementById('uploadFileName').textContent = file.name;
+  document.getElementById('uploadFileSize').textContent = (file.size/1024).toFixed(1) + ' KB';
+  document.getElementById('selObjName').textContent = file.name + ' ready';
+  document.getElementById('addObjConfirmBtn').disabled = false;
+  // Image preview
+  if(file.type.startsWith('image/')){
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('uploadThumb').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;border-radius:4px">`;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Drag over upload zone
+document.addEventListener('DOMContentLoaded', () => {
+  const zone = document.getElementById('uploadZone');
+  if(zone){
+    zone.addEventListener('dragover', e=>{ e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', ()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e=>{ e.preventDefault(); zone.classList.remove('drag-over'); if(e.dataTransfer.files[0]) handleObjUpload({files:e.dataTransfer.files}); });
+  }
+});
+
+// Render objects in right panel
+function renderObjList(){
+  const list = document.getElementById('objList');
+  if(!list) return;
+  list.innerHTML = '';
+  state.scNodes.filter(n=>n.id!=='root').forEach(n=>{
+    const onCanvas = !!state.objects[n.id];
+    const d = document.createElement('div');
+    d.className = 'gd-obj-item' + (state.selNode===n.id?' sel':'');
+    const def = OBJ_DEFAULTS[n.cls||'generic']||OBJ_DEFAULTS.generic;
+    d.innerHTML = `
+      <div class="gd-obj-icon" style="background:${state.objects[n.id]?.color||def.color}22">
+        <span style="font-size:.85rem">${n.icon}</span>
+      </div>
+      <span class="gd-obj-name" style="opacity:${onCanvas?1:.5}">${n.name}</span>
+      <span class="gd-obj-menu" onclick="event.stopPropagation();objCtxMenu(event,'${n.id}')">⋯</span>
+    `;
+    d.onclick = () => { selTN(n.id); };
+    d.oncontextmenu = e => { e.preventDefault(); selTN(n.id); showCtxMenu(e, n.id); };
+    list.appendChild(d);
+  });
+  document.getElementById('sbNodes').textContent = (state.scNodes.length-1) + ' objects';
+}
+
+function objCtxMenu(e, id){
+  selTN(id);
+  showCtxMenu(e, id);
+}
+
+function filterObjects(v){
+  document.querySelectorAll('.gd-obj-item').forEach(item=>{
+    const name = item.querySelector('.gd-obj-name')?.textContent||'';
+    item.style.display = name.toLowerCase().includes(v.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function toggleGroup(hdr){
+  const arr = hdr.querySelector('.gd-grp-arr');
+  const list = hdr.nextElementSibling;
+  if(arr) arr.classList.toggle('rot');
+  if(list) list.style.display = list.style.display==='none' ? '' : 'none';
+}
+
+function switchScene(name){
+  document.querySelectorAll('.gd-scene-tab').forEach(t=>t.classList.remove('act'));
+  document.getElementById('sceneTab1').classList.add('act');
+  setMode('2d');
+}
+
+// Export functions
+function openExport(){
+  closeDD();
+  document.getElementById('exportPage1').style.display='block';
+  document.getElementById('exportPageHTML5').style.display='none';
+  document.getElementById('exportPageZip').style.display='none';
+  document.getElementById('exportOverlay').classList.add('open');
+}
+function closeExport(){ document.getElementById('exportOverlay').classList.remove('open'); }
+
+function showExportHTML5(){
+  document.getElementById('exportPage1').style.display='none';
+  document.getElementById('exportPageHTML5').style.display='block';
+}
+
+function showExportZip(){
+  document.getElementById('exportPage1').style.display='none';
+  document.getElementById('exportPageZip').style.display='block';
+}
+
+function doExportHTML5(){
+  log('info','  Building HTML5 export...');
+  toast('Building export...','in');
+  setTimeout(()=>{
+    log('ok','✓ HTML5 export ready!');
+    log('info','  Upload the exported folder to any web host.');
+    toast('✓ Export complete!');
+    closeExport();
+  }, 1500);
+}
+
+function doExportZip(){
+  log('info','  Packaging game as ZIP...');
+  toast('Packaging game...','in');
+  setTimeout(()=>{
+    // Create a simple downloadable demo zip
+    const content = `<!-- IDE Game Engine Export -->
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>${state.scNodes[0]?.name||'My Game'}</title>
+<style>body{margin:0;background:#111;display:flex;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:sans-serif}</style>
+</head><body>
+<div style="text-align:center">
+  <h1>🎮 ${state.scNodes[0]?.name||'My Game'}</h1>
+  <p style="color:#888">Export your game with full engine to play here</p>
+  <p style="color:#555;font-size:.8rem">Objects: ${state.scNodes.length-1}</p>
+</div>
+</body></html>`;
+    const blob = new Blob([content], {type:'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (state.scNodes[0]?.name||'game').replace(/\s+/g,'-').toLowerCase() + '-export.html';
+    a.click();
+    log('ok','✓ Game downloaded!');
+    toast('✓ Game downloaded!');
+    closeExport();
+  }, 1200);
+}
+
+// Update coords display
+function updateCoords(e){
+  const vp = document.getElementById('cvvp');
+  if(!vp) return;
+  const r = vp.getBoundingClientRect();
+  const or = document.getElementById('cvOrigin');
+  if(!or) return;
+  const orr = or.getBoundingClientRect();
+  const x = Math.round(e.clientX - orr.left - orr.width/2);
+  const y = Math.round(e.clientY - orr.top - orr.height/2);
+  const el = document.getElementById('sbCursorPos');
+  if(el) el.textContent = x + '; ' + y;
+  const cc = document.getElementById('canvasCoords');
+  if(cc) cc.textContent = x + '; ' + y;
+}
+
+// Events editor helpers
+function addEvent(){
+  const c = document.getElementById('eventsContainer');
+  const id = 'ev'+Date.now();
+  const d = document.createElement('div');
+  d.className = 'gd-event-row'; d.id = id;
+  d.innerHTML = `
+    <div class="gd-conditions">
+      <div class="gd-cond-hdr">Conditions</div>
+      <div class="gd-add-cond" onclick="addCondition('${id}')">+ Add condition</div>
+    </div>
+    <div class="gd-actions">
+      <div class="gd-act-hdr">Actions</div>
+      <div class="gd-add-act" onclick="addAction('${id}')">+ Add action</div>
+    </div>`;
+  c.appendChild(d);
+  toast('✓ Event added');
+}
+
+function addCondition(evId){
+  const ev = document.getElementById(evId);
+  const conds = ev?.querySelector('.gd-conditions');
+  if(!conds) return;
+  const opts = ['Player — Key pressed (Arrow Left)','Player — Key pressed (Arrow Right)','Player — Is on floor','Timer reached','Object collides with','Variable equals'];
+  const txt = prompt('Condition (or leave blank for template):\n\n' + opts.map((o,i)=>i+1+'. '+o).join('\n')) || opts[0];
+  const d = document.createElement('div');
+  d.className='gd-condition-item';
+  d.textContent = txt;
+  conds.insertBefore(d, conds.querySelector('.gd-add-cond'));
+  toast('✓ Condition added');
+}
+
+function addAction(evId){
+  const ev = document.getElementById(evId);
+  const acts = ev?.querySelector('.gd-actions');
+  if(!acts) return;
+  const opts = ['Player — Move (speed: 200)','Player — Jump','Object — Set X position','Object — Set visible','Variable — Set value','Audio — Play sound'];
+  const txt = prompt('Action (or leave blank for template):\n\n' + opts.map((o,i)=>i+1+'. '+o).join('\n')) || opts[0];
+  const d = document.createElement('div');
+  d.className='gd-action-item';
+  d.textContent = txt;
+  acts.insertBefore(d, acts.querySelector('.gd-add-act'));
+  toast('✓ Action added');
+}
+
+function addSubEvent(){
+  toast('Sub-event added (Pro feature)', 'in');
+}
+
+
 function openSettings(){
   const theme = document.documentElement.getAttribute('data-theme')||'dark';
   document.getElementById('themeOptDark').classList.toggle('active', theme==='dark');
