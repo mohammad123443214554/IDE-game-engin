@@ -2134,7 +2134,36 @@ function openIDE() {
   if (state.scNodes.length === 0) initScene();
   updateIDEUserUI();
   closeDD();
-  setTimeout(() => { ensureResizers(); renderObjList(); }, 50);
+  setTimeout(() => {
+    ensureResizers();
+    // Migrate any background-named objects that were added as generic
+    Object.entries(state.objects).forEach(([id, obj]) => {
+      const nm = (obj.name||'').toLowerCase();
+      const isBg = nm.startsWith('background')||nm.startsWith('bg_')||nm==='bg'||obj.cls==='bg'||obj.cls==='background';
+      if(isBg && !obj.isBg && obj.el){
+        // Remove old generic element from cvOrigin
+        obj.el.remove();
+        // Re-spawn as proper background
+        const color = obj.color||'#1a2440';
+        const el = document.createElement('div');
+        el.id = 'g'+id;
+        el.className = 'go-bg';
+        el.style.cssText = `position:absolute;inset:0;z-index:0;background:${color};display:flex;align-items:flex-end;justify-content:flex-start;padding:4px 6px;overflow:hidden`;
+        el.innerHTML = `<div style="position:absolute;inset:0;opacity:.06;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px;pointer-events:none"></div><span style="font-size:.58rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace;pointer-events:none">${obj.name}</span>`;
+        el.onclick = e => { e.stopPropagation(); selObj(id); };
+        el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+        const vp = document.getElementById('cvvp');
+        const grid = document.getElementById('cvGrid');
+        if(grid && grid.nextSibling) vp.insertBefore(el, grid.nextSibling);
+        else vp.appendChild(el);
+        state.objects[id] = { el, x:0, y:0, w:0, h:0, name:obj.name, icon:obj.icon, cls:'bg', color, isBg:true };
+        // Update node cls
+        const node = state.scNodes.find(n=>n.id===id);
+        if(node) node.cls = 'bg';
+      }
+    });
+    renderObjList();
+  }, 50);
 }
 
 function goHome() {
@@ -2376,40 +2405,57 @@ function spawnObj(id,icon,name,cls){
   spawnAt(id,icon,name,cls,x,y);
 }
 
+// Helper — check if any object is a background type
+function isBgObject(obj, node){
+  if(!obj) return false;
+  if(obj.cls==='background'||obj.cls==='bg'||obj.isBg) return true;
+  const nm = (obj.name||node?.name||'').toLowerCase();
+  return nm.startsWith('background')||nm.startsWith('bg_')||nm==='bg';
+}
+
 function spawnAt(id,icon,name,cls,x,y,opts={}){
   const def = OBJ_DEFAULTS[cls] || OBJ_DEFAULTS.generic;
   const w = opts.w || def.w;
   const h = opts.h || def.h;
   const color = opts.color || def.color;
 
+  // Detect background by cls OR name
+  const nm = (name||'').toLowerCase();
+  const reallyBg = cls==='background'||cls==='bg'
+    || nm.startsWith('background')||nm.startsWith('bg_')||nm==='bg';
+
   const el = document.createElement('div');
   el.id = 'g'+id;
 
-  // ── BACKGROUND — fills the entire canvas viewport ──
-  if(cls==='background'||cls==='bg'){
+  // ── BACKGROUND — fills entire canvas viewport ──
+  if(reallyBg){
     el.className = 'go-bg';
-    el.style.cssText = `
-      position:absolute;inset:0;z-index:0;pointer-events:none;
-      background:${color};
-      display:flex;align-items:flex-end;justify-content:flex-start;
-      padding:4px 6px;overflow:hidden;
-    `;
+    el.style.cssText = [
+      'position:absolute','inset:0','z-index:0',
+      `background:${color}`,
+      'display:flex','align-items:flex-end','justify-content:flex-start',
+      'padding:4px 6px','overflow:hidden'
+    ].join(';');
     el.innerHTML = `
-      <div style="position:absolute;inset:0;opacity:.08;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px"></div>
-      <span style="font-size:.6rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace">${name}</span>
+      <div style="position:absolute;inset:0;opacity:.06;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px;pointer-events:none"></div>
+      <span style="font-size:.58rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace;pointer-events:none">${name}</span>
     `;
+    el.onclick = e => { e.stopPropagation(); selObj(id); };
     el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
-    // Insert FIRST so it's behind everything
+
     const vp = document.getElementById('cvvp');
     const grid = document.getElementById('cvGrid');
-    if(grid && grid.nextSibling) vp.insertBefore(el, grid.nextSibling);
-    else vp.appendChild(el);
-    // Store with special marker
-    state.objects[id] = { el, x:0, y:0, w:0, h:0, name, icon, cls, color, isBg:true };
+    // Insert right after grid (so it's behind objects but above raw bg)
+    if(grid && grid.nextSibling){
+      vp.insertBefore(el, grid.nextSibling);
+    } else {
+      vp.appendChild(el);
+    }
+    state.objects[id] = { el, x:0, y:0, w:0, h:0, name, icon, cls:'bg', color, isBg:true };
     return;
   }
 
-  // ── Normal objects — relative to cvOrigin ──
+  // ── Normal objects ──
   el.className = 'go';
   el.style.left = x+'px';
   el.style.top  = y+'px';
@@ -2443,10 +2489,9 @@ function rebuildObj(id){
   const obj = state.objects[id];
   if(!obj) return;
   const el = obj.el;
-  // Background — just update color
-  if(obj.cls==='background'||obj.cls==='bg'){
+  if(isBgObject(obj)){
     el.style.background = obj.color;
-    const lbl = el.querySelector('span:last-child');
+    const lbl = el.querySelector('span');
     if(lbl) lbl.textContent = obj.name;
     return;
   }
@@ -2918,7 +2963,7 @@ function start2DGame() {
     const node = state.scNodes.find(n => n.id === id);
     if (!node) return;
     // Skip background objects — they only affect canvas bg color
-    if (obj.cls==='background'||obj.cls==='bg'||obj.isBg) return;
+    if (isBgObject(obj, state.scNodes.find(n=>n.id===id))) return;
 
     const nm = node.name.toLowerCase();
     const ow = obj.w || 40;
@@ -2962,15 +3007,14 @@ function start2DGame() {
 
   // ── Draw background ──
   function drawBg() {
-    // Use scene's background object color if exists
-    const bgObj = Object.values(state.objects).find(o => o.cls==='background'||o.cls==='bg'||o.isBg);
+    const bgObj = Object.values(state.objects).find(o => isBgObject(o));
     const bgColor = bgObj?.color || '#0d1b3e';
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, W(), H());
     // Subtle vignette
-    const vig = ctx.createRadialGradient(W()/2,H()/2,H()*0.2, W()/2,H()/2,H()*0.9);
+    const vig = ctx.createRadialGradient(W()/2,H()/2,H()*0.2,W()/2,H()/2,H()*0.9);
     vig.addColorStop(0,'rgba(0,0,0,0)');
-    vig.addColorStop(1,'rgba(0,0,0,0.35)');
+    vig.addColorStop(1,'rgba(0,0,0,0.3)');
     ctx.fillStyle = vig;
     ctx.fillRect(0,0,W(),H());
   }
