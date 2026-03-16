@@ -2377,45 +2377,50 @@ function spawnObj(id,icon,name,cls){
 }
 
 function spawnAt(id,icon,name,cls,x,y,opts={}){
-  const vp = document.getElementById('cvOrigin');
   const def = OBJ_DEFAULTS[cls] || OBJ_DEFAULTS.generic;
   const w = opts.w || def.w;
   const h = opts.h || def.h;
   const color = opts.color || def.color;
 
   const el = document.createElement('div');
-  el.className = 'go';
   el.id = 'g'+id;
+
+  // ── BACKGROUND — fills the entire canvas viewport ──
+  if(cls==='background'||cls==='bg'){
+    el.className = 'go-bg';
+    el.style.cssText = `
+      position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:${color};
+      display:flex;align-items:flex-end;justify-content:flex-start;
+      padding:4px 6px;overflow:hidden;
+    `;
+    el.innerHTML = `
+      <div style="position:absolute;inset:0;opacity:.08;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px"></div>
+      <span style="font-size:.6rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace">${name}</span>
+    `;
+    el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+    // Insert FIRST so it's behind everything
+    const vp = document.getElementById('cvvp');
+    const grid = document.getElementById('cvGrid');
+    if(grid && grid.nextSibling) vp.insertBefore(el, grid.nextSibling);
+    else vp.appendChild(el);
+    // Store with special marker
+    state.objects[id] = { el, x:0, y:0, w:0, h:0, name, icon, cls, color, isBg:true };
+    return;
+  }
+
+  // ── Normal objects — relative to cvOrigin ──
+  el.className = 'go';
   el.style.left = x+'px';
   el.style.top  = y+'px';
   el.style.width  = w+'px';
   el.style.height = h+'px';
-
-  // Background stays behind all other objects
-  if(cls==='background'||cls==='bg'){
-    el.style.zIndex = '0';
-    el.style.pointerEvents = 'none'; // don't block clicks on objects above
-  }
-
   el.innerHTML = buildObjInner(cls, icon, color, w, h, name);
-
-  if(cls!=='background'&&cls!=='bg'){
-    el.onclick = e => { e.stopPropagation(); selObj(id); };
-    el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
-  } else {
-    el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
-  }
-
+  el.onclick = e => { e.stopPropagation(); selObj(id); };
+  el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
   makeDraggable(el, id);
   makeResizeHandles(el, id);
-
-  // Insert background at the beginning (behind other elements)
-  if(cls==='background'||cls==='bg'){
-    vp.insertBefore(el, vp.firstChild);
-  } else {
-    vp.appendChild(el);
-  }
-
+  document.getElementById('cvOrigin').appendChild(el);
   state.objects[id] = { el, x, y, w, h, name, icon, cls, color };
 }
 
@@ -2438,10 +2443,16 @@ function rebuildObj(id){
   const obj = state.objects[id];
   if(!obj) return;
   const el = obj.el;
-  el.style.width = obj.w+'px';
+  // Background — just update color
+  if(obj.cls==='background'||obj.cls==='bg'){
+    el.style.background = obj.color;
+    const lbl = el.querySelector('span:last-child');
+    if(lbl) lbl.textContent = obj.name;
+    return;
+  }
+  el.style.width  = obj.w+'px';
   el.style.height = obj.h+'px';
   el.innerHTML = buildObjInner(obj.cls||'generic', obj.icon, obj.color, obj.w, obj.h, obj.name);
-  // Re-attach events
   el.onclick = e => { e.stopPropagation(); selObj(id); };
   el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
   makeResizeHandles(el, id);
@@ -2906,22 +2917,23 @@ function start2DGame() {
   Object.entries(state.objects).forEach(([id, obj]) => {
     const node = state.scNodes.find(n => n.id === id);
     if (!node) return;
+    // Skip background objects — they only affect canvas bg color
+    if (obj.cls==='background'||obj.cls==='bg'||obj.isBg) return;
+
     const nm = node.name.toLowerCase();
-    // Use actual w/h from state (set by resize), fallback to defaults
     const ow = obj.w || 40;
     const oh = obj.h || 40;
-    const ocolor = obj.color || '#478cbf';
+    const ocolor = obj.color || '#3b82f6';
     const oicon = obj.icon || node.icon || '📦';
-
-    // Center object on its scene position
     const sx = cx0() + obj.x - ow/2;
     const sy = cy0() + obj.y - oh/2;
 
-    if (nm.includes('player')) {
+    const isCls = (node.cls||'').toLowerCase();
+    if (isCls==='player'||nm.includes('player')) {
       player = { x: sx, y: sy, w: ow, h: oh, vx: 0, vy: 0, onGround: false, emoji: oicon, color: ocolor, name: node.name };
-    } else if (nm.includes('platform')) {
+    } else if (isCls==='platform'||nm.includes('platform')) {
       platforms.push({ x: sx, y: () => cy0() + obj.y - oh/2, w: ow, h: oh, color: ocolor });
-    } else if (nm.includes('enemy')) {
+    } else if (isCls==='enemy'||nm.includes('enemy')) {
       enemies.push({ x: sx, y: sy, w: ow, h: oh, vx: 1.4, dir: 1, color: ocolor, emoji: oicon, minX: sx - 80, maxX: sx + 80, name: node.name });
     } else {
       genericNodes.push({ x: sx, y: sy, w: ow, h: oh, color: ocolor, emoji: oicon, name: node.name });
@@ -2950,17 +2962,17 @@ function start2DGame() {
 
   // ── Draw background ──
   function drawBg() {
-    // Use scene's background object color if one exists
-    const bgObj = Object.values(state.objects).find(o => o.cls==='background'||o.cls==='bg');
-    const bgColor = bgObj?.color || '#0a0e1a';
-
-    // Parse hex to create gradient variation
-    const grad = ctx.createLinearGradient(0, 0, 0, H());
-    grad.addColorStop(0, bgColor);
-    // Darken bottom slightly
-    grad.addColorStop(1, bgColor + 'bb');
-    ctx.fillStyle = grad;
+    // Use scene's background object color if exists
+    const bgObj = Object.values(state.objects).find(o => o.cls==='background'||o.cls==='bg'||o.isBg);
+    const bgColor = bgObj?.color || '#0d1b3e';
+    ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, W(), H());
+    // Subtle vignette
+    const vig = ctx.createRadialGradient(W()/2,H()/2,H()*0.2, W()/2,H()/2,H()*0.9);
+    vig.addColorStop(0,'rgba(0,0,0,0)');
+    vig.addColorStop(1,'rgba(0,0,0,0.35)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0,0,W(),H());
   }
 
   // ── Draw platforms ──
