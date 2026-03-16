@@ -815,16 +815,16 @@ h1 .dim{color:var(--text3)}
         <div class="p-name">Free</div>
         <div class="p-price"><sup>₹</sup>0</div>
         <div class="p-period">Forever free</div>
-        <div class="p-desc">Perfect for learning and experimenting with game development</div>
+        <div class="p-desc">Full game builder — build, preview and share your games</div>
         <ul class="p-feats">
-          <li><span class="ck">✓</span>Scene Editor (5 nodes)</li>
-          <li><span class="ck">✓</span>GDScript Code Editor</li>
-          <li><span class="ck">✓</span>Inspector Panel</li>
-          <li><span class="ck">✓</span>Basic Game Objects</li>
-          <li><span class="ck">✓</span>Run & Preview</li>
-          <li><span class="xx">✗</span>Unlimited Nodes & Scenes</li>
-          <li><span class="xx">✗</span>Export Game (HTML5)</li>
-          <li><span class="xx">✗</span>Physics & Audio</li>
+          <li><span class="ck">✓</span>Scene Editor (up to 20 objects)</li>
+          <li><span class="ck">✓</span>Unlimited Scenes</li>
+          <li><span class="ck">✓</span>All Object Types</li>
+          <li><span class="ck">✓</span>Events & Conditions Editor</li>
+          <li><span class="ck">✓</span>2D & 3D Preview</li>
+          <li><span class="ck">✓</span>Physics, Audio & Camera</li>
+          <li><span class="ck">✓</span>Code Editor</li>
+          <li><span class="xx">✗</span>Export / Download Game</li>
         </ul>
         <button class="pbtn grn" onclick="handleFreePlan()">Start Free →</button>
       </div>
@@ -834,14 +834,14 @@ h1 .dim{color:var(--text3)}
         <div class="p-name">Pro</div>
         <div class="p-price"><sup>₹</sup>199</div>
         <div class="p-period">per month · cancel anytime</div>
-        <div class="p-desc">For developers building real games with all tools unlocked</div>
+        <div class="p-desc">Everything free, plus export your game to web, Android and more</div>
         <ul class="p-feats">
           <li><span class="ck">✓</span>Everything in Free</li>
-          <li><span class="ck">✓</span>Unlimited Nodes & Scenes</li>
-          <li><span class="ck">✓</span>Export to Web / HTML5</li>
-          <li><span class="ck">✓</span>Physics Engine</li>
-          <li><span class="ck">✓</span>Audio System</li>
-          <li><span class="ck">✓</span>Camera2D & Lighting</li>
+          <li><span class="ck">✓</span>Unlimited Objects</li>
+          <li><span class="ck">✓</span>Export to Web (HTML5)</li>
+          <li><span class="ck">✓</span>Download as ZIP</li>
+          <li><span class="ck">✓</span>Android Export (.apk)</li>
+          <li><span class="ck">✓</span>Windows Export (.exe)</li>
           <li><span class="ck">✓</span>Cloud Save & Sync</li>
           <li><span class="ck">✓</span>Priority Support</li>
         </ul>
@@ -1348,22 +1348,29 @@ h1 .dim{color:var(--text3)}
           <div class="addobj-card-ico">🌐</div>
           <div class="addobj-card-name" style="font-size:.82rem">Web (HTML5)</div>
           <div class="addobj-card-desc">Play in any browser</div>
+          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
         </div>
         <div class="addobj-card" onclick="showExportZip()" style="padding:18px">
           <div class="addobj-card-ico">📦</div>
           <div class="addobj-card-name" style="font-size:.82rem">Download as ZIP</div>
           <div class="addobj-card-desc">Host anywhere yourself</div>
+          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
         </div>
         <div class="addobj-card" onclick="chkPro('Android export')" style="padding:18px">
           <div class="addobj-card-ico">📱</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Android (Pro)</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Android</div>
           <div class="addobj-card-desc">.apk file</div>
+          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
         </div>
         <div class="addobj-card" onclick="chkPro('Windows export')" style="padding:18px">
           <div class="addobj-card-ico">🖥️</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Windows (Pro)</div>
+          <div class="addobj-card-name" style="font-size:.82rem">Windows</div>
           <div class="addobj-card-desc">.exe installer</div>
+          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
         </div>
+      </div>
+      <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:8px;padding:12px;text-align:center;font-size:.78rem;color:var(--text2)">
+        🔒 Export & Download features require <strong style="color:var(--accent)">Pro plan</strong>. All other features are free!
       </div>
     </div>
 
@@ -1846,8 +1853,8 @@ function showAcc() {
   document.getElementById('accPlanDesc').textContent = planDescs[u.plan||'free'];
   const badge = document.getElementById('accPlanBadge');
   badge.innerHTML = `<span class="apc-badge ${getPlanClass()}" style="padding:6px 14px">${getPlanLabel()}</span>`;
-  document.getElementById('accNodes').textContent = isPro() ? '∞' : '5';
-  document.getElementById('accScenes').textContent = isPro() ? '∞' : '2';
+  document.getElementById('accNodes').textContent = isPro() ? '∞' : '20';
+  document.getElementById('accScenes').textContent = isPro() ? '∞' : '∞';
   document.getElementById('accExpiry').textContent = u.planExpiry ? new Date(u.planExpiry).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '—';
   document.getElementById('accUpgBtn').style.display = isPro() ? 'none' : '';
   document.getElementById('accOverlay').classList.add('open');
@@ -2169,9 +2176,9 @@ function selTN(id){state.selNode=id;renderTree();const n=state.scNodes.find(x=>x
 
 function addNode(type,icon,cls){
   closeDD();
-  if(!isPro()&&state.scNodes.length>=6){
-    toast('🔒 Free: max 5 nodes. Upgrade to Pro!','er');
-    handlePaidPlan('Pro Monthly',199,'monthly'); return;
+  if(state.scNodes.length>=21){
+    toast('Max 20 objects reached. Upgrade to Pro for unlimited!','in');
+    return;
   }
   const id=addNd(type,icon); renderTree();
   spawnObj(id,icon,type,cls); selTN(id);
@@ -2394,7 +2401,7 @@ function ctxDuplicate(){
   const node = state.scNodes.find(n=>n.id===id);
   if(!obj||!node) return;
   closeCtxMenu();
-  if(!isPro()&&state.scNodes.length>=6){ toast('🔒 Free: max 5 nodes','er'); return; }
+  if(state.scNodes.length>=21){ toast('Max 20 objects reached!','in'); return; }
   const newId = addNd(node.name.replace(/_\d+$/,''), node.icon);
   renderTree();
   spawnAt(newId, obj.icon, node.name+'_copy', obj.cls||'generic', obj.x+30, obj.y+30, {w:obj.w, h:obj.h, color:obj.color});
@@ -2551,7 +2558,7 @@ function openScript(name){
 }
 function clTab(e,name){e.stopPropagation();document.querySelector('[data-tab="'+name+'"]')?.remove();setMode('2d');}
 function updLn(){const lines=document.getElementById('codeEd').textContent.split('\n').length;document.getElementById('lineNums').innerHTML=Array.from({length:lines},(_,i)=>i+1).join('\n');}
-function newScene(){closeDD();if(!isPro()&&state.scNodes.length>=4){toast('🔒 Free: max 2 scenes. Upgrade!','er');handlePaidPlan('Pro Monthly',199,'monthly');return;}toast('✓ New scene created');log('info','  New scene created.');}
+function newScene(){closeDD();toast('✓ New scene created');log('info','  New scene created.');}
 function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','ok');}
 
 // ================================================================
@@ -2579,9 +2586,17 @@ function setTool(t){
   ({select:'tSel',move:'tMov',rotate:'tRot',scale:'tScl'})[t]&&document.getElementById(({select:'tSel',move:'tMov',rotate:'tRot',scale:'tScl'})[t])?.classList.add('act');
 }
 function chkPro(feat){
-  if(isPro()){toast('✓ '+feat+' available!');return true;}
-  toast('🔒 '+feat+' requires Pro!','er');
-  handlePaidPlan('Pro Monthly',199,'monthly');return false;
+  // Export/Download features require Pro
+  const exportFeats = ['Export Game','Android export','Windows export','iOS export'];
+  if(exportFeats.some(f => feat.includes(f))){
+    if(isPro()){ return true; }
+    toast('🔒 Export requires Pro plan','er');
+    handlePaidPlan('Pro Monthly',199,'monthly');
+    return false;
+  }
+  // All other features are free — just show it works
+  toast('✓ '+feat,'ok');
+  return true;
 }
 
 // ================================================================
@@ -3455,9 +3470,9 @@ function confirmAddObject(){
   } else if(selObjType){
     const t = OBJ_TYPES.find(o=>o.id===selObjType);
     if(!t) return;
-    if(!isPro()&&state.scNodes.length>=6){
-      toast('🔒 Free: max 5 objects. Upgrade!','er');
-      closeAddObject(); handlePaidPlan('Pro Monthly',199,'monthly'); return;
+    if(state.scNodes.length>=21){
+      toast('Max 20 objects reached. Upgrade to Pro for unlimited!','in');
+      closeAddObject(); return;
     }
     const id = addNd(t.name.replace(/[^a-zA-Z0-9]/g,'_'), t.ico);
     renderTree();
@@ -3571,6 +3586,12 @@ function showExportZip(){
 }
 
 function doExportHTML5(){
+  if(!isPro()){
+    toast('🔒 Export requires Pro plan','er');
+    closeExport();
+    handlePaidPlan('Pro Monthly',199,'monthly');
+    return;
+  }
   log('info','  Building HTML5 export...');
   toast('Building export...','in');
   setTimeout(()=>{
@@ -3582,10 +3603,15 @@ function doExportHTML5(){
 }
 
 function doExportZip(){
+  if(!isPro()){
+    toast('🔒 Download requires Pro plan','er');
+    closeExport();
+    handlePaidPlan('Pro Monthly',199,'monthly');
+    return;
+  }
   log('info','  Packaging game as ZIP...');
   toast('Packaging game...','in');
   setTimeout(()=>{
-    // Create a simple downloadable demo zip
     const content = `<!-- IDE Game Engine Export -->
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8">
@@ -3601,7 +3627,7 @@ function doExportZip(){
     const blob = new Blob([content], {type:'text/html'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = (state.scNodes[0]?.name||'game').replace(/\s+/g,'-').toLowerCase() + '-export.html';
+    a.download = (state.scNodes[0]?.name||'game').replace(/\s+/g,'-').toLowerCase()+'-export.html';
     a.click();
     log('ok','✓ Game downloaded!');
     toast('✓ Game downloaded!');
