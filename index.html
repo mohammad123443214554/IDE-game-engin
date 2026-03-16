@@ -2430,28 +2430,19 @@ function spawnAt(id,icon,name,cls,x,y,opts={}){
   // ── BACKGROUND — fills entire canvas viewport ──
   if(reallyBg){
     el.className = 'go-bg';
-    el.style.cssText = [
-      'position:absolute','inset:0','z-index:0',
-      `background:${color}`,
-      'display:flex','align-items:flex-end','justify-content:flex-start',
-      'padding:4px 6px','overflow:hidden'
-    ].join(';');
-    el.innerHTML = `
-      <div style="position:absolute;inset:0;opacity:.06;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px;pointer-events:none"></div>
-      <span style="font-size:.58rem;color:rgba(255,255,255,.5);background:rgba(0,0,0,.3);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace;pointer-events:none">${name}</span>
-    `;
+    const imgUrl = opts.imageUrl || null;
+    const bgStyle = imgUrl
+      ? `background:url('${imgUrl}') center/cover no-repeat`
+      : `background:${color}`;
+    el.style.cssText = `position:absolute;inset:0;z-index:0;${bgStyle};display:flex;align-items:flex-end;justify-content:flex-start;padding:4px 6px;overflow:hidden`;
+    el.innerHTML = `<div style="position:absolute;inset:0;opacity:.04;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:24px 24px;pointer-events:none"></div><span style="font-size:.58rem;color:rgba(255,255,255,.7);background:rgba(0,0,0,.4);padding:1px 5px;border-radius:2px;position:relative;z-index:1;font-family:'Geist Mono',monospace;pointer-events:none">${name}</span>`;
     el.onclick = e => { e.stopPropagation(); selObj(id); };
     el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
-
     const vp = document.getElementById('cvvp');
     const grid = document.getElementById('cvGrid');
-    // Insert right after grid (so it's behind objects but above raw bg)
-    if(grid && grid.nextSibling){
-      vp.insertBefore(el, grid.nextSibling);
-    } else {
-      vp.appendChild(el);
-    }
-    state.objects[id] = { el, x:0, y:0, w:0, h:0, name, icon, cls:'bg', color, isBg:true };
+    if(grid && grid.nextSibling) vp.insertBefore(el, grid.nextSibling);
+    else vp.appendChild(el);
+    state.objects[id] = { el, x:0, y:0, w:0, h:0, name, icon, cls:'bg', color, isBg:true, imageUrl:imgUrl };
     return;
   }
 
@@ -2461,23 +2452,33 @@ function spawnAt(id,icon,name,cls,x,y,opts={}){
   el.style.top  = y+'px';
   el.style.width  = w+'px';
   el.style.height = h+'px';
-  el.innerHTML = buildObjInner(cls, icon, color, w, h, name);
+  el.innerHTML = buildObjInner(cls, icon, color, w, h, name, opts.imageUrl||null);
   el.onclick = e => { e.stopPropagation(); selObj(id); };
   el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
   makeDraggable(el, id);
   makeResizeHandles(el, id);
   document.getElementById('cvOrigin').appendChild(el);
-  state.objects[id] = { el, x, y, w, h, name, icon, cls, color };
+  state.objects[id] = { el, x, y, w, h, name, icon, cls, color, imageUrl: opts.imageUrl||null };
 }
 
-function buildObjInner(cls, icon, color, w, h, name){
+function buildObjInner(cls, icon, color, w, h, name, imageUrl){
   const safe = (s) => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const fontSize = Math.min(w, h) * 0.55;
 
-  // Background object — fills behind everything
-  if(cls==='background'||cls==='bg'){
-    return `<div class="go-wrap" style="background:${color};width:${w}px;height:${h}px;border-radius:4px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-start;padding:4px 6px"><div style="position:absolute;inset:0;opacity:.15;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:20px 20px"></div><div style="font-size:.58rem;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;position:relative;z-index:1">${safe(name)}</div></div>`;
+  // Background handled separately in spawnAt
+  if(cls==='background'||cls==='bg') return '';
+
+  // ── Uploaded image object ──
+  if(imageUrl){
+    return `
+      <div class="go-wrap">
+        <div style="width:${w}px;height:${h}px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:${color}22;border:1px solid ${color}44;position:relative">
+          <img src="${imageUrl}" style="width:100%;height:100%;object-fit:contain;display:block" draggable="false">
+        </div>
+      </div>
+      <div class="go-lbl">${safe(name)}</div>`;
   }
+
   if(cls==='platform'){
     return `<div class="go-wrap"><div style="background:${color};width:${w}px;height:${h}px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:${Math.min(fontSize,18)}px">${icon==='🟩'?'':safe(icon)}</div></div><div class="go-lbl">${safe(name)}</div>`;
   }
@@ -2490,14 +2491,18 @@ function rebuildObj(id){
   if(!obj) return;
   const el = obj.el;
   if(isBgObject(obj)){
-    el.style.background = obj.color;
+    if(obj.imageUrl){
+      el.style.background = `url('${obj.imageUrl}') center/cover no-repeat`;
+    } else {
+      el.style.background = obj.color;
+    }
     const lbl = el.querySelector('span');
     if(lbl) lbl.textContent = obj.name;
     return;
   }
   el.style.width  = obj.w+'px';
   el.style.height = obj.h+'px';
-  el.innerHTML = buildObjInner(obj.cls||'generic', obj.icon, obj.color, obj.w, obj.h, obj.name);
+  el.innerHTML = buildObjInner(obj.cls||'generic', obj.icon, obj.color, obj.w, obj.h, obj.name, obj.imageUrl||null);
   el.onclick = e => { e.stopPropagation(); selObj(id); };
   el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
   makeResizeHandles(el, id);
@@ -2946,6 +2951,14 @@ function start2DGame() {
   const W = () => canvas.width, H = () => canvas.height;
   const GRAVITY = 0.5, JUMP = -13, SPEED = 4;
 
+  // Pre-load background image if exists
+  const _bgObj = Object.values(state.objects).find(o => isBgObject(o));
+  let _bgImg = null;
+  if(_bgObj?.imageUrl){
+    _bgImg = new Image();
+    _bgImg.src = _bgObj.imageUrl;
+  }
+
   // ── Build world from actual scene nodes ──────────────────────
   // Canvas origin is center, convert to top-left coords
   const cx0 = () => W() / 2, cy0 = () => H() / 2;
@@ -2962,7 +2975,6 @@ function start2DGame() {
   Object.entries(state.objects).forEach(([id, obj]) => {
     const node = state.scNodes.find(n => n.id === id);
     if (!node) return;
-    // Skip background objects — they only affect canvas bg color
     if (isBgObject(obj, state.scNodes.find(n=>n.id===id))) return;
 
     const nm = node.name.toLowerCase();
@@ -2970,18 +2982,19 @@ function start2DGame() {
     const oh = obj.h || 40;
     const ocolor = obj.color || '#3b82f6';
     const oicon = obj.icon || node.icon || '📦';
+    const oimg = obj.imageUrl || null;
     const sx = cx0() + obj.x - ow/2;
     const sy = cy0() + obj.y - oh/2;
 
     const isCls = (node.cls||'').toLowerCase();
     if (isCls==='player'||nm.includes('player')) {
-      player = { x: sx, y: sy, w: ow, h: oh, vx: 0, vy: 0, onGround: false, emoji: oicon, color: ocolor, name: node.name };
+      player = { x:sx, y:sy, w:ow, h:oh, vx:0, vy:0, onGround:false, emoji:oicon, color:ocolor, name:node.name, img:oimg };
     } else if (isCls==='platform'||nm.includes('platform')) {
-      platforms.push({ x: sx, y: () => cy0() + obj.y - oh/2, w: ow, h: oh, color: ocolor });
+      platforms.push({ x:sx, y:()=>cy0()+obj.y-oh/2, w:ow, h:oh, color:ocolor, img:oimg });
     } else if (isCls==='enemy'||nm.includes('enemy')) {
-      enemies.push({ x: sx, y: sy, w: ow, h: oh, vx: 1.4, dir: 1, color: ocolor, emoji: oicon, minX: sx - 80, maxX: sx + 80, name: node.name });
+      enemies.push({ x:sx, y:sy, w:ow, h:oh, vx:1.4, dir:1, color:ocolor, emoji:oicon, minX:sx-80, maxX:sx+80, name:node.name, img:oimg });
     } else {
-      genericNodes.push({ x: sx, y: sy, w: ow, h: oh, color: ocolor, emoji: oicon, name: node.name });
+      genericNodes.push({ x:sx, y:sy, w:ow, h:oh, color:ocolor, emoji:oicon, name:node.name, img:oimg });
     }
   });
 
@@ -3007,14 +3020,17 @@ function start2DGame() {
 
   // ── Draw background ──
   function drawBg() {
-    const bgObj = Object.values(state.objects).find(o => isBgObject(o));
-    const bgColor = bgObj?.color || '#0d1b3e';
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, W(), H());
+    if(_bgImg && _bgImg.complete && _bgImg.naturalWidth > 0){
+      ctx.drawImage(_bgImg, 0, 0, W(), H());
+    } else {
+      const bgColor = _bgObj?.color || '#0d1b3e';
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, W(), H());
+    }
     // Subtle vignette
     const vig = ctx.createRadialGradient(W()/2,H()/2,H()*0.2,W()/2,H()/2,H()*0.9);
     vig.addColorStop(0,'rgba(0,0,0,0)');
-    vig.addColorStop(1,'rgba(0,0,0,0.3)');
+    vig.addColorStop(1,'rgba(0,0,0,0.25)');
     ctx.fillStyle = vig;
     ctx.fillRect(0,0,W(),H());
   }
@@ -3024,82 +3040,94 @@ function start2DGame() {
     platforms.forEach(p => {
       const py = typeof p.y === 'function' ? p.y() : p.y;
       const pw = typeof p.w === 'function' ? p.w() : p.w;
-      ctx.fillStyle = p.color || '#4a9a4a';
-      ctx.beginPath();
-      ctx.roundRect(p.x, py, pw, p.h, p.isGround ? 0 : 6);
-      ctx.fill();
-      if (!p.isGround) {
-        ctx.fillStyle = 'rgba(255,255,255,0.15)';
-        ctx.fillRect(p.x + 4, py + 2, pw - 8, 3);
+      if(p.img){
+        drawSprite(p.x, py, pw, p.h, p.color||'#22c55e', null, p.img, p.isGround?0:6);
+      } else {
+        ctx.fillStyle = p.color || '#22c55e';
+        ctx.beginPath();
+        ctx.roundRect(p.x, py, pw, p.h, p.isGround ? 0 : 6);
+        ctx.fill();
+        if (!p.isGround) {
+          ctx.fillStyle = 'rgba(255,255,255,0.15)';
+          ctx.fillRect(p.x + 4, py + 2, pw - 8, 3);
+        }
       }
     });
   }
 
   // ── Draw generic nodes ──
+  // ── Sprite draw helper — uses uploaded image or colored box ──
+  const imgCache = {};
+  function drawSprite(x, y, w, h, color, emoji, imgUrl, radius){
+    if(imgUrl){
+      // Draw uploaded image
+      if(!imgCache[imgUrl]){
+        const i = new Image(); i.src = imgUrl;
+        imgCache[imgUrl] = i;
+      }
+      const img = imgCache[imgUrl];
+      if(img.complete && img.naturalWidth>0){
+        ctx.save();
+        ctx.beginPath();
+        const r = radius||6;
+        ctx.roundRect(x,y,w,h,r);
+        ctx.clip();
+        ctx.drawImage(img,x,y,w,h);
+        ctx.restore();
+        return;
+      }
+    }
+    // Fallback: colored box with emoji
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x,y,w,h,radius||6);
+    ctx.fill();
+    if(emoji){
+      ctx.font = Math.min(w,h)*0.55+'px serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(emoji,x+w/2,y+h/2);
+    }
+  }
+
   function drawGenericNodes() {
     genericNodes.forEach(n => {
-      ctx.fillStyle = n.color;
-      ctx.beginPath();
-      ctx.roundRect(n.x, n.y, n.w, n.h, 5);
-      ctx.fill();
-      ctx.font = '18px serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(n.emoji, n.x + n.w/2, n.y + n.h/2 + 6);
-      // Name label
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = '10px sans-serif';
-      ctx.fillText(n.name, n.x + n.w/2, n.y - 5);
+      drawSprite(n.x, n.y, n.w, n.h, n.color, n.emoji, n.img, 5);
+      ctx.fillStyle='rgba(255,255,255,0.6)';
+      ctx.font='10px sans-serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='alphabetic';
+      ctx.fillText(n.name, n.x+n.w/2, n.y-4);
     });
   }
 
   // ── Draw enemies ──
   function drawEnemies() {
     enemies.forEach(en => {
-      // Move left-right
       en.x += en.vx * en.dir;
       if (en.x > en.maxX || en.x < en.minX) en.dir *= -1;
-      // Draw body with actual color
-      ctx.fillStyle = en.color || '#e06c75';
-      ctx.beginPath();
-      ctx.roundRect(en.x, en.y, en.w, en.h, Math.min(en.w, en.h)/2);
-      ctx.fill();
-      // Emoji — scale with size
-      const emojiSize = Math.min(en.w, en.h) * 0.6;
-      ctx.font = emojiSize+'px serif';
-      ctx.textAlign = 'center';
-      ctx.fillText(en.emoji, en.x + en.w/2, en.y + en.h/2 + emojiSize*0.3);
-      // Name label
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = '10px sans-serif';
-      ctx.fillText(en.name, en.x + en.w/2, en.y - 4);
+      drawSprite(en.x, en.y, en.w, en.h, en.color, en.emoji, en.img, Math.min(en.w,en.h)/2);
+      ctx.fillStyle='rgba(255,255,255,0.6)';
+      ctx.font='10px sans-serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='alphabetic';
+      ctx.fillText(en.name, en.x+en.w/2, en.y-4);
     });
   }
 
   // ── Draw player ──
   function drawPlayer() {
     // Shadow
-    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillStyle='rgba(0,0,0,0.3)';
     ctx.beginPath();
-    ctx.ellipse(player.x + player.w/2, player.y + player.h + 2, player.w/2, 5, 0, 0, Math.PI*2);
+    ctx.ellipse(player.x+player.w/2, player.y+player.h+2, player.w/2, 5, 0, 0, Math.PI*2);
     ctx.fill();
-    // Body — use actual color from scene
-    const grad = ctx.createLinearGradient(player.x, player.y, player.x, player.y + player.h);
-    const c1 = player.color || '#478cbf';
-    grad.addColorStop(0, c1);
-    grad.addColorStop(1, c1+'99');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.roundRect(player.x, player.y, player.w, player.h, 6);
-    ctx.fill();
-    // Emoji — scale with size
-    const emojiSize = Math.min(player.w, player.h) * 0.55;
-    ctx.font = emojiSize+'px serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(player.emoji, player.x + player.w/2, player.y + player.h/2 + emojiSize*0.35);
-    // Name label
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.fillText(player.name || 'Player', player.x + player.w/2, player.y - 5);
+    drawSprite(player.x, player.y, player.w, player.h, player.color, player.emoji, player.img, 6);
+    ctx.fillStyle='#fff';
+    ctx.font='bold 10px sans-serif';
+    ctx.textAlign='center';
+    ctx.textBaseline='alphabetic';
+    ctx.fillText(player.name||'Player', player.x+player.w/2, player.y-5);
   }
 
   // ── Draw particles ──
@@ -3743,12 +3771,22 @@ function closeAddObject(){ document.getElementById('addObjOverlay').classList.re
 
 function confirmAddObject(){
   if(uploadedObj){
-    const id = addNd(uploadedObj.name, '📦', 'root', 'generic');
+    const nm = (uploadedObj.name||'').toLowerCase();
+    const isBg = nm.startsWith('background')||nm.startsWith('bg_')||nm==='bg'||nm==='background';
+    const cls = isBg ? 'bg' : 'generic';
+    const icon = isBg ? '🌅' : '🖼️';
+    const id = addNd(uploadedObj.name, icon, 'root', cls);
     renderTree();
-    spawnAt(id, '📦', uploadedObj.name, 'generic',
-      (Math.random()-.5)*200, (Math.random()-.5)*100, {color:'#6366f1'});
+    spawnAt(id, icon, uploadedObj.name, cls, 0, 0, {
+      color: '#1a2440',
+      imageUrl: uploadedObj.dataUrl || null
+    });
     selTN(id); renderObjList();
-    log('info', `  Object "${uploadedObj.name}" added from upload.`);
+    log('info', `  Object "${uploadedObj.name}" added.`);
+    toast('✓ ' + uploadedObj.name + ' added!');
+  } else if(selObjType){
+    selTN(id); renderObjList();
+    log('info', `  Object "${uploadedObj.name}" added.`);
     toast('✓ ' + uploadedObj.name + ' added!');
   } else if(selObjType){
     const t = OBJ_TYPES.find(o=>o.id===selObjType);
@@ -3760,10 +3798,9 @@ function confirmAddObject(){
     const safeName = t.name.replace(/[^a-zA-Z0-9]/g,'_');
     const id = addNd(safeName, t.ico, 'root', selObjType);
     renderTree();
-    // Background: center at origin, full size
-    const isBg = selObjType==='bg'||selObjType==='background';
-    const x = isBg ? -320 : (Math.random()-.5)*200;
-    const y = isBg ? -180 : (Math.random()-.5)*100;
+    const isBg2 = selObjType==='bg'||selObjType==='background';
+    const x = isBg2 ? 0 : (Math.random()-.5)*200;
+    const y = isBg2 ? 0 : (Math.random()-.5)*100;
     spawnAt(id, t.ico, safeName+'_'+state.nodeCount, selObjType, x, y, {color:t.color});
     selTN(id); renderObjList();
     log('info', `  Object "${t.name}" added to scene.`);
@@ -3775,17 +3812,19 @@ function confirmAddObject(){
 function handleObjUpload(input){
   const file = input.files[0];
   if(!file) return;
-  uploadedObj = {name: file.name.replace(/\.[^.]+$/,''), file};
+  const name = file.name.replace(/\.[^.]+$/,'');
+  uploadedObj = {name, file, dataUrl: null};
   document.getElementById('uploadPreview').style.display='block';
   document.getElementById('uploadFileName').textContent = file.name;
   document.getElementById('uploadFileSize').textContent = (file.size/1024).toFixed(1) + ' KB';
   document.getElementById('selObjName').textContent = file.name + ' ready';
   document.getElementById('addObjConfirmBtn').disabled = false;
-  // Image preview
   if(file.type.startsWith('image/')){
     const reader = new FileReader();
     reader.onload = e => {
-      document.getElementById('uploadThumb').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;border-radius:4px">`;
+      uploadedObj.dataUrl = e.target.result;
+      document.getElementById('uploadThumb').innerHTML =
+        `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:contain;border-radius:4px">`;
     };
     reader.readAsDataURL(file);
   }
