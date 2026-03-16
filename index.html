@@ -2201,7 +2201,8 @@ function initScene() {
 
 function addNd(name,icon,parent='root',cls='generic'){
   const id='n'+(++state.nodeCount);
-  state.scNodes.push({id,name:name+'_'+state.nodeCount,icon,d:1,parent,cls});
+  // Use name as-is — caller is responsible for unique naming
+  state.scNodes.push({id, name, icon, d:1, parent, cls});
   return id;
 }
 
@@ -2429,28 +2430,48 @@ function spawnAt(id,icon,name,cls,x,y,opts={}){
 }
 
 function buildObjInner(cls, icon, color, w, h, name, imageUrl){
-  const safe = (s) => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const fontSize = Math.min(w, h) * 0.55;
+  const safe = s => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
-  // Background handled separately in spawnAt
+  // Background handled separately
   if(cls==='background'||cls==='bg') return '';
 
-  // ── Uploaded image object ──
+  // Uploaded image
   if(imageUrl){
-    return `
-      <div class="go-wrap">
-        <div style="width:${w}px;height:${h}px;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:${color}22;border:1px solid ${color}44;position:relative">
-          <img src="${imageUrl}" style="width:100%;height:100%;object-fit:contain;display:block" draggable="false">
-        </div>
+    return `<div class="go-wrap">
+      <div style="width:${w}px;height:${h}px;border-radius:6px;overflow:hidden;border:1px solid ${color}44">
+        <img src="${imageUrl}" style="width:100%;height:100%;object-fit:contain;display:block" draggable="false">
       </div>
-      <div class="go-lbl">${safe(name)}</div>`;
+    </div>
+    <div class="go-lbl">${safe(name)}</div>`;
   }
 
+  // Get SVG icon if available, else use text symbol
+  const svgKey = cls==='player'?'player': cls==='enemy'?'enemy': cls==='platform'?'platform':
+                 cls==='label'?'label': cls==='camera'?'camera': cls==='coin'?'coin':
+                 cls==='particle'?'particle': cls==='sound'?'sound': cls==='button'?'button':
+                 cls==='tileset'?'tileset': cls==='bg'?'bg': 'generic';
+  const svg = (typeof OBJ_SVG !== 'undefined' && OBJ_SVG[svgKey]) || null;
+
+  const radius = cls==='enemy' ? '50%' : cls==='platform' ? '4px' : '6px';
+  const innerContent = svg
+    ? `<div style="width:60%;height:60%;color:rgba(255,255,255,.9)">${svg}</div>`
+    : '';
+
   if(cls==='platform'){
-    return `<div class="go-wrap"><div style="background:${color};width:${w}px;height:${h}px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:${Math.min(fontSize,18)}px">${icon==='🟩'?'':safe(icon)}</div></div><div class="go-lbl">${safe(name)}</div>`;
+    return `<div class="go-wrap">
+      <div style="background:${color};width:${w}px;height:${h}px;border-radius:4px;display:flex;align-items:center;justify-content:center">
+        ${innerContent}
+      </div>
+    </div>
+    <div class="go-lbl">${safe(name)}</div>`;
   }
-  const radius = cls==='enemy' ? '50%' : '6px';
-  return `<div class="go-wrap"><div style="background:${color};width:${w}px;height:${h}px;border-radius:${radius};display:flex;align-items:center;justify-content:center;font-size:${Math.min(fontSize,28)}px;line-height:1">${safe(icon)}</div></div><div class="go-lbl">${safe(name)}</div>`;
+
+  return `<div class="go-wrap">
+    <div style="background:${color};width:${w}px;height:${h}px;border-radius:${radius};display:flex;align-items:center;justify-content:center">
+      ${innerContent}
+    </div>
+  </div>
+  <div class="go-lbl">${safe(name)}</div>`;
 }
 
 function rebuildObj(id){
@@ -3177,11 +3198,18 @@ function start2DGame() {
   // Always add ground floor
   platforms.push({ x: 0, y: () => H() - 30, w: () => W(), h: 30, color: '#3a7a3a', isGround: true });
 
-  // Read from state.objects — use EXACT size, color, position from canvas
+  // Non-game object types — skip in preview
+  const SKIP_IN_PREVIEW = new Set(['camera','particle','sound','button','label','text','tileset','coin']);
+
   Object.entries(state.objects).forEach(([id, obj]) => {
     const node = state.scNodes.find(n => n.id === id);
     if (!node) return;
-    if (isBgObject(obj, state.scNodes.find(n=>n.id===id))) return;
+    if (isBgObject(obj, node)) return;
+
+    const isCls = (node.cls||obj.cls||'').toLowerCase();
+
+    // Skip non-gameplay objects
+    if (SKIP_IN_PREVIEW.has(isCls)) return;
 
     const nm = node.name.toLowerCase();
     const ow = obj.w || 40;
@@ -3192,15 +3220,17 @@ function start2DGame() {
     const sx = cx0() + obj.x - ow/2;
     const sy = cy0() + obj.y - oh/2;
 
-    const isCls = (node.cls||'').toLowerCase();
     if (isCls==='player'||nm.includes('player')) {
-      player = { x:sx, y:sy, w:ow, h:oh, vx:0, vy:0, onGround:false, emoji:oicon, color:ocolor, name:node.name, img:oimg };
-    } else if (isCls==='platform'||nm.includes('platform')) {
+      player = { x:sx, y:sy, w:ow, h:oh, vx:0, vy:0, onGround:false, color:ocolor, name:node.name, img:oimg };
+    } else if (isCls==='platform'||nm.includes('platform')||isCls==='tilemap') {
       platforms.push({ x:sx, y:()=>cy0()+obj.y-oh/2, w:ow, h:oh, color:ocolor, img:oimg });
     } else if (isCls==='enemy'||nm.includes('enemy')) {
-      enemies.push({ x:sx, y:sy, w:ow, h:oh, vx:1.4, dir:1, color:ocolor, emoji:oicon, minX:sx-80, maxX:sx+80, name:node.name, img:oimg });
+      enemies.push({ x:sx, y:sy, w:ow, h:oh, vx:1.4, dir:1, color:ocolor, minX:sx-80, maxX:sx+80, name:node.name, img:oimg });
+    } else if (isCls==='coin'||isCls==='collectible'||nm.includes('coin')||nm.includes('collectible')) {
+      // Coins shown as collectibles
+      genericNodes.push({ x:sx, y:sy, w:ow, h:oh, color:ocolor, name:node.name, img:oimg, isCoin:true });
     } else {
-      genericNodes.push({ x:sx, y:sy, w:ow, h:oh, color:ocolor, emoji:oicon, name:node.name, img:oimg });
+      genericNodes.push({ x:sx, y:sy, w:ow, h:oh, color:ocolor, name:node.name, img:oimg });
     }
   });
 
@@ -3701,42 +3731,46 @@ function confirmAddObject(){
   closeAddObject();
 
   if(uploadedObj){
-    // ── Uploaded image/file ──
     const nm = (uploadedObj.name||'').toLowerCase();
     const isBg = nm.startsWith('background')||nm.startsWith('bg_')||nm==='bg';
     const cls  = isBg ? 'bg' : 'generic';
     const icon = isBg ? '🌅' : '🖼️';
     beforeAction();
-    const id = addNd(uploadedObj.name, icon, 'root', cls);
-    spawnAt(id, icon, uploadedObj.name+'_'+state.nodeCount, cls,
+    const cnt = ++state.nodeCount;
+    const objName = uploadedObj.name + '_' + cnt;
+    const id = 'n' + cnt;
+    state.scNodes.push({id, name: objName, icon, d:1, parent:'root', cls});
+    spawnAt(id, icon, objName, cls,
       isBg ? 0 : (Math.random()-.5)*200,
       isBg ? 0 : (Math.random()-.5)*100,
       {color: isBg?'#1a2440':'#6366f1', imageUrl: uploadedObj.dataUrl||null});
     renderTree(); selTN(id); renderObjList();
     afterAction('Add '+uploadedObj.name);
-    log('info', '  Object "'+uploadedObj.name+'" added from upload.');
-    toast('✓ '+uploadedObj.name+' added!');
+    log('info', '  Object "'+objName+'" added.');
+    toast('✓ '+objName+' added!');
 
   } else if(selObjType){
-    // ── Selected object type ──
     const t = OBJ_TYPES.find(o=>o.id===selObjType);
     if(!t){ toast('Unknown object type','er'); return; }
-
     if(state.scNodes.length >= 21){
       toast('Max 20 objects reached. Upgrade to Pro!','in');
       handlePaidPlan('Pro Monthly',199,'monthly'); return;
     }
-
     beforeAction();
-    const safeName = t.name.replace(/[^a-zA-Z0-9]/g,'_');
+    const cnt = ++state.nodeCount;
+    // Clean name: "Player" -> "Player_1", not "Sprite_Player_Sprite_Player_1"
+    const baseName = t.name.replace(/[^a-zA-Z0-9]/g,'').replace(/\s+/g,'');
+    const objName = baseName + '_' + cnt;
+    const id = 'n' + cnt;
     const isBg2 = selObjType==='bg'||selObjType==='background';
-    const id = addNd(safeName, t.ico, 'root', selObjType);
-    const x = isBg2 ? 0 : (Math.random()-.5)*220;
-    const y = isBg2 ? 0 : (Math.random()-.5)*120;
-    spawnAt(id, t.ico, safeName+'_'+state.nodeCount, selObjType, x, y, {color:t.color});
+    state.scNodes.push({id, name: objName, icon: t.ico, d:1, parent:'root', cls: selObjType});
+    spawnAt(id, t.ico, objName, selObjType,
+      isBg2 ? 0 : (Math.random()-.5)*220,
+      isBg2 ? 0 : (Math.random()-.5)*120,
+      {color: t.color});
     renderTree(); selTN(id); renderObjList();
     afterAction('Add '+t.name);
-    log('info', '  Object "'+t.name+'" added to scene.');
+    log('info', '  Object "'+objName+'" added to scene.');
     toast('✓ '+t.name+' added!');
 
   } else {
@@ -3785,11 +3819,14 @@ function renderObjList(){
     const d = document.createElement('div');
     d.className = 'gd-obj-item' + (state.selNode===n.id?' sel':'');
     const def = OBJ_DEFAULTS[n.cls||'generic']||OBJ_DEFAULTS.generic;
+    const objColor = state.objects[n.id]?.color || def.color;
+    const svgKey = n.cls||'generic';
+    const svg = (typeof OBJ_SVG !== 'undefined' && OBJ_SVG[svgKey]) || OBJ_SVG?.generic || '';
     d.innerHTML = `
-      <div class="gd-obj-icon" style="background:${state.objects[n.id]?.color||def.color}22">
-        <span style="font-size:.85rem">${n.icon}</span>
+      <div class="gd-obj-icon" style="background:${objColor}22;color:${objColor}">
+        ${svg ? `<div style="width:14px;height:14px">${svg}</div>` : `<span style="font-size:.75rem">${n.icon||'📦'}</span>`}
       </div>
-      <span class="gd-obj-name" style="opacity:${onCanvas?1:.5}">${n.name}</span>
+      <span class="gd-obj-name" style="opacity:${onCanvas?1:.4}">${n.name}</span>
       <span class="gd-obj-menu" onclick="event.stopPropagation();objCtxMenu(event,'${n.id}')">⋯</span>
     `;
     d.onclick = () => { selTN(n.id); };
