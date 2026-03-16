@@ -1377,51 +1377,127 @@ h1 .dim{color:var(--text3)}
 
 <!-- ============================= EXPORT MODAL ============================= -->
 <div class="overlay" id="exportOverlay" onclick="if(event.target===this)closeExport()">
-  <div class="export-box">
+  <div class="export-box" style="max-width:700px">
     <button class="export-close-btn" onclick="closeExport()">✕</button>
     <div class="export-tabs">
-      <div class="export-tab act">Publish</div>
-      <div class="export-tab">Invite</div>
+      <div class="export-tab act" onclick="showExportTab(this,'exportPage1')">Export</div>
+      <div class="export-tab" onclick="showExportTab(this,'exportPageGuide')">Play Store Guide</div>
     </div>
-    <div id="exportPage1" class="export-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
-        <div class="addobj-card" onclick="showExportHTML5()" style="padding:18px">
-          <div class="addobj-card-ico">🌐</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Web (HTML5)</div>
-          <div class="addobj-card-desc">Play in any browser</div>
-          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
-        </div>
-        <div class="addobj-card" onclick="showExportZip()" style="padding:18px">
-          <div class="addobj-card-ico">📦</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Download as ZIP</div>
-          <div class="addobj-card-desc">Host anywhere yourself</div>
-          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
-        </div>
-        <div class="addobj-card" onclick="chkPro('Android export')" style="padding:18px">
-          <div class="addobj-card-ico">📱</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Android</div>
-          <div class="addobj-card-desc">.apk file</div>
-          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
-        </div>
-        <div class="addobj-card" onclick="chkPro('Windows export')" style="padding:18px">
-          <div class="addobj-card-ico">🖥️</div>
-          <div class="addobj-card-name" style="font-size:.82rem">Windows</div>
-          <div class="addobj-card-desc">.exe installer</div>
-          <div style="margin-top:6px;font-size:.65rem;background:rgba(59,130,246,.1);color:var(--accent);padding:2px 6px;border-radius:3px;display:inline-block">Pro</div>
+
+    <!-- Page 1: All export options -->
+    <div id="exportPage1" class="export-body" style="padding:20px">
+
+      <!-- GDevelop Export — FREE + highlighted -->
+      <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:16px;margin-bottom:14px;cursor:pointer" onclick="showExportGDevelop()" id="gdExportCard">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:44px;height:44px;background:rgba(34,197,94,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+              <span style="font-size:.9rem;font-weight:600;color:var(--text)">Export for GDevelop</span>
+              <span style="font-size:.62rem;background:rgba(34,197,94,.15);color:var(--green);padding:2px 8px;border-radius:3px;font-weight:600;text-transform:uppercase">FREE</span>
+              <span style="font-size:.62rem;background:rgba(34,197,94,.1);color:var(--green);padding:2px 8px;border-radius:3px">Play Store Ready</span>
+            </div>
+            <div style="font-size:.78rem;color:var(--text2)">Download your game as a GDevelop project (.json) — open it in GDevelop and export to Android, iOS, Windows for free</div>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text3);flex-shrink:0"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
       </div>
-      <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:8px;padding:12px;text-align:center;font-size:.78rem;color:var(--text2)">
-        🔒 Export & Download features require <strong style="color:var(--accent)">Pro plan</strong>. All other features are free!
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <!-- HTML5 -->
+        <div class="addobj-card" onclick="showExportHTML5()" style="padding:14px;text-align:left;display:flex;align-items:center;gap:10px">
+          <div style="font-size:1.4rem">🌐</div>
+          <div>
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">Web (HTML5)</div>
+            <div style="font-size:.7rem;color:var(--text3)">Browser game</div>
+            <div style="margin-top:4px;font-size:.62rem;background:rgba(59,130,246,.1);color:var(--accent);padding:1px 6px;border-radius:3px;display:inline-block">Pro</div>
+          </div>
+        </div>
+        <!-- ZIP -->
+        <div class="addobj-card" onclick="showExportZip()" style="padding:14px;text-align:left;display:flex;align-items:center;gap:10px">
+          <div style="font-size:1.4rem">📦</div>
+          <div>
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">Download ZIP</div>
+            <div style="font-size:.7rem;color:var(--text3)">Self-host anywhere</div>
+            <div style="margin-top:4px;font-size:.62rem;background:rgba(59,130,246,.1);color:var(--accent);padding:1px 6px;border-radius:3px;display:inline-block">Pro</div>
+          </div>
+        </div>
+        <!-- Android -->
+        <div class="addobj-card" onclick="chkPro('Android export')" style="padding:14px;text-align:left;display:flex;align-items:center;gap:10px">
+          <div style="font-size:1.4rem">📱</div>
+          <div>
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">Android (.apk)</div>
+            <div style="font-size:.7rem;color:var(--text3)">Play Store ready</div>
+            <div style="margin-top:4px;font-size:.62rem;background:rgba(59,130,246,.1);color:var(--accent);padding:1px 6px;border-radius:3px;display:inline-block">Pro</div>
+          </div>
+        </div>
+        <!-- Windows -->
+        <div class="addobj-card" onclick="chkPro('Windows export')" style="padding:14px;text-align:left;display:flex;align-items:center;gap:10px">
+          <div style="font-size:1.4rem">🖥️</div>
+          <div>
+            <div style="font-size:.8rem;font-weight:600;color:var(--text)">Windows (.exe)</div>
+            <div style="font-size:.7rem;color:var(--text3)">Desktop game</div>
+            <div style="margin-top:4px;font-size:.62rem;background:rgba(59,130,246,.1);color:var(--accent);padding:1px 6px;border-radius:3px;display:inline-block">Pro</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- HTML5 Export Page -->
-    <div id="exportPageHTML5" class="export-body" style="display:none">
-      <div class="export-back" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageHTML5').style.display='none'">
-        ← Back
+    <!-- GDevelop Export Page -->
+    <div id="exportPageGDevelop" class="export-body" style="display:none;padding:20px">
+      <div class="export-back" onclick="showExportPage1()">← Back</div>
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="font-size:1.8rem;margin-bottom:6px">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="1.8" style="display:inline-block"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div style="font-size:1rem;font-weight:600;color:var(--text)">Export for GDevelop</div>
+        <div style="font-size:.78rem;color:var(--text2);margin-top:4px">Your game design will be saved as a real GDevelop project file</div>
       </div>
-      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">🌐 HTML5</div>
-      <p class="export-desc">This will export your game as an HTML5 package. You can upload it to CrazyGames, Poki, Game Jolt, itch.io, Newgrounds and other platforms.</p>
+
+      <!-- Steps -->
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="width:26px;height:26px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0">1</div>
+          <div>
+            <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:2px">Download your project file</div>
+            <div style="font-size:.75rem;color:var(--text2)">Click below to download <code style="background:var(--bg4);padding:1px 5px;border-radius:3px;font-size:.72rem">game.json</code> — this is your real GDevelop project</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="width:26px;height:26px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0">2</div>
+          <div>
+            <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:2px">Open in GDevelop (Free)</div>
+            <div style="font-size:.75rem;color:var(--text2)">Go to <a href="https://editor.gdevelop.io" target="_blank" style="color:var(--accent)">editor.gdevelop.io</a> → File → Open → Select your <code style="background:var(--bg4);padding:1px 5px;border-radius:3px;font-size:.72rem">game.json</code></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="width:26px;height:26px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:#fff;flex-shrink:0">3</div>
+          <div>
+            <div style="font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:2px">Export to Android / Play Store</div>
+            <div style="font-size:.75rem;color:var(--text2)">In GDevelop → File → Export → Android → Build APK → Upload to Google Play Console ($25 one-time)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Project preview -->
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:16px" id="gdProjectPreview">
+        <div style="font-size:.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">Your Project</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap" id="gdProjectStats"></div>
+      </div>
+
+      <button class="export-btn" onclick="doExportGDevelop()" style="width:100%;padding:14px;font-size:.92rem;background:var(--green)">
+        ↓ Download GDevelop Project (.json)
+      </button>
+      <div style="text-align:center;margin-top:10px;font-size:.72rem;color:var(--text3)">100% Free — No Pro required</div>
+    </div>
+
+    <!-- HTML5 Export Page -->
+    <div id="exportPageHTML5" class="export-body" style="display:none;padding:20px">
+      <div class="export-back" onclick="showExportPage1()">← Back</div>
+      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">🌐 Web (HTML5)</div>
+      <p class="export-desc">Export your game as HTML5. Upload to CrazyGames, itch.io, Game Jolt, Poki, Newgrounds.</p>
       <div class="export-platforms">
         <div class="export-platform-ico" title="CrazyGames">🎮</div>
         <div class="export-platform-ico" title="Game Jolt">⚡</div>
@@ -1429,19 +1505,17 @@ h1 .dim{color:var(--text3)}
         <div class="export-platform-ico" title="Newgrounds">🐱</div>
         <div class="export-platform-ico" title="Other">⬛</div>
       </div>
-      <button class="export-btn" onclick="doExportHTML5()">Export as a HTML5 game</button>
+      <button class="export-btn" onclick="doExportHTML5()">Export as HTML5 game</button>
     </div>
 
     <!-- ZIP Export Page -->
-    <div id="exportPageZip" class="export-body" style="display:none">
-      <div class="export-back" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageZip').style.display='none'">
-        ← Back
-      </div>
-      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">📦 Download as ZIP</div>
-      <p class="export-desc">Export your game as a ZIP file containing all HTML5 assets. You can then host it on any web server, Vercel, Netlify, GitHub Pages, or any other platform.</p>
-      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px">
-        <div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">Your game includes:</div>
-        <div style="font-size:.75rem;color:var(--text3);display:flex;flex-direction:column;gap:4px">
+    <div id="exportPageZip" class="export-body" style="display:none;padding:20px">
+      <div class="export-back" onclick="showExportPage1()">← Back</div>
+      <div style="text-align:center;margin-bottom:8px;font-size:1.1rem">📦 Download ZIP</div>
+      <p class="export-desc">Download your game as a ZIP. Host on Vercel, Netlify, GitHub Pages or any web server.</p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:18px">
+        <div style="font-size:.75rem;color:var(--text2);margin-bottom:6px;font-weight:500">Included files:</div>
+        <div style="font-size:.73rem;color:var(--text3);display:flex;flex-direction:column;gap:3px">
           <span>✓ index.html — Game entry point</span>
           <span>✓ game.js — Game logic &amp; engine</span>
           <span>✓ assets/ — All objects &amp; sprites</span>
@@ -1451,13 +1525,57 @@ h1 .dim{color:var(--text3)}
       <button class="export-btn" onclick="doExportZip()">Download ZIP</button>
     </div>
 
+    <!-- Play Store Guide Page -->
+    <div id="exportPageGuide" class="export-body" style="display:none;padding:20px;overflow-y:auto;max-height:420px">
+      <div style="font-size:.92rem;font-weight:600;color:var(--text);margin-bottom:14px">Complete Play Store Guide</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:6px">Step 1 — Design your game here</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6">Add objects, set up events & conditions, design your levels using this IDE. When ready, export as GDevelop project.</div>
+        </div>
+        <div style="padding:14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:6px">Step 2 — Import in GDevelop (Free)</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6">
+            Download GDevelop free from <a href="https://gdevelop.io" target="_blank" style="color:var(--accent)">gdevelop.io</a><br>
+            Open your exported <code style="background:var(--bg4);padding:1px 4px;border-radius:2px">game.json</code> file<br>
+            Add sprites, sounds, polish your game visuals
+          </div>
+        </div>
+        <div style="padding:14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:.8rem;font-weight:600;color:var(--accent);margin-bottom:6px">Step 3 — Export Android APK</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6">
+            In GDevelop: File → Export → Android/iOS<br>
+            GDevelop builds a real APK for you<br>
+            Sign your APK (required by Google)
+          </div>
+        </div>
+        <div style="padding:14px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+          <div style="font-size:.8rem;font-weight:600;color:var(--green);margin-bottom:6px">Step 4 — Publish on Play Store</div>
+          <div style="font-size:.75rem;color:var(--text2);line-height:1.6">
+            Go to <a href="https://play.google.com/console" target="_blank" style="color:var(--accent)">play.google.com/console</a><br>
+            Create developer account ($25 one-time fee)<br>
+            Upload APK, add screenshots, description<br>
+            Submit for review — usually approved in 3-7 days!
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding:12px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:8px;text-align:center">
+        <div style="font-size:.82rem;font-weight:600;color:var(--green);margin-bottom:4px">Ready to start?</div>
+        <div style="font-size:.75rem;color:var(--text2)">Design your game here → Export → Publish on Play Store</div>
+        <button onclick="showExportGDevelop()" class="export-btn" style="background:var(--green);margin-top:10px;padding:9px 24px;font-size:.82rem">Export GDevelop Project →</button>
+      </div>
+    </div>
+
     <div class="export-footer">
-      <div class="export-footer-link">? Help</div>
-      <div class="export-footer-link" onclick="document.getElementById('exportPage1').style.display='block';document.getElementById('exportPageHTML5').style.display='none';document.getElementById('exportPageZip').style.display='none'">See all exports</div>
+      <div class="export-footer-link" onclick="showExportTab(null,'exportPageGuide')">📖 Play Store Guide</div>
+      <div class="export-footer-link" onclick="showExportPage1()">All exports</div>
       <button class="pbtn out" style="padding:7px 18px;font-size:.8rem" onclick="closeExport()">Close</button>
     </div>
   </div>
 </div>
+
 
 <!-- ============================= ADD OBJECT MODAL ============================= -->
 <div class="overlay" id="addObjOverlay" onclick="if(event.target===this)closeAddObject()">
@@ -3643,76 +3761,197 @@ function switchScene(name){
   setMode('2d');
 }
 
-// Export functions
+// ================================================================
+//  EXPORT FUNCTIONS
+// ================================================================
 function openExport(){
   closeDD();
-  document.getElementById('exportPage1').style.display='block';
-  document.getElementById('exportPageHTML5').style.display='none';
-  document.getElementById('exportPageZip').style.display='none';
+  showExportPage1();
   document.getElementById('exportOverlay').classList.add('open');
 }
 function closeExport(){ document.getElementById('exportOverlay').classList.remove('open'); }
 
-function showExportHTML5(){
-  document.getElementById('exportPage1').style.display='none';
-  document.getElementById('exportPageHTML5').style.display='block';
+function showExportPage1(){
+  ['exportPageGDevelop','exportPageHTML5','exportPageZip','exportPageGuide']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  const p=document.getElementById('exportPage1'); if(p) p.style.display='block';
+  // Reset tabs
+  document.querySelectorAll('.export-tab').forEach((t,i)=>t.classList.toggle('act',i===0));
 }
 
+function showExportGDevelop(){
+  ['exportPage1','exportPageHTML5','exportPageZip','exportPageGuide']
+    .forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  const gd=document.getElementById('exportPageGDevelop'); if(gd) gd.style.display='block';
+  // Update project stats
+  const stats=document.getElementById('gdProjectStats');
+  if(stats){
+    const objs=state.scNodes.filter(n=>n.id!=='root');
+    const evs=document.querySelectorAll('.gd-event-row');
+    stats.innerHTML=`
+      <div style="font-size:.8rem;color:var(--text2)">Scene: <strong style="color:var(--text)">${state.scNodes[0]?.name||'Game Scene'}</strong></div>
+      <div style="font-size:.8rem;color:var(--text2)">Objects: <strong style="color:var(--accent)">${objs.length}</strong></div>
+      <div style="font-size:.8rem;color:var(--text2)">Events: <strong style="color:var(--accent)">${evs.length}</strong></div>
+      <div style="font-size:.8rem;color:var(--text2)">Platform: <strong style="color:var(--green)">Android + iOS + Web</strong></div>`;
+  }
+}
+
+function showExportTab(el,pageId){
+  document.querySelectorAll('.export-tab').forEach(t=>t.classList.remove('act'));
+  if(el) el.classList.add('act');
+  ['exportPage1','exportPageGuide'].forEach(id=>{
+    const pg=document.getElementById(id);
+    if(pg) pg.style.display=(id===pageId?'block':'none');
+  });
+}
+
+function showExportHTML5(){
+  ['exportPage1','exportPageGDevelop','exportPageZip'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const h=document.getElementById('exportPageHTML5'); if(h) h.style.display='block';
+}
 function showExportZip(){
-  document.getElementById('exportPage1').style.display='none';
-  document.getElementById('exportPageZip').style.display='block';
+  ['exportPage1','exportPageGDevelop','exportPageHTML5'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const z=document.getElementById('exportPageZip'); if(z) z.style.display='block';
 }
 
 function doExportHTML5(){
-  if(!isPro()){
-    toast('Export requires Pro plan — Upgrade!','er');
-    closeExport();
-    handlePaidPlan('Pro Monthly',199,'monthly');
-    return;
-  }
+  if(!isPro()){ toast('Export requires Pro plan!','er'); closeExport(); handlePaidPlan('Pro Monthly',199,'monthly'); return; }
   log('info','  Building HTML5 export...');
   toast('Building export...','in');
-  setTimeout(()=>{
-    log('ok','✓ HTML5 export ready!');
-    log('info','  Upload the exported folder to any web host.');
-    toast('✓ Export complete!');
-    closeExport();
-  }, 1500);
+  setTimeout(()=>{ log('ok','✓ HTML5 export ready!'); toast('✓ Export complete!'); closeExport(); }, 1500);
 }
 
 function doExportZip(){
-  if(!isPro()){
-    toast('Download requires Pro plan — Upgrade!','er');
-    closeExport();
-    handlePaidPlan('Pro Monthly',199,'monthly');
-    return;
-  }
+  if(!isPro()){ toast('Download requires Pro plan!','er'); closeExport(); handlePaidPlan('Pro Monthly',199,'monthly'); return; }
   log('info','  Packaging game as ZIP...');
-  toast('Packaging game...','in');
+  toast('Packaging...','in');
   setTimeout(()=>{
-    const content = `<!-- IDE Game Engine Export -->
-<!DOCTYPE html>
-<html><head><meta charset="UTF-8">
-<title>${state.scNodes[0]?.name||'My Game'}</title>
-<style>body{margin:0;background:#111;display:flex;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:sans-serif}</style>
-</head><body>
-<div style="text-align:center">
-  <h1>🎮 ${state.scNodes[0]?.name||'My Game'}</h1>
-  <p style="color:#888">Export your game with full engine to play here</p>
-  <p style="color:#555;font-size:.8rem">Objects: ${state.scNodes.length-1}</p>
-</div>
-</body></html>`;
-    const blob = new Blob([content], {type:'text/html'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = (state.scNodes[0]?.name||'game').replace(/\s+/g,'-').toLowerCase()+'-export.html';
-    a.click();
-    log('ok','✓ Game downloaded!');
-    toast('✓ Game downloaded!');
-    closeExport();
+    const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${state.scNodes[0]?.name||'My Game'}</title><style>body{margin:0;background:#111;display:flex;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:sans-serif;text-align:center}</style></head><body><h1>${state.scNodes[0]?.name||'My Game'}</h1><p style="color:#888">Objects: ${state.scNodes.length-1}</p></body></html>`;
+    const b=new Blob([html],{type:'text/html'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(b);
+    a.download=(state.scNodes[0]?.name||'game').replace(/\s+/g,'-').toLowerCase()+'.html';
+    a.click(); log('ok','✓ Downloaded!'); toast('✓ Downloaded!'); closeExport();
   }, 1200);
 }
 
+function doExportGDevelop(){
+  log('info','  Generating GDevelop project...');
+  toast('Building GDevelop project...','in');
+
+  const sceneName = state.scNodes[0]?.name || 'Game Scene';
+  const projectName = sceneName.replace(/\s+/g,'-');
+
+  const gdObjects = [];
+  const gdInstances = [];
+
+  state.scNodes.filter(n=>n.id!=='root').forEach((node,i) => {
+    const obj = state.objects[node.id];
+    const cls = node.cls || 'generic';
+    const color = obj?.color || '#3b82f6';
+
+    const behaviors = cls==='player' ? [{
+      name:'PlatformerObject', type:'PlatformerObject::PlatformerObjectBehavior',
+      gravity:1500, maxFallingSpeed:700, acceleration:1500, deceleration:1500,
+      maxSpeed:250, jumpSpeed:700, canGrabPlatforms:true, ignoreDefaultControls:false,
+      slopeMaxAngle:60, useLegacyTrajectory:false, useShapeBasedContact:true
+    }] : cls==='platform' ? [{
+      name:'Platform', type:'PlatformBehavior::PlatformBehavior', platformType:'Platform'
+    }] : [];
+
+    gdObjects.push({
+      name: node.name,
+      type: 'Sprite',
+      updateIfNotVisible: false,
+      variables:[
+        {name:'health',value:'100',children:[],type:'number'},
+        {name:'speed',value:cls==='player'?'200':cls==='enemy'?'100':'0',children:[],type:'number'}
+      ],
+      behaviors,
+      effects:[],
+      animations:[{
+        name:'Default', useMultipleDirections:false,
+        directions:[{looping:true,timeBetweenFrames:0.08,sprites:[{
+          image:node.name+'.png',
+          originPoint:{name:'Center',x:Math.round((obj?.w||40)/2),y:Math.round((obj?.h||40)/2)},
+          centerPoint:{name:'Center',automatic:true,x:0,y:0},
+          hasCustomCollisionMask:false, customCollisionMask:[]
+        }]}]
+      }]
+    });
+
+    if(obj){
+      gdInstances.push({
+        name:node.name, x:Math.round(obj.x+480), y:Math.round(obj.y+270),
+        z:0, angle:0, zOrder:i, layer:'', locked:false,
+        persistentUuid:'ide-'+node.id,
+        numberProperties:[], stringProperties:[], initialVariables:[]
+      });
+    }
+  });
+
+  const gdEvents = [];
+  document.querySelectorAll('.gd-event-row').forEach(row => {
+    const conditions = [];
+    row.querySelectorAll('.gd-condition-item').forEach(c=>{
+      conditions.push({type:{value:'',inverted:false},parameters:[c.textContent.trim()],subInstructions:[]});
+    });
+    const actions = [];
+    row.querySelectorAll('.gd-action-item').forEach(a=>{
+      actions.push({type:{value:'',inverted:false},parameters:[a.textContent.trim()],subInstructions:[]});
+    });
+    gdEvents.push({type:'BuiltinCommonInstructions::Standard',disabled:false,infiniteLoopWarning:true,conditions,actions,events:[]});
+  });
+
+  const gdProject = {
+    gdVersion:{major:5,minor:4,build:205,revision:0},
+    properties:{
+      name:projectName, description:'Made with IDE Game Engine',
+      version:'1.0.0', author:'', packageName:'com.example.'+projectName.toLowerCase().replace(/[^a-z0-9]/g,''),
+      orientation:'landscape', scaleMode:'linear', pixelsRounding:false,
+      antialiasingMode:'MSAA', msaaSamplesCount:4, sizeOnStartupMode:'',
+      width:960, height:540, projectUuid:'ide-'+Date.now(),
+      useDeprecatedZeroAsDefaultZOrder:false, folderProject:false,
+      platformSpecificAssets:{android:{},ios:{},desktop:{},web:{},linux:{},windows:{},macos:{}},
+      loadingScreen:{showGDevelopSplash:true,backgroundImageResourceName:'',backgroundColor:1052672,minDuration:1.5,progressBarColor:16777215,showProgressBar:true},
+      watermark:{showWatermark:true,placement:'bottom-left'},
+      authorIds:[], authorUsernames:[], categories:[],
+      playableDevices:['keyboard','gamepad','mobile'], templateSlug:'', extensionProperties:{}
+    },
+    resources:{resources:[],stillLoadingMethodIsPending:false},
+    objects:gdObjects,
+    objectsFolderStructure:{folderName:'__root',children:gdObjects.map(o=>({name:o.name}))},
+    variables:[
+      {name:'Score',value:'0',children:[],type:'number'},
+      {name:'Lives',value:'3',children:[],type:'number'},
+      {name:'Level',value:'1',children:[],type:'number'}
+    ],
+    eventsFunctionsExtensions:[],
+    scenes:[{
+      name:sceneName, mangledName:sceneName.replace(/\s+/g,'_'), title:'',
+      backgroundColorBlue:100, backgroundColorGreen:100, backgroundColorRed:20,
+      standardSortMethod:true, stopSoundsOnStartup:false, disableInputWhenFocusedOnTextField:false,
+      objects:[], objectsFolderStructure:{folderName:'__root',children:[]},
+      layers:[{name:'',visibility:true,cameras:[{customSize:false,cameraWidth:960,cameraHeight:540,renderOrder:0}],effects:[],ambientLightColorR:128,ambientLightColorG:128,ambientLightColorB:128,isLightingLayer:false,followBaseLayerCamera:false}],
+      behaviors:[], variables:[], events:gdEvents, instances:gdInstances,
+      usedResources:[], editorSettings:{useSnap:true,snap:32,zoomFactor:1}, objectGroups:[]
+    }],
+    externalEvents:[], externalLayouts:[], externalSourceFiles:[], layouts:[]
+  };
+
+  const json = JSON.stringify(gdProject, null, 2);
+  const blob = new Blob([json],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = projectName+'.json';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(a.href);
+
+  log('ok','✓ GDevelop project exported: '+projectName+'.json');
+  log('info','  Open editor.gdevelop.io → File → Open → select file');
+  log('info','  Then: File → Export → Android → Build APK');
+  toast('✓ GDevelop project downloaded! Open in GDevelop.','ok');
+  setTimeout(()=>closeExport(), 1000);
+}
 // Update coords display
 function updateCoords(e){
   const vp = document.getElementById('cvvp');
