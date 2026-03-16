@@ -838,65 +838,109 @@ h1 .dim{color:var(--text3)}
   <div class="sec" id="pricing" style="padding-top:0">
     <div class="sec-lbl">Simple Pricing</div>
     <div class="sec-ttl">Start Free. Scale Up.</div>
-    <p class="sec-sub">Free forever for hobbyists. Monthly Pro for serious developers. Cancel anytime.</p>
-    <div class="price-grid">
+    <p class="sec-sub">Free forever for hobbyists. Monthly Pro for serious developers. One-time Lifetime for the best value.</p>
+
+    <div class="price-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));max-width:1000px;margin:0 auto">
+
       <!-- Free -->
       <div class="pc">
         <div class="p-name">Free</div>
         <div class="p-price"><sup>₹</sup>0</div>
         <div class="p-period">Forever free</div>
-        <div class="p-desc">Full game builder — build, preview and share your games</div>
+        <div class="p-desc">Build & preview games — no payment needed</div>
         <ul class="p-feats">
-          <li><span class="ck">✓</span>Scene Editor (up to 20 objects)</li>
-          <li><span class="ck">✓</span>Unlimited Scenes</li>
+          <li><span class="ck">✓</span>Scene Editor (20 objects)</li>
           <li><span class="ck">✓</span>All Object Types</li>
           <li><span class="ck">✓</span>Events & Conditions Editor</li>
           <li><span class="ck">✓</span>2D Preview</li>
-          <li><span class="ck">✓</span>Physics, Audio & Camera</li>
-          <li><span class="ck">✓</span>Code Editor</li>
+          <li><span class="ck">✓</span>GDevelop Export</li>
           <li><span class="xx">✗</span>Export / Download Game</li>
         </ul>
-        <button class="pbtn grn" onclick="handleFreePlan()">Start Free →</button>
+        <button class="pbtn grn" style="width:100%" onclick="handleFreePlan()">Start Free →</button>
       </div>
-      <!-- Pro Monthly -->
+
+      <!-- Pro -->
       <div class="pc pop">
         <div class="pop-badge">Most Popular</div>
         <div class="p-name">Pro</div>
         <div class="p-price"><sup>₹</sup>199</div>
         <div class="p-period">per month · cancel anytime</div>
-        <div class="p-desc">Everything free, plus export your game to web, Android and more</div>
+        <div class="p-desc">Export your game everywhere</div>
         <ul class="p-feats">
           <li><span class="ck">✓</span>Everything in Free</li>
           <li><span class="ck">✓</span>Unlimited Objects</li>
-          <li><span class="ck">✓</span>Export to Web (HTML5)</li>
-          <li><span class="ck">✓</span>Download as ZIP</li>
+          <li><span class="ck">✓</span>Export HTML5 / ZIP</li>
           <li><span class="ck">✓</span>Android Export (.apk)</li>
           <li><span class="ck">✓</span>Windows Export (.exe)</li>
-          <li><span class="ck">✓</span>Cloud Save & Sync</li>
           <li><span class="ck">✓</span>Priority Support</li>
         </ul>
-        <button class="pbtn fil" onclick="handlePaidPlan('Pro Monthly',199,'monthly')">Get Pro — ₹199/mo</button>
+        <button class="pbtn fil" style="width:100%" onclick="handlePaidPlan('Pro Monthly',199,'monthly')">
+          Get Pro — ₹199/mo
+        </button>
       </div>
+
       <!-- Studio -->
       <div class="pc">
         <div class="p-name">Studio</div>
         <div class="p-price"><sup>₹</sup>499</div>
         <div class="p-period">per month · cancel anytime</div>
-        <div class="p-desc">For teams and studios building commercial games</div>
+        <div class="p-desc">For teams building commercial games</div>
         <ul class="p-feats">
           <li><span class="ck">✓</span>Everything in Pro</li>
           <li><span class="ck">✓</span>5 Team Seats</li>
           <li><span class="ck">✓</span>Commercial License</li>
-          <li><span class="ck">✓</span>Custom Domain</li>
           <li><span class="ck">✓</span>White Label</li>
-          <li><span class="ck">✓</span>Dedicated Support</li>
           <li><span class="ck">✓</span>Source Code Access</li>
-          <li><span class="ck">✓</span>Advanced Analytics</li>
+          <li><span class="ck">✓</span>Dedicated Support</li>
         </ul>
-        <button class="pbtn out" onclick="handlePaidPlan('Studio Monthly',499,'monthly')">Get Studio — ₹499/mo</button>
+        <button class="pbtn out" style="width:100%" onclick="handlePaidPlan('Studio Monthly',499,'monthly')">
+          Get Studio — ₹499/mo
+        </button>
       </div>
+
+      <!-- Lifetime — special card -->
+      <div class="pc" style="border-color:var(--green);position:relative;overflow:visible">
+        <div class="pop-badge" style="background:var(--green)">Best Value 🔥</div>
+        <div class="p-name" style="color:var(--green)">Lifetime</div>
+        <div class="p-price" style="color:var(--green)"><sup>₹</sup>7,500</div>
+        <div class="p-period">one-time · yours forever</div>
+        <div class="p-desc">Pay once, use forever — best deal</div>
+        <ul class="p-feats">
+          <li><span class="ck" style="color:var(--green)">✓</span>All Pro + Studio features</li>
+          <li><span class="ck" style="color:var(--green)">✓</span>Lifetime access — no monthly</li>
+          <li><span class="ck" style="color:var(--green)">✓</span>Free future updates</li>
+          <li><span class="ck" style="color:var(--green)">✓</span>Source code included</li>
+          <li><span class="ck" style="color:var(--green)">✓</span>Resell rights</li>
+          <li><span class="ck" style="color:var(--green)">✓</span>Priority forever</li>
+        </ul>
+        <button class="pbtn" style="width:100%;background:var(--green);color:#fff;border:none;padding:10px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;transition:opacity .15s"
+          onclick="handlePaidPlan('Lifetime Access',7500,'lifetime')"
+          onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+          Get Lifetime — ₹7,500
+        </button>
+        <div style="text-align:center;margin-top:8px;font-size:.68rem;color:var(--green)">
+          💰 Save ₹30,000+ vs monthly
+        </div>
+      </div>
+
     </div>
+
+    <!-- Razorpay setup banner — only visible to devs -->
+    <div id="rzpSetupBanner" style="max-width:700px;margin:28px auto 0;background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:16px 20px;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:1.4rem;flex-shrink:0">🔑</div>
+      <div>
+        <div style="font-size:.85rem;font-weight:600;color:var(--yellow);margin-bottom:4px">Setup Razorpay to Accept Real Payments</div>
+        <div style="font-size:.76rem;color:var(--text2);line-height:1.6">
+          <b style="color:var(--text)">Step 1:</b> Go to <a href="https://razorpay.com" target="_blank" style="color:var(--accent)">razorpay.com</a> → Sign up (free) → Settings → API Keys → Copy <b>Key ID</b><br>
+          <b style="color:var(--text)">Step 2:</b> Open <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:.72rem">index.html</code> → Find <code style="background:var(--bg3);padding:1px 5px;border-radius:3px;font-size:.72rem">rzp_test_YourKeyHere</code> → Replace with your Key ID<br>
+          <b style="color:var(--text)">Step 3:</b> Push to GitHub → Vercel auto-deploys → Real payments start! 🚀
+        </div>
+      </div>
+      <button onclick="document.getElementById('rzpSetupBanner').style.display='none'" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:1rem;flex-shrink:0">✕</button>
+    </div>
+
   </div>
+
 
   <footer class="ft">
     <div class="ft-logo">
@@ -948,41 +992,72 @@ h1 .dim{color:var(--text3)}
 
 <!-- ============================= PAYMENT MODAL ============================= -->
 <div class="overlay" id="payOverlay" onclick="if(event.target===this)closePayModal()">
-  <div class="pay-box" id="payBox">
+  <div class="pay-box" id="payBox" style="max-width:480px">
     <button class="pay-close" onclick="closePayModal()">✕</button>
-    <!-- Normal payment form -->
+
+    <!-- Payment Form -->
     <div id="payForm">
-      <div class="pay-h">Subscribe</div>
-      <p class="pay-p">Unlock full IDE Game Engine access</p>
-      <div class="pay-plan-row">
+      <!-- Plan Summary -->
+      <div class="pay-h" id="payTitle">Upgrade to Pro</div>
+      <p class="pay-p" id="paySubtitle">Unlock all features</p>
+
+      <!-- Plan Card -->
+      <div class="pay-plan-row" id="payPlanCard">
         <div>
-          <div class="ppname" id="payPlanName">Pro Plan</div>
-          <div class="ppsub" id="payPlanSub">Monthly subscription · cancel anytime</div>
+          <div class="ppname" id="payPlanName">Pro Monthly</div>
+          <div class="ppsub" id="payPlanSub">Monthly · cancel anytime</div>
         </div>
         <div class="ppprice" id="payPlanPrice">₹199/mo</div>
       </div>
-      <div class="pmethod">
-        <div class="pm-btn sel" onclick="selPM(this,'upi')"><span class="pi">📱</span>UPI</div>
-        <div class="pm-btn" onclick="selPM(this,'card')"><span class="pi">💳</span>Card</div>
-        <div class="pm-btn" onclick="selPM(this,'nb')"><span class="pi">🏦</span>Net Banking</div>
+
+      <!-- What you get -->
+      <div id="payPlanFeatures" style="background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:12px;margin-bottom:18px;font-size:.78rem;color:var(--text2);line-height:1.8">
+        Loading features...
       </div>
-      <div class="fg"><label>Full Name</label><input type="text" id="payName" placeholder="Your full name"></div>
-      <div class="fg"><label>Email</label><input type="email" id="payEmail" placeholder="you@example.com"></div>
-      <div class="fg"><label>Phone</label><input type="tel" id="payPhone" placeholder="+91 98765 43210"></div>
-      <button class="pay-btn" id="payBtn" onclick="doPayment()">Subscribe with Razorpay</button>
-      <div class="pay-note">🔒 Secured by Razorpay · UPI · Cards · Net Banking · Wallets</div>
+
+      <!-- User Details -->
+      <div class="fg"><label>Full Name</label><input type="text" id="payName" placeholder="Your full name" autocomplete="name"></div>
+      <div class="fg"><label>Email</label><input type="email" id="payEmail" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="fg"><label>Phone</label><input type="tel" id="payPhone" placeholder="+91 98765 43210" autocomplete="tel"></div>
+
+      <!-- Pay Button -->
+      <button class="pay-btn" id="payBtn" onclick="doPayment()">
+        Pay with Razorpay →
+      </button>
+
+      <!-- Trust badges -->
+      <div class="pay-note">
+        🔒 100% Secure · UPI · Cards · Net Banking · Wallets
+      </div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:10px;flex-wrap:wrap">
+        <span style="font-size:.68rem;color:var(--text3)">✓ Instant activation</span>
+        <span style="font-size:.68rem;color:var(--text3)">✓ Cancel anytime</span>
+        <span style="font-size:.68rem;color:var(--text3)">✓ 24h support</span>
+      </div>
     </div>
-    <!-- Success -->
+
+    <!-- Success Screen -->
     <div id="paySuccess" style="display:none">
       <div class="suc-box">
         <div class="suc-ico">🎉</div>
-        <div class="suc-h">Subscribed!</div>
-        <p class="suc-p" id="sucMsg">Your Pro plan is now active. You can now access all features!</p>
-        <button class="suc-btn" onclick="openIDEAfterPayment()">Open IDE Now</button>
+        <div class="suc-h" id="paySuccessTitle">Payment Successful!</div>
+        <p class="suc-p" id="sucMsg">Your plan is now active!</p>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:20px;text-align:left">
+          <div style="font-size:.72rem;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Transaction Details</div>
+          <div style="font-size:.78rem;color:var(--text2);display:flex;flex-direction:column;gap:5px">
+            <div style="display:flex;justify-content:space-between"><span>Plan</span><span style="color:var(--text);font-weight:600" id="sucPlanName">Pro</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Amount</span><span style="color:var(--green);font-weight:600" id="sucAmount">₹199</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Payment ID</span><span style="color:var(--text3);font-size:.68rem" id="sucPayId">-</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Valid until</span><span style="color:var(--text)" id="sucExpiry">-</span></div>
+          </div>
+        </div>
+        <button class="suc-btn" onclick="openIDEAfterPayment()">🚀 Open IDE Now</button>
+        <div style="font-size:.7rem;color:var(--text3);margin-top:10px">Receipt sent to your email</div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- ============================= ACCOUNT PAGE ============================= -->
 <div class="overlay" id="accOverlay" onclick="if(event.target===this)closeAcc()">
@@ -1771,9 +1846,33 @@ h1 .dim{color:var(--text3)}
 //  CONFIG — Replace with your actual Razorpay Key
 // ================================================================
 const CFG = {
-  rzpKey: 'rzp_test_YourKeyHere', // 🔑 Put your Razorpay Key ID here
+  // 🔑 STEP 1: Go to razorpay.com → Login → Settings → API Keys → Copy Key ID
+  // 🔑 STEP 2: Replace 'rzp_test_YourKeyHere' with your actual Key ID below
+  rzpKey: 'rzp_test_YourKeyHere',
+
   appName: 'IDE Game Engine',
-  logo: 'logo.png',
+  appLogo: 'https://ide-game-engin.vercel.app/logo.png',
+
+  plans: {
+    pro: {
+      name:  'Pro Monthly',
+      amt:   199,
+      desc:  'Unlimited objects · Export games · Priority support',
+      color: '#3b82f6',
+    },
+    studio: {
+      name:  'Studio Monthly',
+      amt:   499,
+      desc:  'Team access · Commercial license · White label',
+      color: '#a855f7',
+    },
+    lifetime: {
+      name:  'Lifetime Access',
+      amt:   7500,
+      desc:  'One-time payment · All features forever · Source code',
+      color: '#22c55e',
+    },
+  },
 };
 
 // ================================================================
@@ -2003,87 +2102,111 @@ function handleFreePlan() {
 
 function handlePaidPlan(planName, amt, type) {
   if (!state.user) {
-    // Must login/signup first
-    toast('Please create an account first to subscribe!','in');
-    openAuth('signup');
-    return;
+    toast('Please create an account first!','in');
+    openAuth('signup'); return;
   }
-  state.curPlan = {name:planName, amt, type};
-  document.getElementById('payPlanName').textContent = planName;
-  document.getElementById('payPlanSub').textContent = type==='monthly'?'Monthly subscription · cancel anytime':'One-time payment';
+  const planKey = type==='lifetime' ? 'lifetime' : (amt===499 ? 'studio' : 'pro');
+  const plan = CFG.plans[planKey] || CFG.plans.pro;
+  state.curPlan = {name:planName, amt, type, key:planKey};
+
+  document.getElementById('payTitle').textContent = type==='lifetime' ? 'Lifetime Access' : planKey==='studio' ? 'Upgrade to Studio' : 'Upgrade to Pro';
+  document.getElementById('paySubtitle').textContent = type==='lifetime' ? 'One-time payment — yours forever' : 'Monthly subscription · cancel anytime';
+  document.getElementById('payPlanName').textContent = plan.name;
+  document.getElementById('payPlanSub').textContent = type==='lifetime' ? 'One-time · All features forever' : 'Monthly · cancel anytime';
   document.getElementById('payPlanPrice').textContent = '₹'+amt+(type==='monthly'?'/mo':'');
-  document.getElementById('payName').value = state.user.name;
-  document.getElementById('payEmail').value = state.user.email;
-  document.getElementById('payForm').style.display = 'block';
-  document.getElementById('paySuccess').style.display = 'none';
+
+  const feats = {
+    pro: ['✓ Unlimited objects','✓ Export HTML5 & ZIP','✓ Download game files','✓ Priority support'],
+    studio: ['✓ Everything in Pro','✓ 5 Team seats','✓ Commercial license','✓ Dedicated support'],
+    lifetime: ['✓ All Pro + Studio features','✓ Lifetime — no monthly fee','✓ Free updates forever','✓ Source code access'],
+  };
+  document.getElementById('payPlanFeatures').innerHTML = (feats[planKey]||feats.pro).join('<br>');
+
+  if(state.user){ document.getElementById('payName').value=state.user.name||''; document.getElementById('payEmail').value=state.user.email||''; }
+  document.getElementById('payForm').style.display='block';
+  document.getElementById('paySuccess').style.display='none';
+  const btn=document.getElementById('payBtn');
+  btn.textContent = type==='lifetime' ? `Pay ₹${amt} — Lifetime Access` : `Pay ₹${amt}/mo with Razorpay →`;
+  btn.disabled=false;
   document.getElementById('payOverlay').classList.add('open');
 }
 
 function closePayModal() {
   document.getElementById('payOverlay').classList.remove('open');
   const btn=document.getElementById('payBtn');
-  btn.textContent='Subscribe with Razorpay'; btn.disabled=false;
+  if(btn){btn.textContent='Pay with Razorpay →';btn.disabled=false;}
 }
 
 function selPM(el, m) {
   document.querySelectorAll('.pm-btn').forEach(x=>x.classList.remove('sel'));
-  el.classList.add('sel'); state.payMethod = m;
+  el.classList.add('sel'); state.payMethod=m;
 }
 
 function doPayment() {
-  const name = document.getElementById('payName').value.trim();
+  const name  = document.getElementById('payName').value.trim();
   const email = document.getElementById('payEmail').value.trim();
   const phone = document.getElementById('payPhone').value.trim();
-  if (!name||!email||!phone) { toast('Please fill all fields','er'); return; }
-  if (!email.includes('@')) { toast('Invalid email','er'); return; }
+  if(!name){toast('Please enter your name','er');return;}
+  if(!email||!email.includes('@')){toast('Please enter a valid email','er');return;}
+  if(!phone){toast('Please enter your phone number','er');return;}
 
-  const btn = document.getElementById('payBtn');
-  btn.textContent = 'Opening Razorpay...'; btn.disabled = true;
+  const btn=document.getElementById('payBtn');
+  btn.textContent='Opening Razorpay...'; btn.disabled=true;
 
-  const opts = {
-    key: CFG.rzpKey,
-    amount: state.curPlan.amt * 100,
-    currency: 'INR',
-    name: CFG.appName,
-    description: state.curPlan.name,
-    image: CFG.logo,
-    prefill: {name, email, contact:phone},
-    notes: {plan:state.curPlan.name, userId:email},
-    theme: {color:'#478cbf'},
-    handler: (r) => onPayOK(r, name, email),
-    modal: { ondismiss: () => { btn.textContent='Subscribe with Razorpay'; btn.disabled=false; toast('Payment cancelled','er'); } }
+  if(CFG.rzpKey==='rzp_test_YourKeyHere'){
+    toast('Demo mode — add your Razorpay key in CFG to accept real payments','in');
+    setTimeout(()=>onPayOK({razorpay_payment_id:'demo_'+Date.now()},name,email),1500);
+    return;
+  }
+
+  const opts={
+    key:CFG.rzpKey,
+    amount:state.curPlan.amt*100,
+    currency:'INR',
+    name:CFG.appName,
+    description:state.curPlan.name,
+    image:CFG.appLogo,
+    prefill:{name,email,contact:phone},
+    notes:{plan:state.curPlan.name,email},
+    theme:{color:'#3b82f6'},
+    handler:(r)=>onPayOK(r,name,email),
+    modal:{ondismiss:()=>{btn.textContent='Pay with Razorpay →';btn.disabled=false;toast('Payment cancelled','er');}}
   };
-
-  try {
-    const rzp = new Razorpay(opts);
-    rzp.on('payment.failed', () => { btn.textContent='Subscribe with Razorpay'; btn.disabled=false; toast('Payment failed','er'); });
+  try{
+    const rzp=new Razorpay(opts);
+    rzp.on('payment.failed',(resp)=>{btn.textContent='Pay with Razorpay →';btn.disabled=false;toast('Payment failed: '+resp.error.description,'er');});
     rzp.open();
-  } catch(e) {
-    // Demo mode
-    setTimeout(()=>onPayOK({razorpay_payment_id:'demo_'+Date.now()},name,email), 1200);
+  }catch(e){
+    btn.textContent='Pay with Razorpay →';btn.disabled=false;
+    toast('Could not open Razorpay. Check your key.','er');
   }
 }
 
 function onPayOK(r, name, email) {
-  // Update user plan
-  const planMap = {'Pro Monthly':'pro','Studio Monthly':'studio'};
-  const planKey = planMap[state.curPlan.name] || 'pro';
-  const expiry = Date.now() + (30 * 24 * 60 * 60 * 1000); // 30 days
+  const planKey=state.curPlan.key||'pro';
+  const isLifetime=planKey==='lifetime'||state.curPlan.type==='lifetime';
+  const expiry=isLifetime?null:Date.now()+30*24*60*60*1000;
+  const userPlan=planKey==='lifetime'?'pro':planKey;
 
-  if (state.user) {
-    state.user.plan = planKey;
-    state.user.planExpiry = expiry;
+  if(state.user){
+    state.user.plan=userPlan; state.user.planExpiry=expiry; state.user.isLifetime=isLifetime;
     saveUser();
-    // Also update in users db
-    const users = getUsers();
-    if (users[state.user.email]) { users[state.user.email].plan=planKey; users[state.user.email].planExpiry=expiry; saveUsers(users); }
+    const users=getUsers();
+    if(users[state.user.email]){users[state.user.email].plan=userPlan;users[state.user.email].planExpiry=expiry;users[state.user.email].isLifetime=isLifetime;saveUsers(users);}
   }
 
-  document.getElementById('sucMsg').textContent = `${state.curPlan.name} activated for ${name}! Valid for 30 days. Payment ID: ${r.razorpay_payment_id}`;
-  document.getElementById('payForm').style.display = 'none';
-  document.getElementById('paySuccess').style.display = 'block';
-  renderNavAuth();
-  updateIDEUserUI();
+  (document.getElementById('sucPlanName')||{}).textContent=state.curPlan.name;
+  (document.getElementById('sucAmount')||{}).textContent='₹'+state.curPlan.amt;
+  (document.getElementById('sucPayId')||{}).textContent=r.razorpay_payment_id||'demo';
+  (document.getElementById('sucExpiry')||{}).textContent=isLifetime?'Lifetime ♾':new Date(expiry).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  (document.getElementById('paySuccessTitle')||{}).textContent=isLifetime?'🎉 Lifetime Access!':'🎉 Plan Activated!';
+  (document.getElementById('sucMsg')||{}).textContent='Welcome '+name+'! '+state.curPlan.name+' is now active.';
+
+  document.getElementById('payForm').style.display='none';
+  document.getElementById('paySuccess').style.display='block';
+  updateIDEUserUI(); renderNavAuth();
+  log('ok','✓ Payment: '+state.curPlan.name+' | ID: '+(r.razorpay_payment_id||'demo'));
+  toast('🎉 '+state.curPlan.name+' activated!','ok');
 }
 
 function openIDEAfterPayment() {
