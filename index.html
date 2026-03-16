@@ -94,7 +94,16 @@ a{text-decoration:none;color:inherit}
 }
 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
 .nav-logo img{width:22px;height:22px;border-radius:5px;object-fit:contain}
-.logo-fb{width:22px;height:22px;background:var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Geist Mono',monospace}
+.logo-fb{
+  width:28px;height:28px;
+  background:var(--accent);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8px;font-weight:800;color:#fff;
+  flex-shrink:0;
+  font-family:'Geist Mono',monospace;
+  letter-spacing:-.5px;
+}
 .logo-name{font-size:.9rem;font-weight:600;color:var(--text);letter-spacing:-.02em}
 .logo-name span{color:var(--text2);font-weight:400}
 .nav-links{display:flex;align-items:center;gap:24px}
@@ -185,7 +194,7 @@ h1 .dim{color:var(--text3)}
 .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden}
 .fi{background:var(--bg);padding:24px;transition:background .15s;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
 .fi:hover{background:var(--bg2)}
-.fi-ico{font-size:1.1rem;margin-bottom:12px;opacity:.8}
+.fi-ico{font-size:1.1rem;margin-bottom:12px;opacity:.8;color:var(--accent);display:flex;align-items:center}
 .fi h3{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:6px}
 .fi p{font-size:.8rem;color:var(--text2);line-height:1.6}
 
@@ -720,8 +729,7 @@ h1 .dim{color:var(--text3)}
   <!-- Nav -->
   <nav class="nav">
     <a href="#" class="nav-logo" onclick="return false">
-      <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="logo-fb" style="display:none">I</div>
+      <div class="logo-fb" style="display:flex">IDE</div>
       <div class="logo-name">IDE <span>Game Engine</span></div>
     </a>
     <div class="nav-links">
@@ -741,7 +749,7 @@ h1 .dim{color:var(--text3)}
     <h1>Build Games<br><span class="dim">in Your Browser</span></h1>
     <p class="hero-sub">A professional game development IDE inspired by Godot Engine — fully browser-based. No downloads, no setup.</p>
     <div class="hero-btns">
-      <button class="btn-hero-p" onclick="openIDE()">🎮 Try Free — No Signup</button>
+      <button class="btn-hero-p" onclick="openIDE()">Start Building Free</button>
       <button class="btn-hero-s" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Plans ↓</button>
     </div>
     <div class="hero-stats">
@@ -757,31 +765,38 @@ h1 .dim{color:var(--text3)}
     <div class="preview-chrome">
       <div class="preview-bar">
         <div class="pd r"></div><div class="pd y"></div><div class="pd g"></div>
-        <div class="ptitle">IDE Game Engine — Main Scene</div>
+        <div class="ptitle">IDE Game Engine — Game Scene</div>
       </div>
       <div class="p-mock">
         <div class="pm-sb">
-          <div class="pm-sb-hd">Scene Tree</div>
-          <div class="pm-item a">🎬 Main Scene</div>
-          <div class="pm-item" style="padding-left:20px">👾 Player</div>
-          <div class="pm-item" style="padding-left:20px">👹 Enemy</div>
-          <div class="pm-item" style="padding-left:20px">🟩 Platform</div>
-          <div class="pm-sb-hd" style="margin-top:10px">File System</div>
-          <div class="pm-item">📁 res://</div>
-          <div class="pm-item" style="padding-left:18px">📜 main.gd</div>
-          <div class="pm-item" style="padding-left:18px">📜 player.gd</div>
+          <div class="pm-sb-hd">Scene Objects</div>
+          <div class="pm-item a" style="gap:5px">
+            <span style="width:8px;height:8px;background:#3b82f6;border-radius:2px;flex-shrink:0;display:inline-block"></span>
+            Player_1
+          </div>
+          <div class="pm-item" style="gap:5px">
+            <span style="width:8px;height:8px;background:#ef4444;border-radius:50%;flex-shrink:0;display:inline-block"></span>
+            Enemy_2
+          </div>
+          <div class="pm-item" style="gap:5px">
+            <span style="width:8px;height:8px;background:#22c55e;border-radius:1px;flex-shrink:0;display:inline-block"></span>
+            Platform_3
+          </div>
+          <div class="pm-sb-hd" style="margin-top:8px">Events</div>
+          <div class="pm-item" style="font-size:.6rem;opacity:.6">▶ On key press → Move</div>
+          <div class="pm-item" style="font-size:.6rem;opacity:.6">▶ On collision → Score</div>
         </div>
         <div class="pm-cv">
           <div class="pm-grid"></div>
-          <div class="pm-node" style="top:40%;left:40%">👾 Player</div>
-          <div class="pm-node" style="top:27%;left:60%;background:var(--red)">👹 Enemy</div>
-          <div class="pm-node" style="top:66%;left:26%;background:var(--green);width:120px;text-align:center">🟩 Platform</div>
+          <div class="pm-node" style="top:38%;left:35%;background:#3b82f6;padding:4px 10px;font-size:.65rem">Player_1</div>
+          <div class="pm-node" style="top:22%;left:58%;background:#ef4444;border-radius:50%;width:28px;height:28px;padding:0;display:flex;align-items:center;justify-content:center;font-size:.55rem">E</div>
+          <div class="pm-node" style="top:62%;left:20%;background:#22c55e;width:140px;height:10px;border-radius:2px;padding:0"></div>
         </div>
         <div class="pm-props">
           <div class="pm-sb-hd">Inspector</div>
-          <div class="pm-prop"><div class="pm-pk">Name</div><div class="pm-pv">Player</div></div>
-          <div class="pm-prop"><div class="pm-pk">Position</div><div class="pm-pv">x:0, y:0</div></div>
-          <div class="pm-prop"><div class="pm-pk">Scale</div><div class="pm-pv">1.0, 1.0</div></div>
+          <div class="pm-prop"><div class="pm-pk">Name</div><div class="pm-pv">Player_1</div></div>
+          <div class="pm-prop"><div class="pm-pk">X</div><div class="pm-pv">0</div></div>
+          <div class="pm-prop"><div class="pm-pk">Y</div><div class="pm-pv">0</div></div>
           <div class="pm-prop"><div class="pm-pk">Speed</div><div class="pm-pv">200</div></div>
           <div class="pm-prop"><div class="pm-pk">Health</div><div class="pm-pv">100</div></div>
         </div>
@@ -795,12 +810,24 @@ h1 .dim{color:var(--text3)}
     <div class="sec-ttl">Everything to Build Games</div>
     <p class="sec-sub">A complete Godot-inspired development environment, in your browser.</p>
     <div class="feat-grid">
-      <div class="fi"><div class="fi-ico">🎬</div><h3>Scene Editor</h3><p>Visual scene tree with drag-and-drop game objects. Build levels just like Godot.</p></div>
-      <div class="fi"><div class="fi-ico">📜</div><h3>GDScript Editor</h3><p>Full code editor with syntax highlighting, line numbers, and GDScript-style scripting.</p></div>
-      <div class="fi"><div class="fi-ico">🔍</div><h3>Inspector Panel</h3><p>Real-time properties. Modify position, scale, color and more with one click.</p></div>
-      <div class="fi"><div class="fi-ico">📁</div><h3>File System</h3><p>Organize project files. Create scripts, scenes, and assets from one panel.</p></div>
-      <div class="fi"><div class="fi-ico">▶️</div><h3>Run & Preview</h3><p>Hit play and see your game instantly. Test logic and interactions in real-time.</p></div>
-      <div class="fi"><div class="fi-ico">📱</div><h3>Mobile Ready</h3><p>Works on phones and tablets. Build games anywhere, from any modern browser.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div><h3>Scene Editor</h3><p>Visual scene tree with drag-and-drop game objects. Build levels just like Godot.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div><h3>Script Editor</h3><p>Full code editor with syntax highlighting, line numbers, and GDScript-style scripting.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div><h3>Inspector Panel</h3><p>Real-time properties. Modify position, scale, color and more with one click.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </div><h3>File System</h3><p>Organize project files. Create scripts, scenes, and assets from one panel.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div><h3>Run & Preview</h3><p>Hit play and see your game instantly. Test logic and interactions in real-time.</p></div>
+      <div class="fi"><div class="fi-ico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+      </div><h3>Mobile Ready</h3><p>Works on phones and tablets. Build games anywhere, from any modern browser.</p></div>
     </div>
   </div>
 
@@ -870,10 +897,10 @@ h1 .dim{color:var(--text3)}
 
   <footer class="ft">
     <div class="ft-logo">
-      <img src="logo.png" alt="" onerror="this.style.display='none'">
+      <div class="logo-fb" style="display:flex;font-size:9px;width:18px;height:18px;border-radius:3px">IDE</div>
       <span style="font-weight:700;color:var(--text)">IDE <span style="color:var(--accent)">Game Engine</span></span>
     </div>
-    <div class="ft-copy">© 2024 IDE Game Engine. All rights reserved.</div>
+    <div class="ft-copy">© 2025 IDE Game Engine. All rights reserved.</div>
     <div class="ft-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Support</a></div>
   </footer>
 </div>
@@ -883,8 +910,7 @@ h1 .dim{color:var(--text3)}
   <div class="auth-box" id="authBox">
     <button class="auth-close" onclick="closeAuth()">✕</button>
     <div class="auth-logo">
-      <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div class="auth-logo-fb" style="display:none">I</div>
+      <div class="auth-logo-fb" style="display:flex">IDE</div>
       <span>IDE <em>Game Engine</em></span>
     </div>
     <div class="auth-tabs">
@@ -949,7 +975,7 @@ h1 .dim{color:var(--text3)}
         <div class="suc-ico">🎉</div>
         <div class="suc-h">Subscribed!</div>
         <p class="suc-p" id="sucMsg">Your Pro plan is now active. You can now access all features!</p>
-        <button class="suc-btn" onclick="openIDEAfterPayment()">🚀 Open IDE Now</button>
+        <button class="suc-btn" onclick="openIDEAfterPayment()">Open IDE Now</button>
       </div>
     </div>
   </div>
@@ -986,13 +1012,13 @@ h1 .dim{color:var(--text3)}
     <div class="acc-section">
       <div class="acc-sec-ttl">Quick Actions</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="pbtn fil" style="flex:1;padding:10px" onclick="closeAcc();handlePaidPlan('Pro Monthly',199,'monthly')" id="accUpgBtn">⚡ Upgrade to Pro</button>
-        <button class="pbtn out" style="flex:1;padding:10px" onclick="closeAcc();openIDE()">🎮 Open IDE</button>
+        <button class="pbtn fil" style="flex:1;padding:10px" onclick="closeAcc();handlePaidPlan('Pro Monthly',199,'monthly')" id="accUpgBtn">Upgrade to Pro</button>
+        <button class="pbtn out" style="flex:1;padding:10px" onclick="closeAcc();openIDE()">Open IDE</button>
       </div>
     </div>
     <!-- Logout -->
     <div style="border-top:1px solid var(--border);padding-top:20px">
-      <button onclick="doLogout()" style="color:var(--red);font-size:.85rem;font-weight:600;background:transparent;border:1px solid rgba(224,108,117,.2);padding:8px 18px;border-radius:7px;transition:all .2s;width:100%">🚪 Logout</button>
+      <button onclick="doLogout()" style="color:var(--red);font-size:.85rem;font-weight:600;background:transparent;border:1px solid rgba(224,108,117,.2);padding:8px 18px;border-radius:7px;transition:all .2s;width:100%">Sign Out</button>
     </div>
   </div>
 </div>
@@ -1005,8 +1031,7 @@ h1 .dim{color:var(--text3)}
     <!-- Left: Logo + Menus -->
     <div style="display:flex;align-items:center;height:100%">
       <div class="ide-logo">
-        <img src="logo.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="ide-logo-fb" style="display:none">G</div>
+        <div class="ide-logo-fb" style="display:flex">G</div>
         <span class="ide-logo-nm">IDE <em>GE</em></span>
       </div>
       <div class="ide-menus">
@@ -1124,7 +1149,7 @@ h1 .dim{color:var(--text3)}
   <!-- ===== SCENE TABS (like GDevelop) ===== -->
   <div id="sceneTabs" style="display:flex;align-items:center;background:var(--bg2);border-bottom:1px solid var(--border);height:34px;padding:0 8px;gap:2px;flex-shrink:0">
     <div class="gd-scene-tab act" id="sceneTab1" onclick="switchScene('Game Scene')">
-      <span style="font-size:.75rem">🎬</span>
+      <span style="font-size:.75rem">◈</span>
       <span>Game Scene</span>
       <span class="gd-tab-x" onclick="event.stopPropagation()">✕</span>
     </div>
@@ -1170,7 +1195,7 @@ h1 .dim{color:var(--text3)}
           <button class="gd-tool" id="tRot" onclick="setTool('rotate')" title="Rotate">↻</button>
           <button class="gd-tool" id="tScl" onclick="setTool('scale')" title="Scale">⤢</button>
           <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
-          <button class="gd-tool" title="Toggle grid" onclick="toggleGrid(document.getElementById('settingGrid').checked=!document.getElementById('settingGrid').checked,document.getElementById('settingGrid').checked)">⊞</button>
+          <button class="gd-tool" title="Toggle grid" onclick="document.getElementById('settingGrid').checked=!document.getElementById('settingGrid').checked;toggleGrid(document.getElementById('settingGrid').checked)">⊞</button>
         </div>
         <!-- Center: coords display -->
         <div style="display:flex;align-items:center;gap:8px;font-size:.68rem;color:var(--text3);font-family:'Geist Mono',monospace">
@@ -1192,13 +1217,17 @@ h1 .dim{color:var(--text3)}
         </div>
       </div>
 
-      <!-- Events Editor (replaces code editor) -->
+      <!-- Events Editor + Code Editor -->
       <div class="cea" id="cea">
-        <div class="gd-events-editor">
+        <!-- Events View (default in script mode) -->
+        <div class="gd-events-editor" id="eventsView">
           <div class="gd-events-toolbar">
             <button class="gd-ev-btn" onclick="addEvent()">+ Add event</button>
             <button class="gd-ev-btn" onclick="addSubEvent()">+ Add sub-event</button>
             <button class="gd-ev-btn">+ Add comment</button>
+            <div style="margin-left:auto;display:flex;gap:4px">
+              <button class="gd-ev-btn" onclick="switchToCode()" style="color:var(--accent)">{ } Code Editor</button>
+            </div>
           </div>
           <div id="eventsContainer" style="flex:1;overflow-y:auto;padding:8px">
             <div class="gd-event-row" id="ev1">
@@ -1225,6 +1254,18 @@ h1 .dim{color:var(--text3)}
                 <div class="gd-add-act" onclick="addAction('ev2')">+ Add action</div>
               </div>
             </div>
+          </div>
+        </div>
+        <!-- Code Editor View (shown when openScript is called) -->
+        <div id="codeView" style="display:none;flex:1;flex-direction:column;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:8px;padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0">
+            <span style="font-size:.72rem;color:var(--text3);font-family:'Geist Mono',monospace" id="codeViewTitle">main.gd</span>
+            <div id="eTabs" style="display:flex;gap:2px;flex:1"></div>
+            <button onclick="switchToEvents()" class="gd-ev-btn" style="font-size:.7rem">⚡ Events</button>
+          </div>
+          <div class="code-wrap">
+            <div class="line-nums" id="lineNums">1</div>
+            <div class="code-ed" id="codeEd" contenteditable="true" spellcheck="false" oninput="updLn()"></div>
           </div>
         </div>
       </div>
@@ -1407,7 +1448,7 @@ h1 .dim{color:var(--text3)}
           <span>✓ README.md — Deploy instructions</span>
         </div>
       </div>
-      <button class="export-btn" onclick="doExportZip()">📥 Download ZIP</button>
+      <button class="export-btn" onclick="doExportZip()">Download ZIP</button>
     </div>
 
     <div class="export-footer">
@@ -1469,7 +1510,7 @@ h1 .dim{color:var(--text3)}
         </p>
         <label class="upload-zone" id="uploadZone">
           <input type="file" id="objFileInput" accept=".png,.jpg,.jpeg,.gif,.svg,.obj,.gltf,.glb" onchange="handleObjUpload(this)">
-          <div style="font-size:2rem;margin-bottom:8px">📁</div>
+          <svg style="margin-bottom:8px;opacity:.4" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <div style="font-size:.85rem;font-weight:500;color:var(--text);margin-bottom:4px">Click to upload or drag & drop</div>
           <div style="font-size:.75rem;color:var(--text3)">PNG, JPG, SVG, OBJ, GLTF, GLB supported</div>
         </label>
@@ -1515,7 +1556,7 @@ h1 .dim{color:var(--text3)}
       <canvas id="gameCanvas2d" style="display:block;width:100%;height:100%;background:#1a1a2e"></canvas>
       <div class="game-hud">
         <div class="hud-score">Score: <span id="score2d">0</span></div>
-        <div class="hud-lives">❤️❤️❤️</div>
+        <div class="hud-lives" id="lives2d">❤️ ❤️ ❤️</div>
         <div class="hud-time">Time: <span id="time2d">0</span>s</div>
       </div>
       <div class="game-controls-hint">← → Move &nbsp;|&nbsp; Space Jump &nbsp;|&nbsp; Esc Stop</div>
@@ -1575,12 +1616,12 @@ h1 .dim{color:var(--text3)}
 
 <!-- ===== RIGHT-CLICK CONTEXT MENU ===== -->
 <div id="ctxMenu">
-  <div class="ctx-item" onclick="ctxDuplicate()">📋 Duplicate</div>
+  <div class="ctx-item" onclick="ctxDuplicate()">Duplicate</div>
   <div class="ctx-sep"></div>
-  <div class="ctx-item" onclick="ctxEdit()">✏️ Edit Object</div>
+  <div class="ctx-item" onclick="ctxEdit()">Edit Object</div>
   <div class="ctx-sep"></div>
-  <div class="ctx-item danger" onclick="ctxDelete()">🙈 Hide from Canvas</div>
-  <div class="ctx-item danger" onclick="deleteNodePermanently(document.getElementById('ctxMenu').dataset.nodeId)">🗑️ Delete Permanently</div>
+  <div class="ctx-item danger" onclick="ctxDelete()">Hide from Canvas</div>
+  <div class="ctx-item danger" onclick="deleteNodePermanently(document.getElementById('ctxMenu').dataset.nodeId)">Delete Permanently</div>
 </div>
 
 <!-- ===== EDIT PANEL ===== -->
@@ -1630,7 +1671,7 @@ h1 .dim{color:var(--text3)}
   </div>
   <div class="ep-row">
     <label class="ep-label">Opacity: <span id="ep-opacity-val">100%</span></label>
-    <input class="ep-slider" id="ep-opacity" type="range" min="10" max="100" value="100" oninput="document.getElementById('ep-opacity-val').textContent=this.value+'%'">
+    <input class="ep-slider" id="ep-opacity" type="range" min="10" max="100" value="100" oninput="(document.getElementById('ep-opacity-val')||{}).textContent=this.value+'%'">
   </div>
   <button class="ep-apply" onclick="applyEdit()">✓ Apply Changes</button>
 </div>
@@ -1801,10 +1842,10 @@ function renderNavAuth() {
           <span class="user-plan ${getPlanClass()}">${getPlanLabel()}</span>
         </button>
         <div class="user-dd-menu" id="navUserMenu">
-          <div class="uddi" onclick="closeNavDD();showAcc()">👤 My Account</div>
-          <div class="uddi" onclick="closeNavDD();openIDE()">🎮 Open IDE</div>
+          <div class="uddi" onclick="closeNavDD();showAcc()">Account</div>
+          <div class="uddi" onclick="closeNavDD();openIDE()">Open IDE</div>
           <div class="udds"></div>
-          <div class="uddi danger" onclick="doLogout()">🚪 Logout</div>
+          <div class="uddi danger" onclick="doLogout()">Sign Out</div>
         </div>
       </div>
     `;
@@ -2034,10 +2075,10 @@ function closeUserDD() { document.getElementById('ideUserMenu').classList.remove
 //  SCENE INIT
 // ================================================================
 function initScene() {
-  state.scNodes = [{id:'root',name:'Main Scene',icon:'🎬',d:0}];
+  state.scNodes = [{id:'root',name:'Main Scene',icon:'◈',d:0}];
   state.nodeCount = 0; state.objects = {};
   document.getElementById('cvOrigin').innerHTML = '';
-  addNd('Player','👾'); addNd('Enemy','👹'); addNd('Platform','🟩');
+  addNd('Player','▣'); addNd('Enemy','◉'); addNd('Platform','▬');
   renderTree(); spawnDefaults();
 }
 
@@ -2076,7 +2117,7 @@ function renderTree(){
     }
     c.appendChild(d);
   });
-  document.getElementById('sbNodes').textContent=(state.scNodes.length-1)+' objects';
+  (document.getElementById('sbNodes')||{}).textContent=(state.scNodes.length-1)+' objects';
   // Also update objects panel
   if(typeof renderObjList === 'function') renderObjList();
 }
@@ -2168,7 +2209,7 @@ function dropOnCanvas(ev, node){
     obj.el.style.left = sceneX+'px';
     obj.el.style.top  = sceneY+'px';
     selTN(node.id);
-    toast('📌 '+node.name+' moved!');
+    toast(''+node.name+' moved!');
   }
 }
 
@@ -2199,9 +2240,9 @@ const OBJ_DEFAULTS = {
 };
 
 function spawnDefaults(){
-  spawnAt('n1','👾','Player','player',0,0);
-  spawnAt('n2','👹','Enemy','enemy',150,-80);
-  spawnAt('n3','🟩','Platform','platform',0,100);
+  spawnAt('n1','▣','Player','player',0,0);
+  spawnAt('n2','◉','Enemy','enemy',150,-80);
+  spawnAt('n3','▬','Platform','platform',0,100);
 }
 
 function spawnObj(id,icon,name,cls){
@@ -2426,12 +2467,12 @@ function ctxDelete(){
 
   // Clear inspector
   document.getElementById('rpCon').innerHTML='<div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect properties.</div>';
-  document.getElementById('insName').textContent='— None —';
+  (document.getElementById('insName')||{}).textContent='— None —';
 
   // Refresh tree — node stays
   renderTree();
   log('info', '  "'+node.name+'" removed from canvas (still in Scene Tree).');
-  toast('🙈 Removed from canvas', 'er');
+  toast('Removed from canvas','in');
 }
 
 // Permanently delete from both canvas and tree
@@ -2448,9 +2489,9 @@ function deleteNodePermanently(id){
   state.selNode = null;
   renderTree();
   document.getElementById('rpCon').innerHTML='<div style="padding:20px 12px;text-align:center;color:var(--text3);font-size:.78rem;line-height:1.6">Click any node to inspect properties.</div>';
-  document.getElementById('insName').textContent='— None —';
+  (document.getElementById('insName')||{}).textContent='— None —';
   log('info', '  "'+node.name+'" permanently deleted.');
-  toast('🗑 Permanently deleted', 'er');
+  toast('Deleted permanently', 'er');
 }
 
 function ctxEdit(){
@@ -2473,7 +2514,7 @@ function showEditPanel(id){
   document.getElementById('ep-h').value = Math.round(obj.h);
   document.getElementById('ep-icon').value = obj.icon||'📦';
   document.getElementById('ep-opacity').value = obj.opacity||100;
-  document.getElementById('ep-opacity-val').textContent = (obj.opacity||100)+'%';
+  (document.getElementById('ep-opacity-val')||{}).textContent = (obj.opacity||100)+'%';
 }
 
 function applyEdit(){
@@ -2514,7 +2555,7 @@ function updPXY(x,y){const a=document.getElementById('ppx'),b=document.getElemen
 //  INSPECTOR
 // ================================================================
 function showIns(node){
-  document.getElementById('insName').textContent=node.name;
+  (document.getElementById('insName')||{}).textContent=node.name;
   const obj=state.objects[node.id];
   const x=obj?Math.round(obj.x):0,y=obj?Math.round(obj.y):0;
   document.getElementById('rpCon').innerHTML=`
@@ -2543,21 +2584,44 @@ const scripts = {
   'player.gd':`extends CharacterBody2D\n# Player controller\n\nconst SPEED = 200.0\nconst JUMP_VEL = -400.0\nvar gravity = 980\n\nfunc _physics_process(delta):\n\tif not is_on_floor():\n\t\tvelocity.y += gravity * delta\n\n\tif Input.is_action_just_pressed("ui_accept") and is_on_floor():\n\t\tvelocity.y = JUMP_VEL\n\n\tvar dir = Input.get_axis("ui_left", "ui_right")\n\tif dir:\n\t\tvelocity.x = dir * SPEED\n\telse:\n\t\tvelocity.x = move_toward(velocity.x, 0, SPEED)\n\n\tmove_and_slide()\n`
 };
 
+function switchToCode(){
+  const ev = document.getElementById('eventsView');
+  const cv = document.getElementById('codeView');
+  if(ev) ev.style.display = 'none';
+  if(cv) { cv.style.display = 'flex'; }
+}
+function switchToEvents(){
+  const ev = document.getElementById('eventsView');
+  const cv = document.getElementById('codeView');
+  if(cv) cv.style.display = 'none';
+  if(ev) ev.style.display = 'flex';
+}
+
 function openScript(name){
   closeDD(); setMode('script');
   state.activeScript = name;
+  switchToCode();
   const code = scripts[name]||`extends Node\n# ${name}\n\nfunc _ready():\n\tpass\n`;
-  document.getElementById('codeEd').textContent = code; updLn();
+  const ed = document.getElementById('codeEd');
+  const title = document.getElementById('codeViewTitle');
+  if(ed) { ed.textContent = code; updLn(); }
+  if(title) title.textContent = name;
   const tabs = document.getElementById('eTabs');
-  if(!tabs.querySelector('[data-tab="'+name+'"]')){
+  if(tabs && !tabs.querySelector('[data-tab="'+name+'"]')){
     const t=document.createElement('div');t.className='etab';t.dataset.tab=name;
-    t.innerHTML=`<span>📜</span> ${name}<button class="etab-close" onclick="clTab(event,'${name}')">✕</button>`;
+    t.innerHTML=`<span style="font-size:.7rem">{ }</span> ${name}<button class="etab-close" onclick="clTab(event,'${name}')">✕</button>`;
     t.onclick=()=>openScript(name);tabs.appendChild(t);
   }
-  tabs.querySelectorAll('.etab').forEach(t=>t.classList.toggle('act',t.dataset.tab===name));
+  if(tabs) tabs.querySelectorAll('.etab').forEach(t=>t.classList.toggle('act',t.dataset.tab===name));
 }
 function clTab(e,name){e.stopPropagation();document.querySelector('[data-tab="'+name+'"]')?.remove();setMode('2d');}
-function updLn(){const lines=document.getElementById('codeEd').textContent.split('\n').length;document.getElementById('lineNums').innerHTML=Array.from({length:lines},(_,i)=>i+1).join('\n');}
+function updLn(){
+  const ed = document.getElementById('codeEd');
+  const ln = document.getElementById('lineNums');
+  if(!ed||!ln) return;
+  const lines = ed.textContent.split('\n').length;
+  ln.innerHTML = Array.from({length:lines},(_,i)=>i+1).join('\n');
+}
 function newScene(){closeDD();toast('✓ New scene created');log('info','  New scene created.');}
 function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','ok');}
 
@@ -2590,7 +2654,7 @@ function chkPro(feat){
   const exportFeats = ['Export Game','Android export','Windows export','iOS export'];
   if(exportFeats.some(f => feat.includes(f))){
     if(isPro()){ return true; }
-    toast('🔒 Export requires Pro plan','er');
+    toast('Export requires Pro plan — Upgrade!','er');
     handlePaidPlan('Pro Monthly',199,'monthly');
     return false;
   }
@@ -2612,13 +2676,13 @@ function runGame(type = '2d') {
   const btnStop = document.getElementById('btnStop');
   if(btn2d) btn2d.style.display = 'none';
   if(btnStop) btnStop.style.display = 'flex';
-  document.getElementById('runInd').style.display = 'flex';
+  (document.getElementById('runInd')||document.createElement('div')).style.display = 'flex';
 
   log('info', '  Compiling scene...');
   log('info', '  Starting ' + type.toUpperCase() + ' preview...');
 
   document.getElementById('previewOverlay').classList.add('open');
-  document.getElementById('previewTitle').textContent = (type === '2d' ? '🎮 2D' : '🎲 3D') + ' Preview — ' + (state.scNodes[0]?.name || 'Game Scene');
+  (document.getElementById('previewTitle')||{}).textContent = (type === '2d' ? '2D' : '3D') + ' Preview — ' + (state.scNodes[0]?.name || 'Game Scene');
   document.getElementById('game2d').style.display = type === '2d' ? 'block' : 'none';
   document.getElementById('game3d').style.display = type === '3d' ? 'block' : 'none';
 
@@ -2640,7 +2704,7 @@ function stopGame() {
   const btnStop = document.getElementById('btnStop');
   if(btn2d) btn2d.style.display = '';
   if(btnStop) btnStop.style.display = 'none';
-  document.getElementById('runInd').style.display = 'none';
+  (document.getElementById('runInd')||document.createElement('div')).style.display = 'none';
   log('info', '  Game stopped.'); toast('■ Stopped.', 'in');
 }
 
@@ -2658,7 +2722,7 @@ function startFPS() {
   fpsInterval = setInterval(() => {
     const now = performance.now();
     const fps = Math.round(frames / ((now - last) / 1000));
-    document.getElementById('previewFps').textContent = fps + ' FPS';
+    (document.getElementById('previewFps')||{}).textContent = fps + ' FPS';
     frames = 0; last = now;
   }, 1000);
   return () => frames++;
@@ -2729,7 +2793,7 @@ function start2DGame() {
   document.addEventListener('keyup', onKey);
 
   // Timer
-  gameTimer = setInterval(() => { gameTime++; document.getElementById('time2d').textContent = gameTime; }, 1000);
+  gameTimer = setInterval(() => { gameTime++; (document.getElementById('time2d')||{}).textContent = gameTime; }, 1000);
 
   // Particles
   const particles = [];
@@ -2846,7 +2910,7 @@ function start2DGame() {
 
   // ── HUD ──
   function drawHUD() {
-    document.getElementById('score2d').textContent = score;
+    (document.getElementById('score2d')||{}).textContent = score;
   }
 
   function collideRect(a, bx, by, bw, bh) {
@@ -2886,7 +2950,7 @@ function start2DGame() {
     enemies.forEach(en => {
       if (collideRect(player, en.x, en.y, en.w, en.h)) {
         lives = Math.max(0, lives - 1);
-        document.getElementById('lives2d').innerHTML = '❤️'.repeat(lives) || '💀';
+        (document.getElementById('lives2d')||{}).innerHTML = '♥ '.repeat(lives) || '— game over';
         player.x = 60; player.y = H() - 100; player.vy = 0;
         spawnParticles(player.x, player.y, '#e06c75');
         score = Math.max(0, score - 5);
@@ -2900,10 +2964,10 @@ function start2DGame() {
     if (player.y > H() + 50) {
       player.x = 60; player.y = H() - 100; player.vy = 0;
       lives = Math.max(0, lives - 1);
-      document.getElementById('lives2d').innerHTML = '❤️'.repeat(lives) || '💀';
+      (document.getElementById('lives2d')||{}).innerHTML = '♥ '.repeat(lives) || '— game over';
     }
     score++;
-    if (score % 100 === 0) document.getElementById('score2d').textContent = Math.floor(score/10);
+    if (score % 100 === 0) (document.getElementById('score2d')||{}).textContent = Math.floor(score/10);
   }
 
   function draw() {
@@ -3183,7 +3247,7 @@ function start3DGame() {
       if (c.label==='Coin'||c.label==='Power-Up') {
         if (Math.hypot(cam.x-c.x, cam.z-c.z) < 1.2) {
           score += 10;
-          document.getElementById('score3d').textContent = score;
+          (document.getElementById('score3d')||{}).textContent = score;
           c.x = (Math.random()-.5)*14;
           c.z = cam.z + 8 + Math.random()*10;
           for (let i=0;i<10;i++) particles3d.push({
@@ -3268,8 +3332,22 @@ function swBot(btn,id){document.querySelectorAll('.bot-tab').forEach(b=>b.classL
 // ================================================================
 //  LOG & TOAST
 // ================================================================
-function log(type,msg){const o=document.getElementById('bo1');const d=document.createElement('div');d.className='ll l'+type.charAt(0);d.textContent=msg;o.appendChild(d);o.scrollTop=o.scrollHeight;}
-function toast(msg,t='ok'){const el=document.getElementById('toast');el.textContent=msg;el.className='toast '+t+' show';setTimeout(()=>el.classList.remove('show'),3200);}
+function log(type,msg){
+  const o=document.getElementById('bo1');
+  if(!o) return;
+  const d=document.createElement('div');
+  d.className='ll l'+type.charAt(0);
+  d.textContent=msg;
+  o.appendChild(d);
+  o.scrollTop=o.scrollHeight;
+}
+function toast(msg,t='ok'){
+  const el=document.getElementById('toast');
+  if(!el) return;
+  el.textContent=msg;
+  el.className='toast '+t+' show';
+  setTimeout(()=>el.classList.remove('show'),3200);
+}
 
 // ================================================================
 //  RESIZABLE PANELS
@@ -3377,21 +3455,21 @@ document.addEventListener('DOMContentLoaded', ensureResizers);
 
 // Object types for Add Object modal
 const OBJ_TYPES = [
-  {id:'player', cat:'basic', ico:'🟧', name:'Sprite (Player)', desc:'Animated character', color:'#f97316'},
-  {id:'enemy',  cat:'basic', ico:'🔴', name:'Sprite (Enemy)',  desc:'AI character', color:'#ef4444'},
-  {id:'platform', cat:'physics', ico:'🟩', name:'TileMap', desc:'Ground & platforms', color:'#22c55e'},
-  {id:'generic', cat:'basic', ico:'⬜', name:'Sprite', desc:'Basic image object', color:'#6b7280'},
-  {id:'label',  cat:'ui', ico:'🔤', name:'Text object', desc:'Display text', color:'#3b82f6'},
-  {id:'particle', cat:'effects', ico:'✨', name:'Particles', desc:'Visual effects', color:'#a855f7'},
-  {id:'sound',  cat:'audio', ico:'🔊', name:'Sound', desc:'Play audio', color:'#06b6d4'},
-  {id:'button', cat:'ui', ico:'🔘', name:'Button', desc:'UI button', color:'#f59e0b'},
-  {id:'camera', cat:'basic', ico:'🎥', name:'Camera', desc:'Follow player', color:'#8b5cf6'},
-  {id:'tileset', cat:'basic', ico:'🧩', name:'Tileset', desc:'Tile-based map', color:'#14b8a6'},
-  {id:'bg',     cat:'basic', ico:'🌅', name:'Background', desc:'Scene background', color:'#0ea5e9'},
-  {id:'coin',   cat:'basic', ico:'🪙', name:'Collectible', desc:'Coins & items', color:'#eab308'},
-  {id:'box3d',  cat:'3d', ico:'📦', name:'3D Box', desc:'3D cube object', color:'#f97316'},
-  {id:'sphere3d', cat:'3d', ico:'🔵', name:'3D Sphere', desc:'3D ball', color:'#3b82f6'},
-  {id:'model3d', cat:'3d', ico:'🗿', name:'3D Model', desc:'Custom 3D model', color:'#6366f1'},
+  {id:'player', cat:'basic', ico:'▣', name:'Sprite (Player)', desc:'Animated character', color:'#f97316'},
+  {id:'enemy',  cat:'basic', ico:'◉', name:'Sprite (Enemy)',  desc:'AI character', color:'#ef4444'},
+  {id:'platform', cat:'physics', ico:'▬', name:'TileMap', desc:'Ground & platforms', color:'#22c55e'},
+  {id:'generic', cat:'basic', ico:'□', name:'Sprite', desc:'Basic image object', color:'#6b7280'},
+  {id:'label',  cat:'ui', ico:'T', name:'Text object', desc:'Display text', color:'#3b82f6'},
+  {id:'particle', cat:'effects', ico:'⁕', name:'Particles', desc:'Visual effects', color:'#a855f7'},
+  {id:'sound',  cat:'audio', ico:'♪', name:'Sound', desc:'Play audio', color:'#06b6d4'},
+  {id:'button', cat:'ui', ico:'⊡', name:'Button', desc:'UI button', color:'#f59e0b'},
+  {id:'camera', cat:'basic', ico:'◎', name:'Camera', desc:'Follow player', color:'#8b5cf6'},
+  {id:'tileset', cat:'basic', ico:'⊞', name:'Tileset', desc:'Tile-based map', color:'#14b8a6'},
+  {id:'bg',     cat:'basic', ico:'⬛', name:'Background', desc:'Scene background', color:'#0ea5e9'},
+  {id:'coin',   cat:'basic', ico:'◈', name:'Collectible', desc:'Coins & items', color:'#eab308'},
+  {id:'box3d',  cat:'3d', ico:'⬡', name:'3D Box', desc:'3D cube object', color:'#f97316'},
+  {id:'sphere3d', cat:'3d', ico:'○', name:'3D Sphere', desc:'3D ball', color:'#3b82f6'},
+  {id:'model3d', cat:'3d', ico:'◆', name:'3D Model', desc:'Custom 3D model', color:'#6366f1'},
 ];
 
 let selObjType = null;
@@ -3537,7 +3615,7 @@ function renderObjList(){
     d.oncontextmenu = e => { e.preventDefault(); selTN(n.id); showCtxMenu(e, n.id); };
     list.appendChild(d);
   });
-  document.getElementById('sbNodes').textContent = (state.scNodes.length-1) + ' objects';
+  (document.getElementById('sbNodes')||{}).textContent = (state.scNodes.length-1) + ' objects';
 }
 
 function objCtxMenu(e, id){
@@ -3587,7 +3665,7 @@ function showExportZip(){
 
 function doExportHTML5(){
   if(!isPro()){
-    toast('🔒 Export requires Pro plan','er');
+    toast('Export requires Pro plan — Upgrade!','er');
     closeExport();
     handlePaidPlan('Pro Monthly',199,'monthly');
     return;
@@ -3604,7 +3682,7 @@ function doExportHTML5(){
 
 function doExportZip(){
   if(!isPro()){
-    toast('🔒 Download requires Pro plan','er');
+    toast('Download requires Pro plan — Upgrade!','er');
     closeExport();
     handlePaidPlan('Pro Monthly',199,'monthly');
     return;
@@ -3848,28 +3926,28 @@ const ACTIONS = [
 ];
 
 const PICKER_CATS_COND = [
-  {id:'all',      ico:'⊞', name:'All conditions'},
-  {id:'player',   ico:'🕹️', name:'Platformer'},
-  {id:'object',   ico:'📦', name:'All objects'},
-  {id:'input',    ico:'⌨️', name:'Keyboard / Mouse'},
-  {id:'scene',    ico:'🎬', name:'Scene'},
-  {id:'variable', ico:'📊', name:'Variables'},
-  {id:'audio',    ico:'🔊', name:'Audio'},
-  {id:'camera',   ico:'🎥', name:'Camera'},
-  {id:'logic',    ico:'🔀', name:'Logic'},
-  {id:'effect',   ico:'✨', name:'Effects'},
+  {id:'all',      ico:'·', name:'All conditions'},
+  {id:'player',   ico:'◈', name:'Platformer'},
+  {id:'object',   ico:'□', name:'All objects'},
+  {id:'input',    ico:'⌨', name:'Keyboard / Mouse'},
+  {id:'scene',    ico:'▷', name:'Scene'},
+  {id:'variable', ico:'≡', name:'Variables'},
+  {id:'audio',    ico:'♪', name:'Audio'},
+  {id:'camera',   ico:'◎', name:'Camera'},
+  {id:'logic',    ico:'⇄', name:'Logic'},
+  {id:'effect',   ico:'⁕', name:'Effects'},
 ];
 const PICKER_CATS_ACT = [
-  {id:'all',      ico:'⊞', name:'All actions'},
-  {id:'player',   ico:'🕹️', name:'Platformer'},
-  {id:'object',   ico:'📦', name:'All objects'},
-  {id:'scene',    ico:'🎬', name:'Scene'},
-  {id:'variable', ico:'📊', name:'Variables'},
-  {id:'audio',    ico:'🔊', name:'Audio'},
-  {id:'camera',   ico:'🎥', name:'Camera'},
-  {id:'sprite',   ico:'🖼️', name:'Sprite / Anim'},
-  {id:'text',     ico:'🔤', name:'Text'},
-  {id:'effect',   ico:'✨', name:'Effects'},
+  {id:'all',      ico:'·', name:'All actions'},
+  {id:'player',   ico:'◈', name:'Platformer'},
+  {id:'object',   ico:'□', name:'All objects'},
+  {id:'scene',    ico:'▷', name:'Scene'},
+  {id:'variable', ico:'≡', name:'Variables'},
+  {id:'audio',    ico:'♪', name:'Audio'},
+  {id:'camera',   ico:'◎', name:'Camera'},
+  {id:'sprite',   ico:'⊡', name:'Sprite / Anim'},
+  {id:'text',     ico:'T', name:'Text'},
+  {id:'effect',   ico:'⁕', name:'Effects'},
 ];
 
 let pickerMode = 'condition'; // 'condition' | 'action'
