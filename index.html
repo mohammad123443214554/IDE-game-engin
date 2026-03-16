@@ -757,7 +757,7 @@ h1 .dim{color:var(--text3)}
     </div>
     <div class="hero-stats">
       <div class="hs-item"><div class="hs-num">100%</div><div class="hs-lbl">Browser Native</div></div>
-      <div class="hs-item"><div class="hs-num">2D + 3D</div><div class="hs-lbl">Ready</div></div>
+      <div class="hs-item"><div class="hs-num">2D</div><div class="hs-lbl">Ready</div></div>
       <div class="hs-item"><div class="hs-num">GDScript</div><div class="hs-lbl">Editor</div></div>
       <div class="hs-item"><div class="hs-num">Free</div><div class="hs-lbl">To Start</div></div>
     </div>
@@ -851,7 +851,7 @@ h1 .dim{color:var(--text3)}
           <li><span class="ck">✓</span>Unlimited Scenes</li>
           <li><span class="ck">✓</span>All Object Types</li>
           <li><span class="ck">✓</span>Events & Conditions Editor</li>
-          <li><span class="ck">✓</span>2D & 3D Preview</li>
+          <li><span class="ck">✓</span>2D Preview</li>
           <li><span class="ck">✓</span>Physics, Audio & Camera</li>
           <li><span class="ck">✓</span>Code Editor</li>
           <li><span class="xx">✗</span>Export / Download Game</li>
@@ -1041,23 +1041,25 @@ h1 .dim{color:var(--text3)}
         <div style="position:relative">
           <button class="imb" onclick="tDD('dd1')">File</button>
           <div class="ddm" id="dd1">
-            <div class="ddi" onclick="newScene()">New Project<span class="ddk">Ctrl+N</span></div>
-            <div class="ddi">Open Project<span class="ddk">Ctrl+O</span></div>
+            <div class="ddi" onclick="closeDD();ideNewProject()">New Project<span class="ddk">Ctrl+N</span></div>
+            <div class="ddi" onclick="closeDD();ideOpenProject()">Open Project<span class="ddk">Ctrl+O</span></div>
+            <div class="ddi" onclick="closeDD();ideCloseProject()">Close Project</div>
             <div class="dds"></div>
-            <div class="ddi" onclick="saveScene()">Save<span class="ddk">Ctrl+S</span></div>
+            <div class="ddi" onclick="closeDD();saveScene()">Save<span class="ddk">Ctrl+S</span></div>
+            <div class="ddi" onclick="closeDD();ideExportProject()">Save As...</div>
             <div class="dds"></div>
-            <div class="ddi" onclick="openExport()">Export Game...</div>
+            <div class="ddi" onclick="closeDD();openExport()">Export Game...</div>
           </div>
         </div>
         <div style="position:relative">
           <button class="imb" onclick="tDD('dd2')">Edit</button>
           <div class="ddm" id="dd2">
-            <div class="ddi">Undo<span class="ddk">Ctrl+Z</span></div>
-            <div class="ddi">Redo<span class="ddk">Ctrl+Y</span></div>
+            <div class="ddi" onclick="closeDD();ideUndo()">Undo<span class="ddk">Ctrl+Z</span></div>
+            <div class="ddi" onclick="closeDD();ideRedo()">Redo<span class="ddk">Ctrl+Y</span></div>
             <div class="dds"></div>
-            <div class="ddi">Cut<span class="ddk">Ctrl+X</span></div>
-            <div class="ddi">Copy<span class="ddk">Ctrl+C</span></div>
-            <div class="ddi">Paste<span class="ddk">Ctrl+V</span></div>
+            <div class="ddi" onclick="closeDD();ideCut()">Cut<span class="ddk">Ctrl+X</span></div>
+            <div class="ddi" onclick="closeDD();ideCopy()">Copy<span class="ddk">Ctrl+C</span></div>
+            <div class="ddi" onclick="closeDD();idePaste()">Paste<span class="ddk">Ctrl+V</span></div>
           </div>
         </div>
         <div style="position:relative">
@@ -1086,39 +1088,11 @@ h1 .dim{color:var(--text3)}
       <span style="font-size:.75rem;color:var(--text2);font-weight:500" id="sbScene">Game Scene</span>
       <div style="width:1px;height:16px;background:var(--border)"></div>
 
-      <!-- Preview split button -->
-      <div style="display:flex;align-items:stretch;position:relative;z-index:100">
-        <button class="brun" id="btnRun2d" onclick="runGame('2d')"
-          style="border-radius:4px 0 0 4px;border-right:1px solid rgba(255,255,255,.25);padding:4px 14px;font-size:.78rem">
-          ▶ Preview
-        </button>
-        <button class="brun" onclick="togglePreviewDD()"
-          style="border-radius:0 4px 4px 0;padding:4px 9px;font-size:.7rem;min-width:0"
-          id="btnPreviewArrow">
-          ▾
-        </button>
-        <div id="previewDropdown" style="
-          display:none;position:absolute;top:calc(100% + 4px);left:0;
-          background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-          min-width:210px;padding:4px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:9999">
-          <div style="padding:5px 10px 3px;font-size:.63rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.07em">Preview mode</div>
-          <div class="ddi" onclick="hidePreviewDD();runGame('2d')" style="gap:10px">
-            <span style="color:var(--green);font-size:1rem">▶</span>
-            <div>
-              <div style="font-size:.82rem;font-weight:600;color:var(--text)">2D Preview</div>
-              <div style="font-size:.7rem;color:var(--text3)">Arrow keys + Space to jump</div>
-            </div>
-          </div>
-          <div class="ddi" onclick="hidePreviewDD();runGame('3d')" style="gap:10px">
-            <span style="color:var(--purple);font-size:1rem">▶</span>
-            <div>
-              <div style="font-size:.82rem;font-weight:600;color:var(--text)">3D Preview</div>
-              <div style="font-size:.7rem;color:var(--text3)">WASD + mouse to look around</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <!-- Preview button — simple, 2D only -->
+      <button class="brun" id="btnRun2d" onclick="runGame('2d')"
+        style="padding:4px 20px;font-size:.78rem;gap:6px;border-radius:4px">
+        ▶ Preview
+      </button>
       <button class="bstop" id="btnStop" onclick="stopGame()" style="padding:4px 14px;font-size:.78rem">■ Stop</button>
     </div>
 
@@ -1126,7 +1100,7 @@ h1 .dim{color:var(--text3)}
     <div class="ide-right" style="gap:6px">
       <div style="display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px;gap:1px">
         <button class="imdb act" id="b2d" onclick="setMode('2d')" style="padding:3px 10px;font-size:.72rem">2D</button>
-        <button class="imdb" id="b3d" onclick="setMode('3d')" style="padding:3px 10px;font-size:.72rem">3D</button>
+        
         <button class="imdb" id="bsc" onclick="setMode('script')" style="padding:3px 10px;font-size:.72rem">Events</button>
       </div>
       <div class="ide-plan plan-free" id="idePlanChip">FREE</div>
@@ -1194,9 +1168,16 @@ h1 .dim{color:var(--text3)}
           <button class="gd-tool act" id="tSel" onclick="setTool('select')" title="Select (S)">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l4 10 2-4 4-2L2 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/></svg>
           </button>
-          <button class="gd-tool" id="tMov" onclick="setTool('move')" title="Move">✥</button>
-          <button class="gd-tool" id="tRot" onclick="setTool('rotate')" title="Rotate">↻</button>
-          <button class="gd-tool" id="tScl" onclick="setTool('scale')" title="Scale">⤢</button>
+          <button class="gd-tool" id="tMov" onclick="setTool('move')" title="Move (W)">✥</button>
+          <button class="gd-tool" id="tRot" onclick="setTool('rotate')" title="Rotate (E)">↻</button>
+          <button class="gd-tool" id="tScl" onclick="setTool('scale')" title="Scale (R)">⤢</button>
+          <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
+          <button class="gd-tool" title="Undo (Ctrl+Z)" onclick="ideUndo()" id="btnUndo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M3 13C5 8 9 5 14 5a9 9 0 0 1 0 18c-4 0-7.5-2-9-5"/></svg>
+          </button>
+          <button class="gd-tool" title="Redo (Ctrl+Y)" onclick="ideRedo()" id="btnRedo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M21 13c-2-5-6-8-11-8a9 9 0 0 0 0 18c4 0 7.5-2 9-5"/></svg>
+          </button>
           <div style="width:1px;height:18px;background:var(--border);margin:0 4px"></div>
           <button class="gd-tool" title="Toggle grid" onclick="document.getElementById('settingGrid').checked=!document.getElementById('settingGrid').checked;toggleGrid(document.getElementById('settingGrid').checked)">⊞</button>
         </div>
@@ -1586,7 +1567,7 @@ h1 .dim{color:var(--text3)}
     <button class="addobj-close" onclick="closeAddObject()">✕</button>
     <div class="addobj-hdr">
       <h2>Add a new object</h2>
-      <p>Choose the type of object to add to your scene, or upload a custom 3D object.</p>
+      <p>Choose the type of object to add to your scene.</p>
     </div>
     <div class="addobj-search">
       <input placeholder="Search objects..." id="objSearchInput" oninput="filterObjCards(this.value)">
@@ -1601,14 +1582,9 @@ h1 .dim{color:var(--text3)}
         <div class="addobj-cat" onclick="filterObjCat(this,'ui')">UI & Text</div>
         <div class="addobj-cat" onclick="filterObjCat(this,'effects')">Effects</div>
         <div class="addobj-cat" onclick="filterObjCat(this,'audio')">Audio</div>
-        <div class="addobj-cat" onclick="filterObjCat(this,'3d')">3D Objects</div>
         <div style="height:1px;background:var(--border);margin:8px 4px"></div>
         <!-- Upload section -->
         <div class="addobj-cat" onclick="filterObjCat(this,'upload')" style="color:var(--accent)">⬆ Upload Object</div>
-        <div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;padding:10px 8px 6px;font-weight:600">3D Assets</div>
-        <a href="https://sketchfab.com/3d-models/free" target="_blank" class="addobj-cat" style="display:block;color:var(--accent);text-decoration:none" title="Free 3D models">
-          🌐 Sketchfab (free)
-        </a>
         <a href="https://kenney.nl/assets" target="_blank" class="addobj-cat" style="display:block;color:var(--accent);text-decoration:none">
           🎨 Kenney Assets
         </a>
@@ -1624,7 +1600,7 @@ h1 .dim{color:var(--text3)}
       <div id="uploadPanel" style="display:none;flex:1;padding:16px;overflow-y:auto;flex-direction:column">
         <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:8px">Upload Custom Object</div>
         <p style="font-size:.78rem;color:var(--text2);margin-bottom:12px;line-height:1.5">
-          Download a 3D object from <a href="https://sketchfab.com/3d-models/free" target="_blank" style="color:var(--accent)">Sketchfab</a>, 
+          Download sprites and objects from
           <a href="https://kenney.nl/assets" target="_blank" style="color:var(--accent)">Kenney</a>, or 
           <a href="https://itch.io/game-assets/free" target="_blank" style="color:var(--accent)">itch.io</a>, 
           then upload it here.
@@ -1682,16 +1658,7 @@ h1 .dim{color:var(--text3)}
       </div>
       <div class="game-controls-hint">← → Move &nbsp;|&nbsp; Space Jump &nbsp;|&nbsp; Esc Stop</div>
     </div>
-    <!-- 3D Game Canvas -->
-    <div id="game3d" style="display:none;position:relative;width:100%;height:100%">
-      <canvas id="gameCanvas3d" style="display:block;width:100%;height:100%;background:#0a0a1a"></canvas>
-      <div class="game-hud">
-        <div class="hud-score">Score: <span id="score3d">0</span></div>
-        <div class="hud-cam">Camera: Free</div>
-        <div class="hud-time">Time: <span id="time3d">0</span>s</div>
-      </div>
-      <div class="game-controls-hint">← → ↑ ↓ Move &nbsp;|&nbsp; Mouse Look &nbsp;|&nbsp; Esc Stop</div>
-    </div>
+
   </div>
 </div>
 
@@ -2517,14 +2484,14 @@ function selObj(id){
 
 // ── Draggable ──────────────────────────────────────────────────
 function makeDraggable(el, id){
-  let ox, oy, mx, my, dragging=false;
+  let ox, oy, mx, my;
   el.addEventListener('mousedown', e=>{
     if(e.button!==0) return;
-    if(e.target.classList.contains('rh')) return; // resize handle
+    if(e.target.classList.contains('rh')) return;
     e.preventDefault();
-    dragging=true;
     ox=state.objects[id]?.x||0; oy=state.objects[id]?.y||0;
     mx=e.clientX; my=e.clientY;
+    beforeAction(); // snapshot before move
     el.style.cursor='grabbing';
     const mm=ev=>{
       const nx=ox+(ev.clientX-mx), ny=oy+(ev.clientY-my);
@@ -2533,9 +2500,10 @@ function makeDraggable(el, id){
       updPXY(nx,ny);
     };
     const mu=()=>{
-      dragging=false; el.style.cursor='';
+      el.style.cursor='';
       document.removeEventListener('mousemove',mm);
       document.removeEventListener('mouseup',mu);
+      afterAction('Move '+( state.objects[id]?.name||id));
     };
     document.addEventListener('mousemove',mm);
     document.addEventListener('mouseup',mu);
@@ -2544,13 +2512,17 @@ function makeDraggable(el, id){
     if(e.target.classList.contains('rh')) return;
     ox=state.objects[id]?.x||0; oy=state.objects[id]?.y||0;
     mx=e.touches[0].clientX; my=e.touches[0].clientY;
+    beforeAction();
     const tm=ev=>{
       const nx=ox+(ev.touches[0].clientX-mx), ny=oy+(ev.touches[0].clientY-my);
       el.style.left=nx+'px'; el.style.top=ny+'px';
       if(state.objects[id]){state.objects[id].x=nx; state.objects[id].y=ny;}
     };
     el.addEventListener('touchmove',tm,{passive:true});
-    el.addEventListener('touchend',()=>el.removeEventListener('touchmove',tm),{once:true});
+    el.addEventListener('touchend',()=>{
+      el.removeEventListener('touchmove',tm);
+      afterAction('Move '+(state.objects[id]?.name||id));
+    },{once:true});
   },{passive:true});
 }
 
@@ -2831,7 +2803,247 @@ function updLn(){
   ln.innerHTML = Array.from({length:lines},(_,i)=>i+1).join('\n');
 }
 function newScene(){closeDD();toast('✓ New scene created');log('info','  New scene created.');}
-function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','ok');}
+
+// ── File operations ──
+function ideNewProject(){
+  if(!confirm('Start a new project? Unsaved changes will be lost.')) return;
+  // Clear everything
+  Object.keys(state.objects).forEach(id=>{
+    const el=document.getElementById('g'+id); if(el) el.remove();
+  });
+  state.objects={};
+  state.scNodes=[];
+  state.selNode=null;
+  state.nodeCount=0;
+  history.stack=[]; history.idx=-1;
+  updateUndoRedoBtns();
+  initScene();
+  log('info','  New project created.');
+  toast('✓ New project');
+}
+
+function ideOpenProject(){
+  // Create hidden file input
+  const input = document.createElement('input');
+  input.type='file'; input.accept='.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        // Restore scene
+        Object.keys(state.objects).forEach(id=>{
+          const el=document.getElementById('g'+id); if(el) el.remove();
+        });
+        state.objects={};
+        state.scNodes = data.nodes || [];
+        state.nodeCount = data.nodeCount || state.scNodes.length;
+        // Re-spawn objects
+        if(data.objects){
+          Object.entries(data.objects).forEach(([id,obj])=>{
+            spawnAt(id, obj.icon, obj.name, obj.cls, obj.x, obj.y,
+              {w:obj.w, h:obj.h, color:obj.color, imageUrl:obj.imageUrl});
+          });
+        }
+        renderTree(); renderObjList();
+        log('ok','✓ Project loaded: '+file.name);
+        toast('✓ Project loaded!','ok');
+      } catch(err) {
+        toast('Error loading project: '+err.message,'er');
+        log('info','  Error: '+err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function ideCloseProject(){
+  if(!confirm('Close project? Unsaved changes will be lost.')) return;
+  Object.keys(state.objects).forEach(id=>{
+    const el=document.getElementById('g'+id); if(el) el.remove();
+  });
+  state.objects={};
+  state.scNodes=[];
+  state.selNode=null;
+  state.nodeCount=0;
+  history.stack=[]; history.idx=-1;
+  updateUndoRedoBtns();
+  initScene();
+  log('info','  Project closed.');
+  toast('Project closed');
+}
+
+function ideExportProject(){
+  // Save project as JSON file
+  const snap = snapState();
+  snap.nodeCount = state.nodeCount;
+  snap.version = '1.0';
+  snap.name = state.scNodes[0]?.name || 'Game Scene';
+  const blob = new Blob([JSON.stringify(snap, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (snap.name.replace(/\s+/g,'-').toLowerCase()) + '-project.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  log('ok','✓ Project saved: '+a.download);
+  toast('✓ Project saved!','ok');
+}
+// ================================================================
+//  UNDO / REDO / COPY / CUT / PASTE / SAVE
+// ================================================================
+
+// History stack for undo/redo
+const history = { stack: [], idx: -1, maxSize: 50 };
+
+function historySave(action){
+  // Remove any future states
+  history.stack = history.stack.slice(0, history.idx + 1);
+  history.stack.push(action);
+  if(history.stack.length > history.maxSize) history.stack.shift();
+  else history.idx++;
+  updateUndoRedoBtns();
+}
+
+function updateUndoRedoBtns(){
+  const u = document.getElementById('btnUndo');
+  const r = document.getElementById('btnRedo');
+  if(u) u.style.opacity = history.idx >= 0 ? '1' : '0.3';
+  if(r) r.style.opacity = history.idx < history.stack.length-1 ? '1' : '0.3';
+}
+
+// Snapshot current state for undo
+function snapState(){
+  return {
+    nodes: JSON.parse(JSON.stringify(state.scNodes)),
+    objects: Object.entries(state.objects).reduce((acc,[id,obj])=>{
+      acc[id] = {x:obj.x,y:obj.y,w:obj.w,h:obj.h,name:obj.name,icon:obj.icon,cls:obj.cls,color:obj.color,isBg:obj.isBg,imageUrl:obj.imageUrl};
+      return acc;
+    },{})
+  };
+}
+
+// Restore state from snapshot
+function restoreState(snap){
+  // Remove all canvas objects
+  Object.keys(state.objects).forEach(id=>{
+    const el = document.getElementById('g'+id);
+    if(el) el.remove();
+  });
+  state.objects = {};
+  state.scNodes = snap.nodes;
+  // Re-spawn objects
+  Object.entries(snap.objects).forEach(([id,obj])=>{
+    spawnAt(id, obj.icon, obj.name, obj.cls, obj.x, obj.y,
+      {w:obj.w, h:obj.h, color:obj.color, imageUrl:obj.imageUrl});
+  });
+  renderTree(); renderObjList();
+}
+
+let _beforeSnap = null;
+function beforeAction(){ _beforeSnap = snapState(); }
+function afterAction(label){
+  const after = snapState();
+  if(_beforeSnap) historySave({label, before:_beforeSnap, after});
+  _beforeSnap = null;
+}
+
+function ideUndo(){
+  if(history.idx < 0){ toast('Nothing to undo','in'); return; }
+  const action = history.stack[history.idx];
+  history.idx--;
+  restoreState(action.before);
+  toast('↩ Undo: '+action.label);
+  log('info','  Undo: '+action.label);
+  updateUndoRedoBtns();
+}
+
+function ideRedo(){
+  if(history.idx >= history.stack.length-1){ toast('Nothing to redo','in'); return; }
+  history.idx++;
+  const action = history.stack[history.idx];
+  restoreState(action.after);
+  toast('↪ Redo: '+action.label);
+  log('info','  Redo: '+action.label);
+  updateUndoRedoBtns();
+}
+
+// Clipboard
+let _clipboard = null;
+
+function ideCopy(){
+  const id = state.selNode;
+  if(!id || !state.objects[id]){ toast('Select an object first','in'); return; }
+  const obj = state.objects[id];
+  const node = state.scNodes.find(n=>n.id===id);
+  _clipboard = {
+    name: node?.name||obj.name,
+    icon: obj.icon, cls: obj.cls,
+    x: obj.x, y: obj.y,
+    w: obj.w, h: obj.h,
+    color: obj.color,
+    imageUrl: obj.imageUrl||null
+  };
+  toast('Copied: '+_clipboard.name);
+  log('info','  Copied "'+_clipboard.name+'"');
+}
+
+function ideCut(){
+  const id = state.selNode;
+  if(!id || !state.objects[id]){ toast('Select an object first','in'); return; }
+  ideCopy();
+  beforeAction();
+  const el = document.getElementById('g'+id);
+  if(el) el.remove();
+  delete state.objects[id];
+  state.scNodes = state.scNodes.filter(n=>n.id!==id);
+  state.selNode = null;
+  renderTree(); renderObjList();
+  afterAction('Cut '+_clipboard?.name);
+  toast('Cut: '+(_clipboard?.name||'object'));
+}
+
+function idePaste(){
+  if(!_clipboard){ toast('Nothing to paste','in'); return; }
+  if(state.scNodes.length>=21){ toast('Max 20 objects reached!','in'); return; }
+  beforeAction();
+  const newName = _clipboard.name.replace(/_\d+$/, '')+'_'+Date.now().toString().slice(-3);
+  const id = addNd(newName, _clipboard.icon, 'root', _clipboard.cls||'generic');
+  spawnAt(id, _clipboard.icon, newName, _clipboard.cls||'generic',
+    _clipboard.x+20, _clipboard.y+20,
+    {w:_clipboard.w, h:_clipboard.h, color:_clipboard.color, imageUrl:_clipboard.imageUrl});
+  selTN(id);
+  renderObjList();
+  afterAction('Paste '+newName);
+  toast('✓ Pasted: '+newName);
+  log('info','  Pasted "'+newName+'"');
+}
+
+function saveScene(){
+  closeDD();
+  // Save to localStorage
+  try {
+    const snap = snapState();
+    localStorage.setItem('ide_scene_'+( state.scNodes[0]?.name||'scene'), JSON.stringify(snap));
+    log('ok','✓ Scene saved to browser storage.');
+    toast('✓ Saved!','ok');
+  } catch(e) {
+    log('ok','✓ Scene saved.');
+    toast('✓ Saved!','ok');
+  }
+}
+
+// Hook into existing actions for undo history
+const _origCtxDelete = ctxDelete;
+function ctxDelete(){
+  beforeAction();
+  _origCtxDelete();
+  afterAction('Delete');
+}
+
+
 
 // ================================================================
 //  MODES & TOOLS
@@ -2839,18 +3051,12 @@ function saveScene(){closeDD();log('ok','✓ Scene saved.');toast('✓ Saved!','
 function setMode(m){
   state.curMode=m;
   const isEvents = m==='script';
-  const is3d = m==='3d';
   document.getElementById('cva').style.display = isEvents?'none':'flex';
   document.getElementById('cea').classList.toggle('vis', isEvents);
-  // Update mode buttons
-  document.getElementById('b2d')?.classList.toggle('act', m==='2d');
-  document.getElementById('b3d')?.classList.toggle('act', is3d);
+  document.getElementById('b2d')?.classList.toggle('act', !isEvents);
   document.getElementById('bsc')?.classList.toggle('act', isEvents);
-  // Update scene tabs
   document.getElementById('sceneTab1')?.classList.toggle('act', !isEvents);
   document.getElementById('sceneTabEvents')?.classList.toggle('act', isEvents);
-  // 3D mode — launch 3D preview directly
-  if(is3d) runGame('3d');
 }
 function setTool(t){
   state.curTool=t;
@@ -2875,7 +3081,7 @@ function chkPro(feat){
 //  GAME PREVIEW — 2D & 3D
 // ================================================================
 let gameLoop = null, gameTimer = null, fpsInterval = null;
-let game2dState = null, game3dState = null;
+let game2dState = null;
 
 function runGame(type = '2d') {
   state.running = true;
@@ -2891,12 +3097,12 @@ function runGame(type = '2d') {
 
   document.getElementById('previewOverlay').classList.add('open');
   (document.getElementById('previewTitle')||{}).textContent = (type === '2d' ? '2D' : '3D') + ' Preview — ' + (state.scNodes[0]?.name || 'Game Scene');
-  document.getElementById('game2d').style.display = type === '2d' ? 'block' : 'none';
-  document.getElementById('game3d').style.display = type === '3d' ? 'block' : 'none';
+  document.getElementById('game2d').style.display = 'block';
+  
 
   setTimeout(() => {
     if (type === '2d') start2DGame();
-    else start3DGame();
+    // 3D removed
     log('ok', '✓ Preview running! Press Esc to stop.');
     toast('▶ Preview started!');
   }, 300);
@@ -3229,307 +3435,6 @@ function start2DGame() {
 // ================================================================
 //  3D GAME ENGINE (WebGL-style with Canvas 2D faux-3D)
 // ================================================================
-function start3DGame() {
-  const canvas = document.getElementById('gameCanvas3d');
-  const ctx = canvas.getContext('2d');
-  const countFps = startFPS();
-  let score = 0, gameTime = 0;
-
-  // Force canvas to fill container properly
-  function resize() {
-    const parent = canvas.parentElement;
-    canvas.width  = parent.clientWidth  || 800;
-    canvas.height = parent.clientHeight || 500;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  const W = () => canvas.width, H = () => canvas.height;
-
-  // 3D Camera
-  const cam = { x: 0, y: 1.6, z: -4, rx: 0, ry: 0, speed: 0.1 };
-  const keys = {};
-  let locked = false;
-
-  canvas.addEventListener('click', () => canvas.requestPointerLock?.());
-  document.addEventListener('pointerlockchange', () => {
-    locked = document.pointerLockElement === canvas;
-  });
-  document.addEventListener('mousemove', e => {
-    if (locked) {
-      cam.ry += e.movementX * 0.002;
-      cam.rx += e.movementY * 0.002;
-      cam.rx = Math.max(-0.8, Math.min(0.8, cam.rx));
-    }
-  });
-  document.addEventListener('keydown', e => keys[e.code] = true);
-  document.addEventListener('keyup',   e => keys[e.code] = false);
-
-  // 3D World objects — use actual scene objects
-  const cubes = [];
-  state.scNodes.filter(n=>n.id!=='root'&&state.objects[n.id]).forEach((n,i) => {
-    const obj = state.objects[n.id];
-    const angle = (i / Math.max(state.scNodes.length,1)) * Math.PI * 2;
-    cubes.push({
-      x: obj.x * 0.02 || (Math.cos(angle)*3),
-      y: 0,
-      z: obj.y * 0.02 + 4 || (4 + i*2),
-      size: 1,
-      color: obj.color || '#478cbf',
-      label: n.name,
-      flat: n.cls==='platform'
-    });
-  });
-  // Always add a floor
-  cubes.push({x:0,y:-1,z:4,size:30,color:'#2d5a2d',label:'Floor',flat:true,isFloor:true});
-  // Add some default objects if scene is empty
-  if(cubes.length <= 1){
-    cubes.push(
-      {x:2, y:0, z:5,  size:1,   color:'#478cbf', label:'Player'},
-      {x:-2,y:0, z:7,  size:1,   color:'#e06c75', label:'Enemy'},
-      {x:0, y:0, z:10, size:1.5, color:'#eab308', label:'Coin'},
-      {x:5, y:0, z:12, size:1,   color:'#a855f7', label:'Power-Up'}
-    );
-  }
-
-  const particles3d = [];
-  let frame3d = 0;
-
-  function project(px, py, pz) {
-    let dx = px - cam.x, dy = py - cam.y, dz = pz - cam.z;
-    const cosY = Math.cos(-cam.ry), sinY = Math.sin(-cam.ry);
-    const rx = dx*cosY - dz*sinY, rz0 = dx*sinY + dz*cosY;
-    const cosX = Math.cos(-cam.rx), sinX = Math.sin(-cam.rx);
-    const ry = dy*cosX - rz0*sinX, rz = dy*sinX + rz0*cosX;
-    if (rz <= 0.05) return null;
-    const fov = W() * 0.7;
-    return {
-      sx: W()/2 + rx*fov/rz,
-      sy: H()/2 + ry*fov/rz,
-      scale: fov/rz,
-      depth: rz
-    };
-  }
-
-  function drawSkybox() {
-    // Solid sky — no transparency
-    ctx.fillStyle = '#050a1e';
-    ctx.fillRect(0, 0, W(), H());
-
-    // Sky gradient top half
-    const grad = ctx.createLinearGradient(0, 0, 0, H()*0.55);
-    grad.addColorStop(0, '#03071a');
-    grad.addColorStop(0.6, '#0d1b4b');
-    grad.addColorStop(1, '#162460');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W(), H()*0.55);
-
-    // Stars
-    for (let i = 0; i < 120; i++) {
-      const sx = ((i*137.5 + cam.ry*300 + 5000) % W());
-      const sy = ((i*79.3) % (H()*0.52));
-      const alpha = 0.4 + (i%4)*0.15;
-      const size  = i%7===0 ? 1.5 : 0.8;
-      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
-      ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
-    }
-
-    // Horizon glow
-    const hGrad = ctx.createLinearGradient(0, H()*0.45, 0, H()*0.58);
-    hGrad.addColorStop(0, 'rgba(30,60,120,0)');
-    hGrad.addColorStop(1, 'rgba(10,20,40,1)');
-    ctx.fillStyle = hGrad;
-    ctx.fillRect(0, H()*0.45, W(), H()*0.13);
-
-    // Ground
-    const gGrad = ctx.createLinearGradient(0, H()*0.55, 0, H());
-    gGrad.addColorStop(0, '#0d1a0d');
-    gGrad.addColorStop(1, '#060e06');
-    ctx.fillStyle = gGrad;
-    ctx.fillRect(0, H()*0.55, W(), H()*0.45);
-
-    // Ground grid
-    ctx.strokeStyle = 'rgba(34,197,94,0.12)';
-    ctx.lineWidth = 0.5;
-    for (let i = 0; i < 25; i++) {
-      const zLine = cam.z + (i % 12) * 2.5;
-      const p1 = project(-30, -1, zLine), p2 = project(30, -1, zLine);
-      if (p1&&p2) { ctx.beginPath(); ctx.moveTo(p1.sx,p1.sy); ctx.lineTo(p2.sx,p2.sy); ctx.stroke(); }
-    }
-    for (let i = -8; i <= 8; i++) {
-      const p1 = project(i*2, -1, cam.z+0.5), p2 = project(i*2, -1, cam.z+40);
-      if (p1&&p2) { ctx.beginPath(); ctx.moveTo(p1.sx,p1.sy); ctx.lineTo(p2.sx,p2.sy); ctx.stroke(); }
-    }
-  }
-
-  function drawCube(c) {
-    if (c.flat || c.isFloor) return;
-    const s = c.size / 2;
-    const verts = [
-      [c.x-s, c.y+s, c.z-s],[c.x+s, c.y+s, c.z-s],
-      [c.x+s, c.y+s, c.z+s],[c.x-s, c.y+s, c.z+s],
-      [c.x-s, c.y-s, c.z-s],[c.x+s, c.y-s, c.z-s],
-      [c.x+s, c.y-s, c.z+s],[c.x-s, c.y-s, c.z+s],
-    ];
-    const faces = [
-      [0,1,2,3, 1.0], // top
-      [4,5,6,7, 0.4], // bottom
-      [0,1,5,4, 0.75],// front
-      [2,3,7,6, 0.65],// back
-      [1,2,6,5, 0.85],// right
-      [0,3,7,4, 0.55] // left
-    ];
-    const projs = verts.map(v => project(v[0],v[1],v[2]));
-    const validProjs = projs.every(p => p !== null);
-    if (!validProjs) return;
-
-    // Parse hex color
-    const hex = c.color.replace('#','');
-    const r = parseInt(hex.substring(0,2),16);
-    const g = parseInt(hex.substring(2,4),16);
-    const b = parseInt(hex.substring(4,6),16);
-
-    // Sort faces back-to-front
-    const sortedFaces = [...faces].sort((a,b2) => {
-      const da = a.slice(0,4).reduce((s,i)=>s+projs[i].depth,0)/4;
-      const db = b2.slice(0,4).reduce((s,i)=>s+projs[i].depth,0)/4;
-      return db - da;
-    });
-
-    sortedFaces.forEach(f => {
-      const pts = f.slice(0,4).map(i => projs[i]);
-      if (pts.some(p => !p || p.depth < 0.05)) return;
-      ctx.beginPath();
-      ctx.moveTo(pts[0].sx, pts[0].sy);
-      for (let i=1; i<pts.length; i++) ctx.lineTo(pts[i].sx, pts[i].sy);
-      ctx.closePath();
-      const br = f[4];
-      ctx.fillStyle = `rgb(${Math.round(r*br)},${Math.round(g*br)},${Math.round(b*br)})`;
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-    });
-
-    // Label
-    const topCenter = project(c.x, c.y + s + 0.15, c.z);
-    if (topCenter && topCenter.depth > 0.2 && topCenter.depth < 25) {
-      const fs = Math.max(9, Math.min(18, Math.round(topCenter.scale * 12)));
-      ctx.font = `${fs}px Geist, sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.9)';
-      ctx.textAlign = 'center';
-      ctx.fillText(c.label, topCenter.sx, topCenter.sy);
-    }
-
-    // Animate collectibles
-    if (c.label==='Coin' || c.label==='Power-Up') {
-      c.y = Math.sin(frame3d * 0.05) * 0.2;
-    }
-  }
-
-  function drawParticles() {
-    for (let i = particles3d.length-1; i >= 0; i--) {
-      const p = particles3d[i];
-      p.x += p.vx; p.y += p.vy; p.z += p.vz;
-      p.life -= 0.025;
-      if (p.life <= 0) { particles3d.splice(i,1); continue; }
-      const pt = project(p.x, p.y, p.z);
-      if (!pt) continue;
-      ctx.beginPath();
-      ctx.arc(pt.sx, pt.sy, Math.max(1, pt.scale*0.25), 0, Math.PI*2);
-      ctx.fillStyle = `rgba(255,200,50,${p.life})`;
-      ctx.fill();
-    }
-  }
-
-  function drawCrosshair() {
-    const cx = W()/2, cy = H()/2, sz = 10, gap = 4;
-    ctx.strokeStyle = 'rgba(255,255,255,0.75)';
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(cx-sz, cy); ctx.lineTo(cx-gap, cy);
-    ctx.moveTo(cx+gap, cy); ctx.lineTo(cx+sz, cy);
-    ctx.moveTo(cx, cy-sz); ctx.lineTo(cx, cy-gap);
-    ctx.moveTo(cx, cy+gap); ctx.lineTo(cx, cy+sz);
-    ctx.stroke();
-    ctx.beginPath(); ctx.arc(cx, cy, 1.5, 0, Math.PI*2);
-    ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fill();
-  }
-
-  function drawHint() {
-    if (!locked) {
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
-      ctx.beginPath();
-      ctx.roundRect(W()/2-135, H()/2+24, 270, 34, 8);
-      ctx.fill();
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
-      ctx.font = '13px Geist, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.fillText('🖱 Click canvas to capture mouse', W()/2, H()/2+45);
-    }
-  }
-
-  function update() {
-    frame3d++;
-    const spd = cam.speed;
-    const cosY = Math.cos(cam.ry), sinY = Math.sin(cam.ry);
-    if (keys['ArrowUp']  || keys['KeyW']) { cam.z += cosY*spd; cam.x += sinY*spd; }
-    if (keys['ArrowDown']|| keys['KeyS']) { cam.z -= cosY*spd; cam.x -= sinY*spd; }
-    if (keys['ArrowLeft']|| keys['KeyA']) { cam.x -= cosY*spd; cam.z += sinY*spd; }
-    if (keys['ArrowRight']||keys['KeyD']) { cam.x += cosY*spd; cam.z -= sinY*spd; }
-    cam.y = 1.6 + Math.sin(frame3d*0.03)*0.04;
-
-    // Coin pickup
-    cubes.forEach(c => {
-      if (c.label==='Coin'||c.label==='Power-Up') {
-        if (Math.hypot(cam.x-c.x, cam.z-c.z) < 1.2) {
-          score += 10;
-          (document.getElementById('score3d')||{}).textContent = score;
-          c.x = (Math.random()-.5)*14;
-          c.z = cam.z + 8 + Math.random()*10;
-          for (let i=0;i<10;i++) particles3d.push({
-            x:c.x,y:0,z:c.z,
-            vx:(Math.random()-.5)*.18,
-            vy: Math.random()*.18,
-            vz:(Math.random()-.5)*.18,
-            life:1
-          });
-        }
-      }
-    });
-    // Infinite world scroll
-    cubes.forEach(c => {
-      if (!c.isFloor && !c.flat && c.z < cam.z - 4) {
-        c.z += 35 + Math.random()*10;
-        c.x  = (Math.random()-.5)*10;
-      }
-    });
-  }
-
-  gameTimer = setInterval(() => {
-    gameTime++;
-    const el = document.getElementById('time3d');
-    if (el) el.textContent = gameTime;
-  }, 1000);
-
-  function loop() {
-    if (!state.running) return;
-    // Always fill solid black first — prevents bleed-through
-    ctx.clearRect(0, 0, W(), H());
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, W(), H());
-    update();
-    drawSkybox();
-    const sorted = [...cubes].filter(c=>!c.isFloor&&!c.flat)
-      .sort((a,b) => Math.hypot(cam.x-b.x,cam.z-b.z) - Math.hypot(cam.x-a.x,cam.z-a.z));
-    sorted.forEach(drawCube);
-    drawParticles();
-    drawCrosshair();
-    drawHint();
-    countFps();
-    gameLoop = requestAnimationFrame(loop);
-  }
-  loop();
-}
 
 
 
@@ -3703,9 +3608,6 @@ const OBJ_TYPES = [
   {id:'tileset', cat:'basic', ico:'⊞', name:'Tileset', desc:'Tile-based map', color:'#14b8a6'},
   {id:'bg',     cat:'basic', ico:'🌅', name:'Background', desc:'Scene background color (fills behind everything)', color:'#1a2440'},
   {id:'coin',   cat:'basic', ico:'◈', name:'Collectible', desc:'Coins & items', color:'#eab308'},
-  {id:'box3d',  cat:'3d', ico:'⬡', name:'3D Box', desc:'3D cube object', color:'#f97316'},
-  {id:'sphere3d', cat:'3d', ico:'○', name:'3D Sphere', desc:'3D ball', color:'#3b82f6'},
-  {id:'model3d', cat:'3d', ico:'◆', name:'3D Model', desc:'Custom 3D model', color:'#6366f1'},
 ];
 
 let selObjType = null;
@@ -4521,9 +4423,20 @@ function pickIcon(el,icon){
 function setupKeyboard(){
   document.addEventListener('keydown',e=>{
     if(e.ctrlKey||e.metaKey){
-      if(e.key==='n'){e.preventDefault();newScene();}
-      if(e.key==='s'){e.preventDefault();saveScene();}
-      if(e.key==='d'&&state.selNode&&state.objects[state.selNode]){e.preventDefault();document.getElementById('ctxMenu').dataset.nodeId=state.selNode;ctxDuplicate();}
+      if(e.key==='n'){e.preventDefault();ideNewProject();}
+      if(e.key==='o'){e.preventDefault();ideOpenProject();}
+      if(e.key==='s' && !e.shiftKey){e.preventDefault();saveScene();}
+      if(e.key==='s' && e.shiftKey){e.preventDefault();ideExportProject();}
+      if(e.key==='z'){e.preventDefault();ideUndo();}
+      if(e.key==='y'){e.preventDefault();ideRedo();}
+      if(e.key==='c'&&state.selNode&&state.objects[state.selNode]){e.preventDefault();ideCopy();}
+      if(e.key==='x'&&state.selNode&&state.objects[state.selNode]){e.preventDefault();ideCut();}
+      if(e.key==='v'){e.preventDefault();idePaste();}
+      if(e.key==='d'&&state.selNode&&state.objects[state.selNode]){
+        e.preventDefault();
+        document.getElementById('ctxMenu').dataset.nodeId=state.selNode;
+        ctxDuplicate();
+      }
     }
     if(!e.target.closest('#codeEd')&&!e.target.closest('.ep-input')){
       if(e.key==='q')setTool('select');
@@ -4532,7 +4445,6 @@ function setupKeyboard(){
       if(e.key==='r')setTool('scale');
       if(e.key==='F5'){e.preventDefault();runGame();}
       if((e.key==='Delete'||e.key==='Backspace')&&state.selNode&&state.objects[state.selNode]){
-        // Only delete if focus is on canvas area (not on input/tree)
         const active = document.activeElement;
         const onInput = active && (active.tagName==='INPUT'||active.tagName==='TEXTAREA'||active.closest('.ide-lp'));
         if(!onInput){
