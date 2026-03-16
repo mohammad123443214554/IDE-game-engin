@@ -456,6 +456,9 @@ h1 .dim{color:var(--text3)}
 .go{position:absolute;transform:translate(-50%,-50%);cursor:move}
 .go:hover .go-wrap{box-shadow:0 0 0 1.5px var(--accent)}
 .go.sel .go-wrap{box-shadow:0 0 0 1.5px var(--accent)}
+/* Background objects — no selection ring, stays behind */
+.go[style*="z-index: 0"]:hover .go-wrap{box-shadow:0 0 0 1.5px rgba(59,130,246,.4)}
+.go[style*="z-index: 0"].sel .go-wrap{box-shadow:0 0 0 2px var(--accent)}
 .go-wrap{border-radius:5px;transition:box-shadow .1s;display:flex;align-items:center;justify-content:center}
 .go-player-box,.go-enemy-box,.go-platform-box,.go-generic-box{display:flex;align-items:center;justify-content:center;color:#fff}
 .go-lbl{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.6rem;color:var(--text2);white-space:nowrap;font-family:'Geist Mono',monospace;background:var(--bg2);padding:1px 4px;border-radius:2px;pointer-events:none;border:1px solid var(--border)}
@@ -2200,9 +2203,9 @@ function initScene() {
   renderTree(); spawnDefaults();
 }
 
-function addNd(name,icon,parent='root'){
+function addNd(name,icon,parent='root',cls='generic'){
   const id='n'+(++state.nodeCount);
-  state.scNodes.push({id,name:name+'_'+state.nodeCount,icon,d:1,parent});
+  state.scNodes.push({id,name:name+'_'+state.nodeCount,icon,d:1,parent,cls});
   return id;
 }
 
@@ -2244,9 +2247,12 @@ function renderTree(){
 function addToCanvas(id){
   const node = state.scNodes.find(n=>n.id===id);
   if(!node||state.objects[id]) return;
-  const cls = node.name.toLowerCase().includes('player')?'player'
-             :node.name.toLowerCase().includes('enemy')?'enemy'
-             :node.name.toLowerCase().includes('platform')?'platform':'generic';
+  const nm = node.name.toLowerCase();
+  const cls = node.cls ||
+    (nm.includes('player')?'player':
+     nm.includes('enemy')?'enemy':
+     nm.includes('platform')?'platform':
+     (nm.includes('background')||nm.includes('bg'))?'bg':'generic');
   spawnAt(id, node.icon, node.name, cls, 0, 0);
   selTN(id);
   toast('✓ '+node.name+' added back to canvas!');
@@ -2351,10 +2357,12 @@ function addNode(type,icon,cls){
 
 // Object default sizes per type
 const OBJ_DEFAULTS = {
-  player:   { w: 40, h: 40, color: '#478cbf' },
-  enemy:    { w: 38, h: 38, color: '#e06c75' },
-  platform: { w: 130, h: 22, color: '#6dcf6f' },
-  generic:  { w: 36, h: 36, color: '#7a7aaa' },
+  player:     { w: 40,  h: 40,  color: '#3b82f6' },
+  enemy:      { w: 38,  h: 38,  color: '#ef4444' },
+  platform:   { w: 130, h: 22,  color: '#22c55e' },
+  generic:    { w: 36,  h: 36,  color: '#7a7aaa' },
+  background: { w: 640, h: 360, color: '#1a2440' },
+  bg:         { w: 640, h: 360, color: '#1a2440' },
 };
 
 function spawnDefaults(){
@@ -2379,25 +2387,46 @@ function spawnAt(id,icon,name,cls,x,y,opts={}){
   el.className = 'go';
   el.id = 'g'+id;
   el.style.left = x+'px';
-  el.style.top = y+'px';
-  el.style.width = w+'px';
+  el.style.top  = y+'px';
+  el.style.width  = w+'px';
   el.style.height = h+'px';
+
+  // Background stays behind all other objects
+  if(cls==='background'||cls==='bg'){
+    el.style.zIndex = '0';
+    el.style.pointerEvents = 'none'; // don't block clicks on objects above
+  }
 
   el.innerHTML = buildObjInner(cls, icon, color, w, h, name);
 
-  el.onclick = e => { e.stopPropagation(); selObj(id); };
-  el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+  if(cls!=='background'&&cls!=='bg'){
+    el.onclick = e => { e.stopPropagation(); selObj(id); };
+    el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+  } else {
+    el.oncontextmenu = e => { e.preventDefault(); e.stopPropagation(); selObj(id); showCtxMenu(e, id); };
+  }
 
   makeDraggable(el, id);
   makeResizeHandles(el, id);
-  vp.appendChild(el);
+
+  // Insert background at the beginning (behind other elements)
+  if(cls==='background'||cls==='bg'){
+    vp.insertBefore(el, vp.firstChild);
+  } else {
+    vp.appendChild(el);
+  }
 
   state.objects[id] = { el, x, y, w, h, name, icon, cls, color };
 }
 
 function buildObjInner(cls, icon, color, w, h, name){
-  const safe = (s) => s.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const safe = (s) => String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   const fontSize = Math.min(w, h) * 0.55;
+
+  // Background object — fills behind everything
+  if(cls==='background'||cls==='bg'){
+    return `<div class="go-wrap" style="background:${color};width:${w}px;height:${h}px;border-radius:4px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-start;padding:4px 6px"><div style="position:absolute;inset:0;opacity:.15;background:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 50%);background-size:20px 20px"></div><div style="font-size:.58rem;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);padding:1px 4px;border-radius:2px;position:relative;z-index:1">${safe(name)}</div></div>`;
+  }
   if(cls==='platform'){
     return `<div class="go-wrap"><div style="background:${color};width:${w}px;height:${h}px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:${Math.min(fontSize,18)}px">${icon==='🟩'?'':safe(icon)}</div></div><div class="go-lbl">${safe(name)}</div>`;
   }
@@ -2921,10 +2950,15 @@ function start2DGame() {
 
   // ── Draw background ──
   function drawBg() {
-    // Clean sky gradient — no grid lines in preview
+    // Use scene's background object color if one exists
+    const bgObj = Object.values(state.objects).find(o => o.cls==='background'||o.cls==='bg');
+    const bgColor = bgObj?.color || '#0a0e1a';
+
+    // Parse hex to create gradient variation
     const grad = ctx.createLinearGradient(0, 0, 0, H());
-    grad.addColorStop(0, '#0a0e1a');
-    grad.addColorStop(1, '#1a2440');
+    grad.addColorStop(0, bgColor);
+    // Darken bottom slightly
+    grad.addColorStop(1, bgColor + 'bb');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, W(), H());
   }
@@ -3583,7 +3617,7 @@ const OBJ_TYPES = [
   {id:'button', cat:'ui', ico:'⊡', name:'Button', desc:'UI button', color:'#f59e0b'},
   {id:'camera', cat:'basic', ico:'◎', name:'Camera', desc:'Follow player', color:'#8b5cf6'},
   {id:'tileset', cat:'basic', ico:'⊞', name:'Tileset', desc:'Tile-based map', color:'#14b8a6'},
-  {id:'bg',     cat:'basic', ico:'⬛', name:'Background', desc:'Scene background', color:'#0ea5e9'},
+  {id:'bg',     cat:'basic', ico:'🌅', name:'Background', desc:'Scene background color (fills behind everything)', color:'#1a2440'},
   {id:'coin',   cat:'basic', ico:'◈', name:'Collectible', desc:'Coins & items', color:'#eab308'},
   {id:'box3d',  cat:'3d', ico:'⬡', name:'3D Box', desc:'3D cube object', color:'#f97316'},
   {id:'sphere3d', cat:'3d', ico:'○', name:'3D Sphere', desc:'3D ball', color:'#3b82f6'},
@@ -3653,14 +3687,11 @@ function closeAddObject(){ document.getElementById('addObjOverlay').classList.re
 
 function confirmAddObject(){
   if(uploadedObj){
-    // Add uploaded object
-    const id = addNd(uploadedObj.name, '📦');
+    const id = addNd(uploadedObj.name, '📦', 'root', 'generic');
     renderTree();
     spawnAt(id, '📦', uploadedObj.name, 'generic',
-      (Math.random()-.5)*200, (Math.random()-.5)*100,
-      {color:'#6366f1'});
-    selTN(id);
-    renderObjList();
+      (Math.random()-.5)*200, (Math.random()-.5)*100, {color:'#6366f1'});
+    selTN(id); renderObjList();
     log('info', `  Object "${uploadedObj.name}" added from upload.`);
     toast('✓ ' + uploadedObj.name + ' added!');
   } else if(selObjType){
@@ -3670,13 +3701,15 @@ function confirmAddObject(){
       toast('Max 20 objects reached. Upgrade to Pro for unlimited!','in');
       closeAddObject(); return;
     }
-    const id = addNd(t.name.replace(/[^a-zA-Z0-9]/g,'_'), t.ico);
+    const safeName = t.name.replace(/[^a-zA-Z0-9]/g,'_');
+    const id = addNd(safeName, t.ico, 'root', selObjType);
     renderTree();
-    spawnAt(id, t.ico, t.name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+state.nodeCount,
-      selObjType, (Math.random()-.5)*200, (Math.random()-.5)*100,
-      {color:t.color});
-    selTN(id);
-    renderObjList();
+    // Background: center at origin, full size
+    const isBg = selObjType==='bg'||selObjType==='background';
+    const x = isBg ? -320 : (Math.random()-.5)*200;
+    const y = isBg ? -180 : (Math.random()-.5)*100;
+    spawnAt(id, t.ico, safeName+'_'+state.nodeCount, selObjType, x, y, {color:t.color});
+    selTN(id); renderObjList();
     log('info', `  Object "${t.name}" added to scene.`);
     toast('✓ ' + t.name + ' added!');
   }
